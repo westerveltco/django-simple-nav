@@ -1,0 +1,220 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+authors = [
+  {name = "Josh Thomas", email = "josh@joshthomas.dev"},
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Framework :: Django",
+  "Framework :: Django :: 3",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = ["django>=3.2"]
+description = "A simple, flexible, and extensible navigation menu for Django."
+dynamic = ["version"]
+keywords = []
+license = "MIT"
+name = "django-simple-nav"
+readme = "README.md"
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = [
+  "bumpver",
+  "coverage[toml]",
+  "django-stubs",
+  "django-stubs-ext",
+  "hatch",
+  "mypy",
+  "nox",
+  "pytest",
+  "pytest-cov",
+  "pytest-django",
+  "pytest-randomly",
+  "pytest-reverse",
+  "pytest-xdist",
+]
+docs = [
+  "cogapp",
+  "furo",
+  "myst-parser",
+  "sphinx",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinx-inline-tabs",
+]
+lint = ["pre-commit"]
+
+[project.urls]
+Documentation = "https://django-simple-nav.westervelt.dev"
+Issues = "https://github.com/westerveltco/django-simple-nav/issues"
+Source = "https://github.com/westerveltco/django-simple-nav"
+
+[tool.hatch.build]
+exclude = [
+  ".github/*",
+  ".dockerfiles/*",
+  ".dockerignore",
+  ".editorconfig",
+  ".pre-commit-config.yaml",
+  "Justfile",
+  "src/service/*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/simple_nav"]
+
+[tool.hatch.version]
+path = "src/simple_nav/__init__.py"
+
+[tool.bumpver]
+commit = true
+commit_message = ":bookmark: bump version {old_version} -> {new_version}"
+current_version = "0.1.0"
+push = false   # set to false for CI
+tag = false
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+
+[tool.bumpver.file_patterns]
+"src/simple_nav/__init__.py" = [
+    '__version__ = "{version}"',
+]
+"tests/test_version.py" = [
+    'assert __version__ == "{version}"',
+]
+
+[tool.coverage.paths]
+source = ["src"]
+
+[tool.coverage.report]
+fail_under = 85
+
+[tool.coverage.run]
+omit = [
+  "src/simple_nav/migrations/*",
+  "tests/*",
+]
+source = ["simple_nav"]
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
+strict_settings = false
+
+[tool.mypy]
+exclude = "docs/.*\\.py$"
+mypy_path = "src/"
+namespace_packages = false
+check_untyped_defs = true
+no_implicit_optional = true
+plugins = [
+  "mypy_django_plugin.main",
+]
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+ignore_errors = true
+ignore_missing_imports = true
+module = "tests.*"
+
+[tool.mypy_django_plugin]
+ignore_missing_model_attributes = true
+
+[tool.pytest.ini_options]
+django_find_project = false
+pythonpath = "src"
+addopts = "--create-db -n auto --dist loadfile --doctest-modules"
+norecursedirs = ".* bin build dist *.egg htmlcov logs node_modules templates venv"
+python_files = "tests.py test_*.py *_tests.py"
+testpaths = ["tests"]
+
+[tool.ruff]
+ignore = ["E501", "E741"] # temporary
+select = [
+  "B", # flake8-bugbear
+  "E", # Pycodestyle
+  "F", # Pyflakes
+  "I", # isort
+  "UP", # pyupgrade
+]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "I"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".github",
+  ".hg",
+  ".mypy_cache",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "migrations",
+  "node_modules",
+  "static",
+  "venv",
+]
+extend-include = ["*.pyi?"]
+
+per-file-ignores = {}
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python >3.8.
+target-version = "py38"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+# magic-trailing-comma = "respect"
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.ruff.isort]
+force-single-line = true
+known-first-party = ["simple_nav"]
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
