@@ -18,7 +18,7 @@ update:
     @just bootstrap
 
 venv PY_VERSION="3.11":
-#!/usr/bin/env python
+    #!/usr/bin/env python
     from __future__ import annotations
 
     import subprocess
