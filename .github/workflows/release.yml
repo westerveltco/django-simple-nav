@@ -31,10 +31,10 @@ jobs:
                           --jq '.[] | select(.headBranch=="main" and .conclusion=="success") | .conclusion' \
                           | head -n 1)" >> $GITHUB_OUTPUT
       - name: OK
-        if: ${{ !(contains(steps.latest-test-result.outputs.result, 'failure')) }}
+        if: ${{ (contains(steps.latest-test-result.outputs.result, 'success')) }}
         run: exit 0
       - name: Fail
-        if: ${{ contains(steps.latest-test-result.outputs.result, 'failure') }}
+        if: ${{ !contains(steps.latest-test-result.outputs.result, 'success') }}
         run: exit 1
 
 
