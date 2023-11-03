@@ -16,4 +16,4 @@ def test_default_settings():
 def test_app_settings():
     # temporary until app actually has settings
     with pytest.raises(AttributeError):
-        app_settings.FOO
+        app_settings.FOO  # noqa: B018

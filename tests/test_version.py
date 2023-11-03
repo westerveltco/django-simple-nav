@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from simple_nav import __version__
 
 

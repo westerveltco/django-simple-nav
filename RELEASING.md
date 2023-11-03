@@ -73,4 +73,3 @@ When it comes time to cut a new release, follow these steps:
 We try our best to adhere to [Semantic Versioning](https://semver.org/), but we do not promise to follow it perfectly (and let's be honest, this is the case with a lot of projects using SemVer).
 
 In general, use your best judgement when choosing the next version number. If you are unsure, you can always ask for a second opinion from another contributor.
-
