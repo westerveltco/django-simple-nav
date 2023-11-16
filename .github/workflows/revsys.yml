@@ -1,0 +1,28 @@
+name: Add to REVSYS Backlog
+
+on:
+  issues:
+    types:
+      - labeled
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'revsys'
+    steps:
+      - uses: 1password/load-secrets-action@v1
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          REVSYS_PROJECT_URL: "op://GitHub Actions/REVSYS Project/url"
+          REVSYS_PROJECT_PAT: "op://GitHub Actions/REVSYS Project/PAT"
+
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: ${{ env.REVSYS_PROJECT_URL }}
+          github-token: ${{ env.REVSYS_PROJECT_PAT }}
