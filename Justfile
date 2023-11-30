@@ -118,3 +118,19 @@ lint:
 
 mypy:
     python -m nox --reuse-existing-virtualenvs --session "mypy"
+
+# ----------------------------------------------------------------------
+# COPIER
+# ----------------------------------------------------------------------
+
+# create a copier answers file
+copier-copy TEMPLATE_PATH DESTINATION_PATH=".":
+    pipx run copier copy {{ TEMPLATE_PATH }} {{ DESTINATION_PATH }}
+
+# update the project using a copier answers file
+copier-update ANSWERS_FILE *ARGS:
+    pipx run copier update --answers-file {{ ANSWERS_FILE }} {{ ARGS }}
+
+# loop through all answers files and update the project using copier
+@copier-update-all *ARGS:
+    for file in `ls .copier-answers/`; do just copier-update .copier-answers/$file "{{ ARGS }}"; done
