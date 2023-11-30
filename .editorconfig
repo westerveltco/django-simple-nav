@@ -7,7 +7,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{{Justfile,.justfile},*.{py,rst,ini,md}}]
+[{{J,j}ustfile,.{J,j}ustfile,{*.{py,rst,ini,md}}}]
 indent_size = 4
 indent_style = space
 
