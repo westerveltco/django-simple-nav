@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 418d39a
+_src_path: https://github.com/westerveltco/pre-commit-template
+django_version: 3.2
+include_django: true
+include_javascript: false
+include_python: true
+include_tailwind: false
+python_version: 3.8
