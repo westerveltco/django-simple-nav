@@ -43,6 +43,7 @@ dev = [
   "django-stubs-ext",
   "hatch",
   "mypy",
+  "model_bakery",
   "nox",
   "pytest",
   "pytest-cov",

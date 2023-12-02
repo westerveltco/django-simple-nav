@@ -26,10 +26,19 @@ def pytest_configure(config):
         },
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
         INSTALLED_APPS=[
+            "django.contrib.auth",
+            "django.contrib.contenttypes",
             "simple_nav",
+            "tests",
         ],
         LOGGING_CONFIG=None,
         PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"],
         SECRET_KEY="NOTASECRET",
+        TEMPLATES=[
+            {
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "APP_DIRS": True,
+            }
+        ],
         USE_TZ=True,
     )
