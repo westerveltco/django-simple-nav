@@ -42,43 +42,48 @@
 
 1. **Create a navigation definition**:
 
-   Define your navigation structure in a Python file. Here's an example configuration:
+    Define your navigation structure in a Python file. Here's an example configuration:
 
-   ```python
-   from django_simple_nav.nav import NavGroup
-   from django_simple_nav.nav import NavItem
+    ```python
+    from django_simple_nav.nav import Nav
+    from django_simple_nav.nav import NavGroup
+    from django_simple_nav.nav import NavItem
 
-   main_nav = [
-       NavItem(title="Relative URL", url="/relative-url"),
-       NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
-       NavGroup(
-           title="Group",
-           url="/group",
-           items=[
-               NavItem(title="Relative URL", url="/relative-url"),
-               NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
-           ],
-       ),
-       NavItem(title="is_authenticated Item", url="#", permissions=["is_authenticated"]),
-       NavItem(title="is_staff Item", url="#", permissions=["is_staff"]),
-       NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
-   ]
-   template_name = "main_nav.html"
-   ```
+
+    class MainNav(Nav):
+        items = [
+            NavItem(title="Relative URL", url="/relative-url"),
+            NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
+            NavGroup(
+                title="Group",
+                url="/group",
+                items=[
+                    NavItem(title="Relative URL", url="/relative-url"),
+                    NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
+                ],
+            ),
+            NavItem(
+                title="is_authenticated Item", url="#", permissions=["is_authenticated"]
+            ),
+            NavItem(title="is_staff Item", url="#", permissions=["is_staff"]),
+            NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
+        ]
+        template_name = "main_nav.html"
+    ```
 
 2. **Integrate Navigation in Templates**:
 
-   Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation.
-   For example:
+    Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation.
+    For example:
 
-   ```html
-   {% load django_simple_nav_tags %}
-   ...
-   <nav>
-       {% django_simple_nav 'path.to.main_nav' %}
-   </nav>
-   ...
-   ```
+    ```html
+    {% load django_simple_nav_tags %}
+    ...
+    <nav>
+        {% django_simple_nav 'path.to.MainNav' %}
+    </nav>
+    ...
+    ```
 
 ## Usage
 
