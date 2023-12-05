@@ -68,7 +68,7 @@
 
 2. **Integrate Navigation in Templates**:
 
-   Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation. 
+   Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation.
    For example:
 
    ```html
@@ -82,7 +82,7 @@
 
 ## Usage
 
-After configuring your navigation, you can use it across your Django project by calling the `django_simple_nav` template tag in your templates. 
+After configuring your navigation, you can use it across your Django project by calling the `django_simple_nav` template tag in your templates.
 This tag dynamically renders navigation based on your defined structure, ensuring a consistent and flexible navigation experience throughout your application.
 
 ## License
