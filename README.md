@@ -7,7 +7,88 @@
 <!-- django-3.2 | 4.1 | 4.2-#44B78B -->
 <!-- labelColor=%23092E20 -->
 
-WIP
+
+## Introduction
+
+`django-simple-nav` is a Python/Django application designed to simplify the integration of navigation and menu bars in your Django projects. With a straightforward API and customizable options, you can easily add and manage navigational elements in your web applications.
+
+## Installation
+
+1. **Install the package**:
+
+   You can install `django-simple-nav` using pip:
+
+   ```shell
+   pip install django-simple-nav
+   ```
+
+2. **Add to Installed Apps**:
+
+   After installation, add `django_simple_nav` to your `INSTALLED_APPS` in your Django settings:
+
+   ```python
+   INSTALLED_APPS = [
+       # ...
+       "django_simple_nav",
+       # ...
+   ]
+   ```
+
+## Configuration
+
+### Setting up Template Tags
+
+### Defining Your Navigation
+
+1. **Create a navigation definition**:
+
+    Define your navigation structure in a Python file. Here's an example configuration:
+
+    ```python
+    from django_simple_nav.nav import Nav
+    from django_simple_nav.nav import NavGroup
+    from django_simple_nav.nav import NavItem
+
+
+    class MainNav(Nav):
+        items = [
+            NavItem(title="Relative URL", url="/relative-url"),
+            NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
+            NavGroup(
+                title="Group",
+                url="/group",
+                items=[
+                    NavItem(title="Relative URL", url="/relative-url"),
+                    NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
+                ],
+            ),
+            NavItem(
+                title="is_authenticated Item", url="#", permissions=["is_authenticated"]
+            ),
+            NavItem(title="is_staff Item", url="#", permissions=["is_staff"]),
+            NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
+        ]
+        template_name = "main_nav.html"
+    ```
+
+2. **Integrate Navigation in Templates**:
+
+    Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation.
+    For example:
+
+    ```html
+    {% load django_simple_nav_tags %}
+    ...
+    <nav>
+        {% django_simple_nav 'path.to.MainNav' %}
+    </nav>
+    ...
+    ```
+
+## Usage
+
+After configuring your navigation, you can use it across your Django project by calling the `django_simple_nav` template tag in your templates.
+This tag dynamically renders navigation based on your defined structure, ensuring a consistent and flexible navigation experience throughout your application.
 
 ## License
 

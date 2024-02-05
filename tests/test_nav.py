@@ -6,9 +6,9 @@ from django.http import HttpRequest
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
-from simple_nav.nav import Nav
-from simple_nav.nav import NavGroup
-from simple_nav.nav import NavItem
+from django_simple_nav.nav import Nav
+from django_simple_nav.nav import NavGroup
+from django_simple_nav.nav import NavItem
 
 pytestmark = pytest.mark.django_db
 

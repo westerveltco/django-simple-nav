@@ -28,7 +28,7 @@ def pytest_configure(config):
         INSTALLED_APPS=[
             "django.contrib.auth",
             "django.contrib.contenttypes",
-            "simple_nav",
+            "django_simple_nav",
             "tests",
         ],
         LOGGING_CONFIG=None,

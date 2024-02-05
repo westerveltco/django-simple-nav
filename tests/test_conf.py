@@ -3,8 +3,8 @@ from __future__ import annotations
 import pytest
 from django.conf import settings
 
-from simple_nav.conf import SIMPLE_NAV_SETTINGS_NAME
-from simple_nav.conf import app_settings
+from django_simple_nav.conf import SIMPLE_NAV_SETTINGS_NAME
+from django_simple_nav.conf import app_settings
 
 
 def test_default_settings():
