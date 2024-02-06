@@ -87,3 +87,11 @@ def test_nav_render_with_permissions(req, count_anchors, permission, expected_co
     rendered_template = DummyNav.render_from_request(req)
 
     assert count_anchors(rendered_template) == expected_count
+
+
+def test_nav_render_from_request_with_template_name(req):
+    req.user = AnonymousUser()
+
+    rendered_template = DummyNav.render_from_request(req, "tests/alternate.html")
+
+    assert "This is an alternate template." in rendered_template
