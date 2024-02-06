@@ -1,5 +1,5 @@
 {% for item in items %}
-  <a href="{{ item.url }}">{{ item.title }}</a>
+  <a href="{{ item.href }}">{{ item.title }}</a>
   {% if item.items %}
     {% include 'tests/dummy_nav.html' with items=item.items %}
   {% endif %}
