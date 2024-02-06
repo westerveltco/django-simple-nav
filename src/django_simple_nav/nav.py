@@ -8,10 +8,11 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
+from django_simple_nav.exceptions import ReadOnlyProperty
 from django_simple_nav.permissions import check_item_permissions
 
 
-@dataclass
+@dataclass(frozen=True)
 class Nav:
     template_name: str
     items: list[NavGroup | NavItem]
@@ -19,66 +20,86 @@ class Nav:
     @classmethod
     def render_from_request(cls, request: HttpRequest) -> str:
         items = [
-            item
+            _RenderedNavItem(item, request)
             for item in cls.items
             if check_item_permissions(item, request.user)  # type: ignore[arg-type]
         ]
-        for item in items:
-            if item.url:
-                item.href = item.get_href()
-                item.active = item.is_active(request)
-            if hasattr(item, "items"):
-                for sub_item in item.items:
-                    sub_item.href = sub_item.get_href()
-                    item.active = item.is_active(request)
         return render_to_string(
             template_name=cls.template_name,
             context={"items": items},
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class NavGroup:
     title: str
     items: list[NavGroup | NavItem]
     url: str | None = None
     permissions: list[str] = field(default_factory=list)
-    href: str | None = None
-    active: bool | None = None
-
-    def get_href(self) -> str | None:
-        if not self.url:
-            return None
-        return _get_href(self.url)
-
-    def is_active(self, request: HttpRequest) -> bool | None:
-        if not self.url:
-            return None
-        return _check_item_active(request, self.url)
 
 
-@dataclass
+@dataclass(frozen=True)
 class NavItem:
     title: str
     url: str
     permissions: list[str] = field(default_factory=list)
-    href: str | None = None
-    active: bool | None = None
-
-    def get_href(self) -> str:
-        return _get_href(self.url)
-
-    def is_active(self, request: HttpRequest) -> bool:
-        return _check_item_active(request, self.url)
 
 
-def _get_href(url: str) -> str:
-    try:
-        href = reverse(url)
-    except NoReverseMatch:
-        href = url
-    return href
+@dataclass(frozen=True)
+class _RenderedNavItem:
+    item: NavItem | NavGroup
+    request: HttpRequest
 
+    @property
+    def title(self) -> str:
+        return self.item.title
 
-def _check_item_active(request: HttpRequest, url: str) -> bool:
-    return request.path.startswith(url) and url != "/" or request.path == url
+    @title.setter
+    def title(self, _: str) -> None:
+        raise ReadOnlyProperty("title")
+
+    @property
+    def items(self) -> list[NavGroup | NavItem] | None:
+        if not isinstance(self.item, NavGroup):
+            return None
+        return self.item.items
+
+    @items.setter
+    def items(self, _: list[NavGroup | NavItem]) -> None:
+        raise ReadOnlyProperty("items")
+
+    @property
+    def url(self) -> str | None:
+        return self.item.url
+
+    @url.setter
+    def url(self, _: str) -> None:
+        raise ReadOnlyProperty("url")
+
+    @property
+    def href(self) -> str:
+        if not self.item.url:
+            return "#"
+        try:
+            href = reverse(self.item.url)
+        except NoReverseMatch:
+            href = self.item.url
+        return href
+
+    @href.setter
+    def href(self, _: str) -> None:
+        raise ReadOnlyProperty("href")
+
+    @property
+    def active(self) -> bool:
+        if not self.item.url:
+            return False
+        return (
+            self.request.path.startswith(self.item.url)
+            and self.item.url != "/"
+            or self.request.path == self.item.url
+        )
+
+    @active.setter
+    def active(self, _: bool) -> None:
+        raise ReadOnlyProperty("active")

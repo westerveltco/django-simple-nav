@@ -11,6 +11,16 @@ from .navs import DummyNav
 pytestmark = pytest.mark.django_db
 
 
+def test_init():
+    nav = DummyNav
+
+    assert nav.template_name == "tests/dummy_nav.html"
+    assert len(nav.items) == 12
+
+    for item in nav.items:
+        assert item.title
+
+
 @pytest.mark.parametrize(
     "nav, template_name, expected_count",
     [
@@ -37,6 +47,8 @@ def test_nav_render(user, expected_count, req, count_anchors):
 
     req.user = user
     rendered_template = DummyNav.render_from_request(req)
+
+    print("rendered_template", rendered_template)
 
     assert count_anchors(rendered_template) == expected_count
 
