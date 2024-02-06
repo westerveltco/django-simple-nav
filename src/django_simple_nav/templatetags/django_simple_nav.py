@@ -8,6 +8,10 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def django_simple_nav(context: Context, nav_path: str) -> str:
+def django_simple_nav(
+    context: Context, nav_path: str, template_name: str | None = None
+) -> str:
     nav = import_string(nav_path)
-    return nav.render_from_request(request=context["request"])
+    return nav.render_from_request(
+        request=context["request"], template_name=template_name
+    )
