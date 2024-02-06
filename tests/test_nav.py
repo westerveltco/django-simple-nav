@@ -48,8 +48,6 @@ def test_nav_render(user, expected_count, req, count_anchors):
     req.user = user
     rendered_template = DummyNav.render_from_request(req)
 
-    print("rendered_template", rendered_template)
-
     assert count_anchors(rendered_template) == expected_count
 
 
