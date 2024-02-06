@@ -17,14 +17,16 @@ class Nav:
     items: list[NavGroup | NavItem]
 
     @classmethod
-    def render_from_request(cls, request: HttpRequest) -> str:
+    def render_from_request(
+        cls, request: HttpRequest, template_name: str | None = None
+    ) -> str:
         items = [
             RenderedNavItem(item, request)
             for item in cls.items
             if check_item_permissions(item, request.user)  # type: ignore[arg-type]
         ]
         return render_to_string(
-            template_name=cls.template_name,
+            template_name=template_name or cls.template_name,
             context={"items": items},
         )
 
