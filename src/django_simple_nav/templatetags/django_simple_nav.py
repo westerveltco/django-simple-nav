@@ -9,10 +9,10 @@ register = template.Library()
 @register.tag(name="django_simple_nav")
 def do_django_simple_nav(parser, token):
     try:
-        _, args = token.contents.split(None, 1)
+        tag_name, args = token.contents.split(None, 1)
     except ValueError as err:
         raise template.TemplateSyntaxError(
-            f"{token.contents.split()[0]} tag requires arguments"
+            f"{tag_name} tag requires arguments"
         ) from err
 
     args = args.split()
