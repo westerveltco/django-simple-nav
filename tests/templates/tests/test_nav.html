@@ -1,6 +1,0 @@
-{% for item in items %}
-  {% if item.items %}
-    {% include 'tests/test_nav.html' with items=item.items %}
-  {% endif %}
-  <a href="{{ item.url }}">{{ item.title }}</a>
-{% endfor %}

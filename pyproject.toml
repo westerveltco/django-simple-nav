@@ -101,6 +101,9 @@ source = ["django_simple_nav"]
 django_settings_module = "tests.settings"
 strict_settings = false
 
+[tool.djlint]
+indent = 2
+
 [tool.hatch.build]
 exclude = [
   ".github/*",

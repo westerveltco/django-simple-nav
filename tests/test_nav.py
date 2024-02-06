@@ -2,83 +2,78 @@ from __future__ import annotations
 
 import pytest
 from django.contrib.auth import get_user_model
-from django.http import HttpRequest
+from django.contrib.auth.models import AnonymousUser
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
-from django_simple_nav.nav import Nav
-from django_simple_nav.nav import NavGroup
-from django_simple_nav.nav import NavItem
+from .navs import DummyNav
 
 pytestmark = pytest.mark.django_db
 
 
-class TestNav(Nav):
-    items = [
-        NavItem(title="Relative URL", url="/relative-url"),
-        NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
-        NavGroup(
-            title="Group",
-            url="/group",
-            items=[
-                NavItem(title="Relative URL", url="/relative-url"),
-                NavItem(title="Absolute URL", url="https://example.com/absolute-url"),
-            ],
-        ),
-        NavItem(
-            title="is_authenticated Item", url="#", permissions=["is_authenticated"]
-        ),
-        NavItem(title="is_staff Item", url="#", permissions=["is_staff"]),
-        NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
-        NavGroup(
-            title="is_authenticated Group",
-            permissions=["is_authenticated"],
-            items=[NavItem(title="Test Item", url="#")],
-        ),
-        NavGroup(
-            title="is_staff Group",
-            permissions=["is_staff"],
-            items=[NavItem(title="Test Item", url="#")],
-        ),
-        NavGroup(
-            title="is_superuser Group",
-            permissions=["is_superuser"],
-            items=[NavItem(title="Test Item", url="#")],
-        ),
-    ]
-    template_name = "tests/test_nav.html"
+@pytest.mark.parametrize(
+    "nav, template_name, expected_count",
+    [
+        ("tests.navs.DummyNav", "tests/dummy_nav.html", 12),
+    ],
+)
+def test_dotted_path_loading(nav, template_name, expected_count):
+    nav = import_string(nav)
+
+    assert nav.template_name == template_name
+    assert len(nav.items) == expected_count
 
 
-@pytest.fixture
-def req():
-    return HttpRequest()
+@pytest.mark.parametrize(
+    "user, expected_count",
+    [
+        (AnonymousUser(), 7),
+        (get_user_model(), 10),
+    ],
+)
+def test_nav_render(user, expected_count, req, count_anchors):
+    if not isinstance(user, AnonymousUser):
+        user = baker.make(user)
 
-
-@pytest.fixture
-def user():
-    return baker.make(get_user_model())
-
-
-def test_dotted_path_loading():
-    nav = import_string("tests.test_nav.TestNav")
-
-    assert len(nav.items) == 9
-    assert nav.template_name == "tests/test_nav.html"
-
-
-def test_nav_render(req, user):
     req.user = user
-    rendered_template = TestNav.render(req)
+    rendered_template = DummyNav.render_from_request(req)
 
-    assert "Relative URL" in rendered_template
-    assert "/relative-url" in rendered_template
-    assert "Absolute URL" in rendered_template
-    assert "https://example.com/absolute-url" in rendered_template
-    assert "Group" in rendered_template
+    assert count_anchors(rendered_template) == expected_count
 
 
-def test_dotted_path_rendering(req, user):
+def test_dotted_path_rendering(req):
+    req.user = baker.make(get_user_model())
+    nav = import_string("tests.navs.DummyNav")
+
+    assert nav.render_from_request(req)
+
+
+@pytest.mark.parametrize(
+    "permission, expected_count",
+    [
+        ("", 10),  # regular authenticated user
+        ("is_staff", 13),
+        ("is_superuser", 16),
+        ("tests.dummy_perm", 13),
+    ],
+)
+def test_nav_render_with_permissions(req, count_anchors, permission, expected_count):
+    user = baker.make(get_user_model())
+
+    if permission == "tests.dummy_perm":
+        dummy_perm = baker.make(
+            "auth.Permission",
+            codename="dummy_perm",
+            name="Dummy Permission",
+            content_type=baker.make("contenttypes.ContentType", app_label="tests"),
+        )
+        user.user_permissions.add(dummy_perm)
+    else:
+        setattr(user, permission, True)
+
+    user.save()
+
     req.user = user
-    nav = import_string("tests.test_nav.TestNav")
+    rendered_template = DummyNav.render_from_request(req)
 
-    assert nav.render(req)
+    assert count_anchors(rendered_template) == expected_count

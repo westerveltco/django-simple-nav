@@ -1,0 +1,52 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import Protocol
+
+if TYPE_CHECKING:
+    from django_simple_nav.nav import NavGroup
+    from django_simple_nav.nav import NavItem
+
+
+class User(Protocol):
+    is_authenticated: bool
+    is_staff: bool
+    is_superuser: bool
+
+    def has_perm(self, perm: str) -> bool:
+        ...
+
+
+def check_item_permissions(item: NavGroup | NavItem, user: User) -> bool:
+    for idx, perm in enumerate(item.permissions):
+        user_perm = user_has_perm(user, perm)
+
+        if not user_perm:
+            return False
+
+        if hasattr(item, "items"):
+            sub_items = [
+                sub_item
+                for sub_item in item.items
+                if check_item_permissions(sub_item, user)
+            ]
+            if not sub_items:
+                return False
+
+        if not idx == len(item.permissions) - 1:
+            continue
+
+    return True
+
+
+def user_has_perm(user: User, perm: str) -> bool:
+    """Check if the user has a certain auth attribute, permission, or is in a group."""
+
+    has_perm = False
+
+    if perm in ["is_authenticated", "is_staff", "is_superuser"]:
+        has_perm = getattr(user, perm, False)
+    elif user.has_perm(perm):
+        has_perm = True
+
+    return has_perm

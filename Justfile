@@ -51,13 +51,16 @@ venv PY_VERSION="3.11":
 ##################
 
 test:
-    python -m nox --reuse-existing-virtualenvs
+    python -m nox --reuse-existing-virtualenvs --session "test"
+
+testall:
+    python -m nox --reuse-existing-virtualenvs --session "tests"
 
 coverage:
     python -m nox --reuse-existing-virtualenvs --session "coverage"
 
 types:
-    python -m mypy .
+    python -m nox --reuse-existing-virtualenvs --session "mypy"
 
 ##################
 #     DJANGO     #
@@ -77,7 +80,7 @@ manage *COMMAND:
             "forget to activate a virtual environment?"
         ) from exc
 
-    settings.configure(INSTALLED_APPS=["simple_nav"])
+    settings.configure(INSTALLED_APPS=["django_simple_nav"])
     execute_from_command_line(sys.argv + "{{ COMMAND }}".split(" "))
 
 alias mm := makemigrations
@@ -116,8 +119,9 @@ shell:
 lint:
     python -m nox --reuse-existing-virtualenvs --session "lint"
 
-mypy:
-    python -m nox --reuse-existing-virtualenvs --session "mypy"
+# format Justfile
+fmt:
+    just --fmt --unstable
 
 # ----------------------------------------------------------------------
 # COPIER
