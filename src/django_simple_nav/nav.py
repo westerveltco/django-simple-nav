@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from django_simple_nav.exceptions import ReadOnlyProperty
 from django_simple_nav.permissions import check_item_permissions
 
 
@@ -54,27 +53,15 @@ class _RenderedNavItem:
     def title(self) -> str:
         return self.item.title
 
-    @title.setter
-    def title(self, _: str) -> None:
-        raise ReadOnlyProperty("title")
-
     @property
     def items(self) -> list[NavGroup | NavItem] | None:
         if not isinstance(self.item, NavGroup):
             return None
         return self.item.items
 
-    @items.setter
-    def items(self, _: list[NavGroup | NavItem]) -> None:
-        raise ReadOnlyProperty("items")
-
     @property
     def url(self) -> str | None:
         return self.item.url
-
-    @url.setter
-    def url(self, _: str) -> None:
-        raise ReadOnlyProperty("url")
 
     @property
     def href(self) -> str:
@@ -86,10 +73,6 @@ class _RenderedNavItem:
             href = self.item.url
         return href
 
-    @href.setter
-    def href(self, _: str) -> None:
-        raise ReadOnlyProperty("href")
-
     @property
     def active(self) -> bool:
         if not self.item.url:
@@ -99,7 +82,3 @@ class _RenderedNavItem:
             and self.item.url != "/"
             or self.request.path == self.item.url
         )
-
-    @active.setter
-    def active(self, _: bool) -> None:
-        raise ReadOnlyProperty("active")
