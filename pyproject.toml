@@ -43,6 +43,7 @@ dev = [
   "django-stubs-ext",
   "hatch",
   "mypy",
+  "model_bakery",
   "nox",
   "pytest",
   "pytest-cov",
@@ -76,7 +77,7 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-"src/simple_nav/__init__.py" = [
+"src/django_simple_nav/__init__.py" = [
   '__version__ = "{version}"'
 ]
 "tests/test_version.py" = [
@@ -91,14 +92,17 @@ fail_under = 85
 
 [tool.coverage.run]
 omit = [
-  "src/simple_nav/migrations/*",
+  "src/django_simple_nav/migrations/*",
   "tests/*"
 ]
-source = ["simple_nav"]
+source = ["django_simple_nav"]
 
 [tool.django-stubs]
 django_settings_module = "tests.settings"
 strict_settings = false
+
+[tool.djlint]
+indent = 2
 
 [tool.hatch.build]
 exclude = [
@@ -112,10 +116,10 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/simple_nav"]
+packages = ["src/django_simple_nav"]
 
 [tool.hatch.version]
-path = "src/simple_nav/__init__.py"
+path = "src/django_simple_nav/__init__.py"
 
 [tool.mypy]
 check_untyped_defs = true
@@ -201,7 +205,7 @@ quote-style = "double"
 
 [tool.ruff.isort]
 force-single-line = true
-known-first-party = ["simple_nav"]
+known-first-party = ["django_simple_nav"]
 required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.pyupgrade]

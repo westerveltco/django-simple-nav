@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from simple_nav import __version__
+from django_simple_nav import __version__
 
 
 def test_version():
