@@ -63,6 +63,9 @@
             ),
             NavItem(title="is_staff Item", url="#", permissions=["is_staff"]),
             NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
+            NavItem(
+                title="myapp.django_perm Item", url="#", permissions=["myapp.django_perm"]
+            ),
         ]
     ```
 
