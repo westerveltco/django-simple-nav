@@ -28,12 +28,12 @@ def test_dotted_path_loading(nav, template_name, expected_count):
     "user, expected_count",
     [
         (AnonymousUser(), 7),
-        (get_user_model(), 10),
+        (None, 10),
     ],
 )
 def test_nav_render(user, expected_count, req, count_anchors):
     if not isinstance(user, AnonymousUser):
-        user = baker.make(user)
+        user = baker.make(get_user_model())
 
     req.user = user
     rendered_template = DummyNav.render_from_request(req)

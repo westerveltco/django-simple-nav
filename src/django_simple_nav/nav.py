@@ -19,7 +19,9 @@ class Nav:
     @classmethod
     def render_from_request(cls, request: HttpRequest) -> str:
         items = [
-            item for item in cls.items if check_item_permissions(item, request.user)
+            item
+            for item in cls.items
+            if check_item_permissions(item, request.user)  # type: ignore[arg-type]
         ]
         for item in items:
             if item.url:
@@ -41,14 +43,17 @@ class NavGroup:
     items: list[NavGroup | NavItem]
     url: str | None = None
     permissions: list[str] = field(default_factory=list)
+    active: bool | None = None
 
     def get_url(self) -> str | None:
-        if self.url:
-            return _get_url(self.url)
+        if not self.url:
+            return None
+        return _get_url(self.url)
 
     def is_active(self, request: HttpRequest) -> bool | None:
-        if self.url:
-            return _check_item_active(request, self.url)
+        if not self.url:
+            return None
+        return _check_item_active(request, self.url)
 
 
 @dataclass
@@ -56,6 +61,7 @@ class NavItem:
     title: str
     url: str
     permissions: list[str] = field(default_factory=list)
+    active: bool | None = None
 
     def get_url(self) -> str:
         return _get_url(self.url)
