@@ -19,7 +19,7 @@ class Nav:
     @classmethod
     def render_from_request(cls, request: HttpRequest) -> str:
         items = [
-            _RenderedNavItem(item, request)
+            RenderedNavItem(item, request)
             for item in cls.items
             if check_item_permissions(item, request.user)  # type: ignore[arg-type]
         ]
@@ -45,7 +45,7 @@ class NavItem:
 
 
 @dataclass(frozen=True)
-class _RenderedNavItem:
+class RenderedNavItem:
     item: NavItem | NavGroup
     request: HttpRequest
 
@@ -60,18 +60,14 @@ class _RenderedNavItem:
         return self.item.items
 
     @property
-    def url(self) -> str | None:
-        return self.item.url
-
-    @property
-    def href(self) -> str:
+    def url(self) -> str:
         if not self.item.url:
             return "#"
         try:
-            href = reverse(self.item.url)
+            url = reverse(self.item.url)
         except NoReverseMatch:
-            href = self.item.url
-        return href
+            url = self.item.url
+        return url
 
     @property
     def active(self) -> bool:
