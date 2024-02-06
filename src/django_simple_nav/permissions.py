@@ -40,7 +40,7 @@ def check_item_permissions(item: NavGroup | NavItem, user: User) -> bool:
 
 
 def user_has_perm(user: User, perm: str) -> bool:
-    """Check if the user has a certain auth attribute, permission, or is in a group."""
+    """Check if the user has a certain auth attribute or permission."""
 
     has_perm = False
 
