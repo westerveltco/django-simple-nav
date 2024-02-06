@@ -11,6 +11,16 @@ from .navs import DummyNav
 pytestmark = pytest.mark.django_db
 
 
+def test_init():
+    nav = DummyNav
+
+    assert nav.template_name == "tests/dummy_nav.html"
+    assert len(nav.items) == 12
+
+    for item in nav.items:
+        assert item.title
+
+
 @pytest.mark.parametrize(
     "nav, template_name, expected_count",
     [
