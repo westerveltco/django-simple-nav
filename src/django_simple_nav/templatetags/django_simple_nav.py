@@ -3,16 +3,18 @@ from __future__ import annotations
 from django import template
 from django.utils.module_loading import import_string
 
+from django_simple_nav.nav import Nav
+
 register = template.Library()
 
 
 @register.tag(name="django_simple_nav")
 def do_django_simple_nav(parser, token):
     try:
-        tag_name, args = token.contents.split(None, 1)
+        _, args = token.contents.split(None, 1)
     except ValueError as err:
         raise template.TemplateSyntaxError(
-            f"{tag_name} tag requires arguments"
+            f"{token.contents.split()[0]} tag requires arguments"
         ) from err
 
     args = args.split()
@@ -43,6 +45,6 @@ class DjangoSimpleNavNode(template.Node):
         else:
             nav = self.nav
 
-        request = context["request"]
+        assert isinstance(nav, Nav)
 
-        return nav.render_from_request(request, self.template_name)
+        return nav.render_from_request(context["request"], self.template_name)
