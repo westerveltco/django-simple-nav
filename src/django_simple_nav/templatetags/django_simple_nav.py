@@ -3,8 +3,6 @@ from __future__ import annotations
 from django import template
 from django.utils.module_loading import import_string
 
-from django_simple_nav.nav import Nav
-
 register = template.Library()
 
 
@@ -45,6 +43,6 @@ class DjangoSimpleNavNode(template.Node):
         else:
             nav = self.nav
 
-        assert isinstance(nav, Nav)
+        assert hasattr(nav, "render_from_request")
 
         return nav.render_from_request(context["request"], self.template_name)
