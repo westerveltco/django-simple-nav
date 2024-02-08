@@ -16,6 +16,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Security
 -->
 
+## [Unreleased]
+
 ## [0.1.0]
 
 Initial release! 🎉
@@ -39,8 +41,6 @@ Initial release! 🎉
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 - Jeff Triplett [@jefftriplett](https://github.com/jefftriplett)
-
-## [Unreleased]
 
 [unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.1.0
