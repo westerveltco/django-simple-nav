@@ -10,7 +10,7 @@ from django.http import HttpRequest
 pytest_plugins = []  # type: ignore
 
 
-def pytest_configure(_):
+def pytest_configure(config):
     logging.disable(logging.CRITICAL)
 
     settings.configure(**TEST_SETTINGS)
