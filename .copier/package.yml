@@ -1,0 +1,24 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v2024.3
+_src_path: gh:westerveltco/django-twc-package
+author_email: josh@joshthomas.dev
+author_name: Josh Thomas
+current_version: 0.1.0
+django_versions:
+- '3.2'
+- '4.2'
+- '5.0'
+docs_domain: westervelt.dev
+github_owner: westerveltco
+github_repo: django-simple-nav
+module_name: django_simple_nav
+package_description: A simple, flexible, and extensible navigation menu for Django.
+package_name: django-simple-nav
+python_versions:
+- '3.8'
+- '3.9'
+- '3.10'
+- '3.11'
+- '3.12'
+test_django_main: true
+versioning_scheme: SemVer

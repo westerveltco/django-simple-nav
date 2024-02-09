@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Now using [`django-twc-package`](https://github.com/westerveltco/django-twc-package) template for repository and package structure.
+
 ## [0.1.0]
 
 Initial release! 🎉
@@ -25,9 +29,9 @@ Initial release! 🎉
 ### Added
 
 - A group of navigation classes -- `Nav`, `NavGroup`, and `NavItem` -- that can be used together to build a simple navigation structure.
-    - `Nav` is the main container for a navigation structure.
-    - `NavGroup` is a container for a group of `NavItem` objects.
-    - `NavItem` is a single navigation item.
+  - `Nav` is the main container for a navigation structure.
+  - `NavGroup` is a container for a group of `NavItem` objects.
+  - `NavItem` is a single navigation item.
 - A `django_simple_nav` template tag that renders a `Nav` object to a template. The template tag takes a string represented the dotted path to a `Nav` object and renders it to the template.
 - Navigation item urls can be either a URL string (e.g. `https://example.com/about/` or `/about/`) or a Django URL name (e.g. `about-view`). When rendering out to the template, the template tag will resolve the URL name to the actual URL.
 - Navigation items also can take a list of permissions to control the visibility of the item. The permissions can be user attributes (e.g. `is_staff`, `is_superuser`, etc.) or a specific permission (e.g. `auth.add_user`).
@@ -37,7 +41,7 @@ Initial release! 🎉
 - Initial tests.
 - Initial CI/CD (GitHub Actions).
 
-### New Contributors!
+### New Contributors
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 - Jeff Triplett [@jefftriplett](https://github.com/jefftriplett)

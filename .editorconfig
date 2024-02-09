@@ -4,20 +4,22 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
+indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{{J,j}ustfile,.{J,j}ustfile,{*.{py,rst,ini,md}}}]
+[{,.}{j,J}ustfile]
 indent_size = 4
-indent_style = space
+
+[*.{py,rst,ini,md}]
+indent_size = 4
 
 [*.py]
 line_length = 120
 multi_line_output = 3
 
-[*.{css,html,js,json,sass,scss,yml,yaml}]
+[*.{css,html,js,json,jsx,sass,scss,svelte,ts,tsx,yml,yaml}]
 indent_size = 2
-indent_style = space
 
 [*.md]
 trim_trailing_whitespace = false
