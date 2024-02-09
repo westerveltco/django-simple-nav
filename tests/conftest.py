@@ -41,6 +41,12 @@ TEST_SETTINGS = {
     "PASSWORD_HASHERS": [
         "django.contrib.auth.hashers.MD5PasswordHasher",
     ],
+    "TEMPLATES": [
+        {
+            "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "APP_DIRS": True,
+        }
+    ],
 }
 
 
