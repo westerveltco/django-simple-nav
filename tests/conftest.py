@@ -1,72 +1,38 @@
 from __future__ import annotations
 
 import logging
-from html.parser import HTMLParser
 
-import pytest
 from django.conf import settings
-from django.http import HttpRequest
 
 pytest_plugins = []  # type: ignore
 
 
-# Settings fixtures to bootstrap our tests
-def pytest_configure(config):
+def pytest_configure(_):
     logging.disable(logging.CRITICAL)
 
-    settings.configure(
-        ALLOWED_HOSTS=["*"],
-        CACHES={
-            "default": {
-                "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-            }
+    settings.configure(**TEST_SETTINGS)
+
+
+TEST_SETTINGS = {
+    "ALLOWED_HOSTS": ["*"],
+    "DEBUG": False,
+    "CACHES": {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    },
+    "DATABASES": {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
         },
-        DATABASES={
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": ":memory:",
-            },
-        },
-        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
-        INSTALLED_APPS=[
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django_simple_nav",
-            "tests",
-        ],
-        LOGGING_CONFIG=None,
-        PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"],
-        ROOT_URLCONF="tests.urls",
-        SECRET_KEY="NOTASECRET",
-        TEMPLATES=[
-            {
-                "BACKEND": "django.template.backends.django.DjangoTemplates",
-                "APP_DIRS": True,
-            }
-        ],
-        USE_TZ=True,
-    )
-
-
-@pytest.fixture
-def req():
-    return HttpRequest()
-
-
-@pytest.fixture
-def count_anchors():
-    class AnchorParser(HTMLParser):
-        def __init__(self):
-            super().__init__()
-            self.anchors = []
-
-        def handle_starttag(self, tag, attrs):
-            if tag == "a":
-                self.anchors.append(attrs[0][1])
-
-    def count_anchors(html: str) -> int:
-        parser = AnchorParser()
-        parser.feed(html)
-        return len(parser.anchors)
-
-    return count_anchors
+    },
+    "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
+    "INSTALLED_APPS": [
+        "django_simple_nav",
+    ],
+    "LOGGING_CONFIG": None,
+    "PASSWORD_HASHERS": [
+        "django.contrib.auth.hashers.MD5PasswordHasher",
+    ],
+}

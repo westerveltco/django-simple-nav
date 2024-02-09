@@ -6,4 +6,8 @@ updates:
       interval: weekly
       timezone: America/Chicago
     labels:
-      - "dependabot"
+      - dependabot
+    groups:
+      gha:
+        patterns:
+          - "*"
