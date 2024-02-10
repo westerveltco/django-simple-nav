@@ -7,39 +7,23 @@ import pytest
 from django.conf import settings
 from django.http import HttpRequest
 
+from .settings import DEFAULT_SETTINGS
+
 pytest_plugins = []  # type: ignore
 
 
 def pytest_configure(config):
     logging.disable(logging.CRITICAL)
 
-    settings.configure(**TEST_SETTINGS)
+    settings.configure(**DEFAULT_SETTINGS, **TEST_SETTINGS)
 
 
 TEST_SETTINGS = {
-    "ALLOWED_HOSTS": ["*"],
-    "DEBUG": False,
-    "CACHES": {
-        "default": {
-            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-        }
-    },
-    "DATABASES": {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": ":memory:",
-        },
-    },
-    "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
     "INSTALLED_APPS": [
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django_simple_nav",
         "tests",
-    ],
-    "LOGGING_CONFIG": None,
-    "PASSWORD_HASHERS": [
-        "django.contrib.auth.hashers.MD5PasswordHasher",
     ],
     "ROOT_URLCONF": "tests.urls",
     "TEMPLATES": [
