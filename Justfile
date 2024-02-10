@@ -21,11 +21,11 @@ update:
 # TESTING/TYPES
 # ----------------------------------------------------------------------
 
-test:
-    python -m nox --reuse-existing-virtualenvs --session "test"
+test *ARGS:
+    python -m nox --reuse-existing-virtualenvs --session "test" -- "{{ ARGS }}"
 
-testall:
-    python -m nox --reuse-existing-virtualenvs --session "tests"
+testall *ARGS:
+    python -m nox --reuse-existing-virtualenvs --session "tests" -- "{{ ARGS }}"
 
 coverage:
     python -m nox --reuse-existing-virtualenvs --session "coverage"
@@ -90,7 +90,7 @@ fmt:
 
 # run pre-commit on all files
 lint:
-    pre-commit run --all-files
+    python -m nox --reuse-existing-virtualenvs --session "lint"
 
 # ----------------------------------------------------------------------
 # COPIER

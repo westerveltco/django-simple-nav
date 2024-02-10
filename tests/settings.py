@@ -19,4 +19,5 @@ DEFAULT_SETTINGS = {
     "PASSWORD_HASHERS": [
         "django.contrib.auth.hashers.MD5PasswordHasher",
     ],
+    "SECRET_KEY": "not-a-secret",
 }

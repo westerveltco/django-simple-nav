@@ -6,14 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project attempts to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!--
-## [Version Number]
-
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
+## [${version}]
+### Added - for new features
+### Changed - for changes in existing functionality
+### Deprecated - for soon-to-be removed features
+### Removed - for now removed features
+### Fixed - for any bug fixes
+### Security - in case of vulnerabilities
+[${version}]: https://github.com/westerveltco/django-simple-nav/releases/tag/v${version}
 -->
 
 ## [Unreleased]
