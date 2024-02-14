@@ -38,6 +38,8 @@ requires-python = ">=3.8"
 [project.optional-dependencies]
 dev = [
   "bumpver",
+  "copier",
+  "copier-templates-extensions",
   "coverage[toml]",
   "django-stubs",
   "django-stubs-ext",
