@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 
 - The `django_simple_nav` template tag can now take an instance of a `Nav` class, in addition to a `Nav` dotted path string. This should give greater flexibility for rendering a `Nav`, as it can now be overridden on a per-view/template basis.
@@ -50,5 +52,6 @@ Initial release! 🎉
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 - Jeff Triplett [@jefftriplett](https://github.com/jefftriplett)
 
-[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.2.0...HEAD
 [0.1.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.1.0
+[0.2.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.2.0
