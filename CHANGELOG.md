@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- The `django_simple_nav` template tag can now take an instance of a `Nav` class, in addition to a `Nav` dotted path string. This should give greater flexibility for rendering a `Nav`, as it can now be overridden on a per-view/template basis.
+
 ### Changed
 
 - Now using [`django-twc-package`](https://github.com/westerveltco/django-twc-package) template for repository and package structure.

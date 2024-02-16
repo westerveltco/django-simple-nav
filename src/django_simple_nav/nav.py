@@ -7,14 +7,15 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.safestring import mark_safe
 
 from django_simple_nav.permissions import check_item_permissions
 
 
 @dataclass(frozen=True)
 class Nav:
-    template_name: str
-    items: list[NavGroup | NavItem]
+    template_name: str = field(init=False)
+    items: list[NavGroup | NavItem] = field(init=False)
 
     @classmethod
     def render_from_request(
@@ -53,7 +54,7 @@ class RenderedNavItem:
 
     @property
     def title(self) -> str:
-        return self.item.title
+        return mark_safe(self.item.title)
 
     @property
     def items(self) -> list[NavGroup | NavItem] | None:
