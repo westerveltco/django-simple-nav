@@ -64,7 +64,7 @@ def test_dotted_path_rendering(req):
     [
         ("", 10),  # regular authenticated user
         ("is_staff", 13),
-        ("is_superuser", 16),
+        ("is_superuser", 19),
         ("tests.dummy_perm", 13),
     ],
 )
