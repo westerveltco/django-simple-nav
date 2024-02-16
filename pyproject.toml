@@ -76,8 +76,15 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-"src/django_simple_nav/__init__.py" = ['__version__ = "{version}"']
-"tests/test_version.py" = ['assert __version__ == "{version}"']
+".copier/package.yml" = [
+  'current_version: {version}'
+]
+"src/django_simple_nav/__init__.py" = [
+  '__version__ = "{version}"'
+]
+"tests/test_version.py" = [
+  'assert __version__ == "{version}"'
+]
 
 [tool.coverage.paths]
 source = ["src"]

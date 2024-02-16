@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.8
+  python: python3.12
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -24,7 +24,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: "1.16.0"
+    rev: 1.16.0
     hooks:
       - id: blacken-docs
         alias: autoformat
@@ -49,6 +49,17 @@ repos:
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+
+  - repo: local
+    hooks:
+      - id: rustywind
+        name: rustywind Tailwind CSS class linter
+        language: node
+        additional_dependencies:
+          - rustywind@0.21.0
+        entry: rustywind
+        args: [--write]
+        types_or: [html, jsx, tsx]
 
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
     rev: v2.12.0
