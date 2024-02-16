@@ -6,7 +6,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
-from .navs import DummyNav
+from tests.navs import DummyNav
+from tests.utils import count_anchors
 
 pytestmark = pytest.mark.django_db
 
@@ -41,7 +42,7 @@ def test_dotted_path_loading(nav, template_name, expected_count):
         (None, 10),
     ],
 )
-def test_nav_render(user, expected_count, req, count_anchors):
+def test_nav_render(user, expected_count, req):
     if not isinstance(user, AnonymousUser):
         user = baker.make(get_user_model())
 
@@ -67,7 +68,7 @@ def test_dotted_path_rendering(req):
         ("tests.dummy_perm", 13),
     ],
 )
-def test_nav_render_with_permissions(req, count_anchors, permission, expected_count):
+def test_nav_render_with_permissions(req, permission, expected_count):
     user = baker.make(get_user_model())
 
     if permission == "tests.dummy_perm":

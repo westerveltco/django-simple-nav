@@ -4,8 +4,10 @@ from django.contrib.auth.models import AnonymousUser
 from django.template import Context
 from django.template import Template
 
+from tests.utils import count_anchors
 
-def test_django_simple_nav_templatetag(req, count_anchors):
+
+def test_django_simple_nav_templatetag(req):
     template = Template(
         "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
     )
