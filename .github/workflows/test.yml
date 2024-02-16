@@ -14,16 +14,28 @@ env:
   FORCE_COLOR: "1"
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: wntrblm/nox@main
+        with:
+          python-versions: "3.8"
+
+      - id: set-matrix
+        run: |
+          echo "matrix=$(nox -l --json | jq -c '[.[] | select(.name == "tests") | {"python-version": .python, "django-version": .call_spec.django}] | {include: .}')" >> $GITHUB_OUTPUT
+
   test:
     name: Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
+    needs: generate-matrix
     strategy:
       fail-fast: false
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        django-version: ["3.2", "4.2", "5.0", "main"]
-    env:
-      NOX_SESSION: "tests(python='${{ matrix.python-version }}', django='${{ matrix.django-version }}')"
+      matrix: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,20 +50,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip nox
 
-      - name: Check if test session exists
-        run: |
-          if nox -l | grep -q "${{ env.NOX_SESSION }}"; then
-            echo "Session exists, proceeding with tests"
-            echo "RUN_TESTS=true" >> $GITHUB_ENV
-          else
-            echo "Session does not exist, skipping tests"
-            echo "RUN_TESTS=false" >> $GITHUB_ENV
-          fi
-
       - name: Run tests
-        if: env.RUN_TESTS == 'true'
         run: |
-          python -m nox --session "${{ env.NOX_SESSION }}"
+          python -m nox --session "tests(python='${{ matrix.python-version }}', django='${{ matrix.django-version }}')"
 
   tests:
     runs-on: ubuntu-latest
