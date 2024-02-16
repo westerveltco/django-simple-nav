@@ -8,13 +8,13 @@ from django.template import Template
 from model_bakery import baker
 
 from django_simple_nav.nav import NavItem
-
-from .navs import DummyNav
+from tests.navs import DummyNav
+from tests.utils import count_anchors
 
 pytestmark = pytest.mark.django_db
 
 
-def test_django_simple_nav_templatetag(req, count_anchors):
+def test_django_simple_nav_templatetag(req):
     template = Template(
         "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
     )

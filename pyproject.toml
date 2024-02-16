@@ -3,11 +3,9 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-authors = [
-  {name = "Josh Thomas", email = "josh@joshthomas.dev"}
-]
+authors = [{name = "Josh Thomas", email = "josh@joshthomas.dev"}]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Framework :: Django",
   "Framework :: Django :: 3.2",
   "Framework :: Django :: 4.2",
@@ -24,9 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython"
 ]
-dependencies = [
-  "django>=3.2"
-]
+dependencies = ["django>=3.2"]
 description = "A simple, flexible, and extensible navigation menu for Django."
 dynamic = ["version"]
 keywords = []
@@ -80,12 +76,8 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-"src/django_simple_nav/__init__.py" = [
-  '__version__ = "{version}"'
-]
-"tests/test_version.py" = [
-  'assert __version__ == "{version}"'
-]
+"src/django_simple_nav/__init__.py" = ['__version__ = "{version}"']
+"tests/test_version.py" = ['assert __version__ == "{version}"']
 
 [tool.coverage.paths]
 source = ["src"]
@@ -102,10 +94,7 @@ exclude_lines = [
 fail_under = 75
 
 [tool.coverage.run]
-omit = [
-  "src/django_simple_nav/migrations/*",
-  "tests/*"
-]
+omit = ["src/django_simple_nav/migrations/*", "tests/*"]
 source = ["django_simple_nav"]
 
 [tool.django-stubs]
@@ -116,10 +105,7 @@ strict_settings = false
 indent = 2
 
 [tool.hatch.build]
-exclude = [
-  ".*",
-  "Justfile"
-]
+exclude = [".*", "Justfile"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/django_simple_nav"]
@@ -132,9 +118,7 @@ check_untyped_defs = true
 exclude = "docs/.*\\.py$"
 mypy_path = "src/"
 no_implicit_optional = true
-plugins = [
-  "mypy_django_plugin.main"
-]
+plugins = ["mypy_django_plugin.main"]
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
@@ -142,10 +126,7 @@ warn_unused_ignores = true
 [[tool.mypy.overrides]]
 ignore_errors = true
 ignore_missing_imports = true
-module = [
-  "django_simple_nav.*.migrations.*",
-  "tests.*"
-]
+module = ["django_simple_nav.*.migrations.*", "tests.*"]
 
 [tool.mypy_django_plugin]
 ignore_missing_model_attributes = true
@@ -159,8 +140,6 @@ pythonpath = "src"
 testpaths = ["tests"]
 
 [tool.ruff]
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 # Exclude a variety of commonly ignored directories.
 exclude = [
   ".bzr",
@@ -183,22 +162,11 @@ exclude = [
   "venv"
 ]
 extend-include = ["*.pyi?"]
-# Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["A", "B", "C", "D", "E", "F", "I"]
-ignore = ["E501", "E741"]  # temporary
 indent-width = 4
 # Same as Black.
 line-length = 88
-select = [
-  "B",  # flake8-bugbear
-  "E",  # Pycodestyle
-  "F",  # Pyflakes
-  "I",  # isort
-  "UP"  # pyupgrade
-]
 # Assume Python >3.8.
 target-version = "py38"
-unfixable = []
 
 [tool.ruff.format]
 # Like Black, indent with spaces, rather than tabs.
@@ -208,15 +176,30 @@ line-ending = "auto"
 # Like Black, use double quotes for strings.
 quote-style = "double"
 
-[tool.ruff.isort]
+[tool.ruff.lint]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "I"]
+ignore = ["E501", "E741"]  # temporary
+select = [
+  "B",  # flake8-bugbear
+  "E",  # Pycodestyle
+  "F",  # Pyflakes
+  "I",  # isort
+  "UP"  # pyupgrade
+]
+unfixable = []
+
+[tool.ruff.lint.isort]
 force-single-line = true
 known-first-party = ["django_simple_nav"]
 required-imports = ["from __future__ import annotations"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports
 "tests/**/*" = ["PLR2004", "S101", "TID252"]
 
-[tool.ruff.pyupgrade]
+[tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = true
