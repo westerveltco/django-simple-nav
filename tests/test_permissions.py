@@ -37,7 +37,7 @@ def test_check_superuser_user_has_perm():
     assert user_has_perm(user, "is_superuser")
 
 
-def test_check_dummy_perm_user_has_perm():
+def test_check_auth_permission_user_has_perm():
     user = baker.make(get_user_model())
 
     dummy_perm = baker.make(
