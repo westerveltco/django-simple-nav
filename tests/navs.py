@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pytest
-
 from django_simple_nav.nav import Nav
 from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
