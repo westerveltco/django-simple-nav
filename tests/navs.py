@@ -6,8 +6,6 @@ from django_simple_nav.nav import Nav
 from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
 
-pytestmark = pytest.mark.django_db
-
 
 class DummyNav(Nav):
     template_name = "tests/dummy_nav.html"
