@@ -18,19 +18,26 @@ class Nav:
     template_name: str = field(init=False)
     items: list[NavGroup | NavItem] = field(init=False)
 
+    def get_context_data(self, request: HttpRequest) -> dict[str, Any]:
+        items = [
+            RenderedNavItem(item, request)
+            for item in self.items
+            if check_item_permissions(item, request.user)  # type: ignore[arg-type]
+        ]
+        return {"items": items}
+
+    def render(self, request: HttpRequest, template_name: str | None = None) -> str:
+        context = self.get_context_data(request)
+        return render_to_string(
+            template_name=template_name or self.template_name,
+            context=context,
+        )
+
     @classmethod
     def render_from_request(
         cls, request: HttpRequest, template_name: str | None = None
     ) -> str:
-        items = [
-            RenderedNavItem(item, request)
-            for item in cls.items
-            if check_item_permissions(item, request.user)  # type: ignore[arg-type]
-        ]
-        return render_to_string(
-            template_name=template_name or cls.template_name,
-            context={"items": items},
-        )
+        return cls().render(request, template_name)
 
 
 @dataclass(frozen=True)

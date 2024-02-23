@@ -185,3 +185,43 @@ def test_extra_context_builtins(req):
     assert rendered_group_item.permissions == ["is_staff"]
     assert rendered_group_item.extra_context == {"foo": "bar"}
     assert rendered_group_item.foo == "bar"
+
+
+def test_get_context_data(req):
+    req.user = baker.make(get_user_model())
+
+    context = DummyNav().get_context_data(req)
+
+    assert context["items"]
+
+
+def test_get_context_data_override(req):
+    class OverrideNav(DummyNav):
+        def get_context_data(self, request):
+            return {"foo": "bar"}
+
+    req.user = baker.make(get_user_model())
+
+    context = OverrideNav().get_context_data(req)
+
+    assert context["foo"] == "bar"
+
+
+def test_render(req):
+    req.user = baker.make(get_user_model())
+
+    rendered_template = DummyNav().render(req)
+
+    assert count_anchors(rendered_template) == 10
+
+
+def test_render_override(req):
+    class OverrideNav(DummyNav):
+        def get_context_data(self, request):
+            return {"foo": "bar"}
+
+    req.user = baker.make(get_user_model())
+
+    rendered_template = OverrideNav().render(req)
+
+    assert count_anchors(rendered_template) == 0
