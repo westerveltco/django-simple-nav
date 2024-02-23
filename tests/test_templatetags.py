@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.template import Context
 from django.template import Template
+from django.template import TemplateSyntaxError
 from model_bakery import baker
 
 from django_simple_nav.nav import NavItem
@@ -87,3 +88,17 @@ def test_templatetag_with_template_name_on_nav_instance(req):
 
     assert "Yeah Mr. White! Yeah science!" in rendered_template
     assert "This is an alternate template." in rendered_template
+
+
+def test_templatetag_with_no_arguments():
+    with pytest.raises(TemplateSyntaxError):
+        Template("{% load django_simple_nav %} {% django_simple_nav %}")
+
+
+def test_templatetag_with_missing_variable():
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav missing_nav %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context({}))

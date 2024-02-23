@@ -219,3 +219,23 @@ def test_get_context_data_override_render(req):
     rendered_template = OverrideNav().render(req)
 
     assert count_anchors(rendered_template) == 0
+
+
+def test_rendered_nav_item_active(req):
+    item = NavItem(title="Test", url="/test/")
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.active is False
+
+    req.path = "/test/"
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.active is True
+
+
+def test_rendered_nav_item_active_no_url(req):
+    item = NavGroup(title="Test", items=[NavItem(title="Test", url="/test/")])
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.active is False
