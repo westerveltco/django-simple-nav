@@ -20,7 +20,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Added
 
-- An `extra_context` attribute to `NavGroup` and `NavItem` classes. This allows for passing additional context to the template when rendering the navigation, either via the extra attribute (`item.foo`) or the `extra_context` attribute itself (`item.extra_context.foo`).
+- `NavGroup` and `NavItem` now has a new `extra_context` attribute. This allows for passing additional context to the template when rendering the navigation, either via the extra attribute (`item.foo`) or the `extra_context` attribute itself (`item.extra_context.foo`).
 
 ### Changed
 
