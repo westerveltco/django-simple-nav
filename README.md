@@ -47,7 +47,7 @@
    - `Nav`: The main container for a navigation structure. It has two required attributes:
      - `template_name`: The name of the template to render the navigation structure.
      - `items`: A list of `NavItem` or `NavGroup` objects that represent the navigation structure.
-   - `NavGroup`: A container for a group of `NavItem` objects. It has two required and three optional attributes:
+   - `NavGroup`: A container for a group of `NavItem` or `NavGroup` objects. It has two required and three optional attributes:
      - `title`: The title of the group.
      - `items`: A list of `NavItem` or `NavGroup`objects that represent the structure of the group.
      - `url` (optional): The URL of the group. If not provided, the group will not be a link but just a container for the items.
