@@ -156,9 +156,12 @@
    ```htmldjango
    <!-- base.html -->
    {% load django_simple_nav %}
+
+   {% block navigation %}
    <nav>
      {% django_simple_nav "path.to.MainNav" %}
    </nav>
+   {% endblock navigation %}
    ```
 
    The template tag can either take a string representing the import path to your navigation definition or an instance of your navigation class:
@@ -173,11 +176,15 @@
    ```
 
    ```htmldjango
-   <!-- base.html -->
+   <!-- example_app/example_template.html -->
+   {% extends "base.html" %}
    {% load django_simple_nav %}
+
+   {% block navigation %}
    <nav>
        {% django_simple_nav nav %}
    </nav>
+   {% endblock navigation %}
    ```
 
    Additionally, the template tag can take a second argument to specify the template to use for rendering the navigation. This is useful if you want to use the same navigation structure in multiple places but render it differently.
@@ -185,6 +192,7 @@
    ```htmldjango
    <!-- base.html -->
    {% load django_simple_nav %}
+
    <footer>
      {% django_simple_nav "path.to.MainNav" "footer_nav.html" %}
    </footer>
