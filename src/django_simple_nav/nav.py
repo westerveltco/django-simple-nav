@@ -56,6 +56,9 @@ class RenderedNavItem:
     request: HttpRequest
 
     def __getattr__(self, name: str) -> Any:
+        if name == "extra_context":
+            return self.item.extra_context
+
         try:
             return self.item.extra_context[name]
         except KeyError as err:

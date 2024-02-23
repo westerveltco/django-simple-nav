@@ -117,6 +117,7 @@ def test_extra_context_with_no_extra_context(req):
         title="Test",
         url="/test/",
     )
+
     rendered_item = RenderedNavItem(item, req)
 
     with pytest.raises(AttributeError):
@@ -129,6 +130,21 @@ def test_extra_context_shadowing(req):
         url="/test/",
         extra_context={"title": "Shadowed"},
     )
+
     rendered_item = RenderedNavItem(item, req)
 
     assert rendered_item.title == "Test"
+
+
+def test_extra_context_iteration(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+        extra_context={"foo": "bar", "baz": "qux"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.extra_context == {"foo": "bar", "baz": "qux"}
+    for key, value in rendered_item.extra_context.items():
+        assert getattr(rendered_item, key) == value
