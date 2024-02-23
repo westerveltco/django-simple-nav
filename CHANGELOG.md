@@ -26,7 +26,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Removed
 
-- `Nav.render_from_request` method has been removed. This was used in one spot in the template tag. It has been removed in favor of the new `Nav.render` method.
+- `Nav.render_from_request` method has been removed. This was only used within the template tag to render a `Nav` template from an `HttpRequest` object. It has been removed in favor of the new `Nav.get_context_data` and `Nav.render` methods.
 
 ## [0.3.0]
 
