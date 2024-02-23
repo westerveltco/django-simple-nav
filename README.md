@@ -51,12 +51,12 @@
      - `title`: The title of the group.
      - `items`: A list of `NavItem` or `NavGroup`objects that represent the structure of the group.
      - `url` (optional): The URL of the group. If not provided, the group will not be a link but just a container for the items.
-     - `permissions` (optional): A list of permissions that control the visibility of the group.
+     - `permissions` (optional): A list of permissions that control the visibility of the group. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`) or Django permissions (e.g. `myapp.django_perm`).
      - `extra_context` (optional): A dictionary of additional context to pass to the template when rendering the navigation.
    - `NavItem`: A single navigation item. It has two required and three optional attributes:
      - `title`: The title of the item.
      - `url`: The URL of the item. This can be a URL string (e.g. `https://example.com/about/` or `/about/`) or a Django URL name (e.g. `about-view`).
-     - `permissions` (optional): A list of permissions that control the visibility of the item.
+     - `permissions` (optional): A list of permissions that control the visibility of the item. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`) or Django permissions (e.g. `myapp.django_perm`).
      - `extra_context` (optional): A dictionary of additional context to pass to the template when rendering the navigation.
 
    Here's an example configuration:
@@ -115,6 +115,8 @@
 
    Create a template to render the navigation structure. This is just a standard Django template so you can use any Django template features you like.
 
+   The template will be passed an `items` variable in the context.
+
    Any items with permissions attached will automatically filtered out before rendering the template based on the request user's permissions, so you don't need to worry about that in your template.
 
    Items with extra context will have that context passed to the template when rendering the navigation, which you can access either directly or through the `item.extra_context` attribute.
@@ -124,7 +126,7 @@
    ```htmldjango
    <!-- main_nav.html -->
    <ul>
-     {% for item in nav.items %}
+     {% for item in items %}
        <li>
          <a href="{{ item.url }}"{% if item.active %} class="active"{% endif %}{% if item.baz %} data-baz="{{ item.baz }}"{% endif %}>
            {{ item.title }}
