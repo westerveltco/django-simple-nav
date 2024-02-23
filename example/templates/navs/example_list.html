@@ -1,0 +1,10 @@
+<ul>
+  {% for item in items %}
+    <li>
+      <a href="{{ item.url }}"
+         class="{% if item.active %}text-indigo-500 hover:text-indigo-300{% else %}hover:text-gray-400{% endif %}">
+        {{ item.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,4 +1,5 @@
 {# djlint:off D018,H031 #}
+{% load django_simple_nav %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -36,16 +37,22 @@
     {% endblock nav %}
     <main>
       {% block content %}
-        <div class="mx-2 mt-8 prose">
-          <h1>
+        <div class="mx-4 mt-8 prose">
+          {% if request.path != "/" %}
+            <a href="/" class="flex items-center text-sm hover:text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 20 20"
+                   fill="currentColor"
+                   class="mr-2 w-4 h-4">
+                <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
+              </svg>
+              Back to index
+            </a>
+          {% endif %}
+          <h1 class="mt-8">
             <code class="bg-gray-200 rounded">django-simple-nav</code> Examples
           </h1>
-          <a href="/" class="hover:text-gray-400">Back to home</a>
-          <ul>
-            <li>
-              <a href="/tailwind/" class="hover:text-gray-400">Tailwind CSS</a>
-            </li>
-          </ul>
+          {% django_simple_nav "navigation.ExampleListNav" %}
         </div>
       {% endblock content %}
     </main>
