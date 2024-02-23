@@ -1,0 +1,53 @@
+{# djlint:off D018,H031 #}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      {% block title %}
+        django-simple-nav Demo
+      {% endblock title %}
+    </title>
+    <meta name="description" content="A demo of django-simple-nav" />
+    <meta name="author" content="Josh Thomas" />
+    {% block css %}
+      <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    {% endblock css %}
+    <script defer
+            src="https://unpkg.com/@alpinejs/ui@3.13.3-beta.4"
+            integrity="sha384-BOC0hrQPTXQv3X+4j0CDVtDdBplQLPPs6KJfKnc3r7/DNlbvpd9EjykBWP/sNH9v"
+            crossorigin="anonymous"></script>
+    <script defer
+            src="https://unpkg.com/@alpinejs/collapse@3.13.3"
+            integrity="sha384-2OH1oWuzGQTwIVsefc3w96FepRDcaddeEJiyo8ZXCQA4jP7C4mQMdI70jDKtgq0R"
+            crossorigin="anonymous"></script>
+    <script defer
+            src="https://unpkg.com/@alpinejs/focus@3.13.3"
+            integrity="sha384-KbHuoVQjZqKnY0E8Zy6AadqsgGJwz0QYY5kk9XyFE2GTDeOqNYsSBDLCNOuSwcis"
+            crossorigin="anonymous"></script>
+    <script defer
+            src="https://unpkg.com/alpinejs@3.13.3"
+            integrity="sha384-Rpe/8orFUm5Q1GplYBHxbuA8Az8O8C5sAoOsdbRWkqPjKFaxPgGZipj4zeHL7lxX"
+            crossorigin="anonymous"></script>
+  </head>
+  <body>
+    {% block nav %}
+    {% endblock nav %}
+    <main>
+      {% block content %}
+        <div class="mx-2 mt-8 prose">
+          <h1>
+            <code class="bg-gray-200 rounded">django-simple-nav</code> Examples
+          </h1>
+          <a href="/" class="hover:text-gray-400">Back to home</a>
+          <ul>
+            <li>
+              <a href="/tailwind/" class="hover:text-gray-400">Tailwind CSS</a>
+            </li>
+          </ul>
+        </div>
+      {% endblock content %}
+    </main>
+  </body>
+</html>
