@@ -29,8 +29,8 @@ class DjangoSimpleNavNode(template.Node):
 
     def render(self, context):
         try:
-            self.nav = self.nav.resolve(context)
-            self.template_name = (
+            resolved_nav = self.nav.resolve(context)
+            resolved_template_name = (
                 self.template_name.resolve(context) if self.template_name else None
             )
         except template.VariableDoesNotExist as err:
@@ -38,11 +38,19 @@ class DjangoSimpleNavNode(template.Node):
                 f"Variable does not exist: {err}"
             ) from err
 
-        if isinstance(self.nav, str):
-            nav = import_string(self.nav)()
+        if isinstance(resolved_nav, str):
+            try:
+                nav = import_string(resolved_nav)()
+            except ImportError as err:
+                raise template.TemplateSyntaxError(
+                    f"Failed to import: {resolved_nav}"
+                ) from err
         else:
-            nav = self.nav
+            nav = resolved_nav
 
-        assert hasattr(nav, "render")
+        if not hasattr(nav, "render"):
+            raise template.TemplateSyntaxError(
+                "The object does not have a 'render' method."
+            )
 
-        return nav.render(context["request"], self.template_name)
+        return nav.render(context["request"], resolved_template_name)
