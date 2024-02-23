@@ -18,6 +18,16 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- The `Nav` class now has two new methods: `get_context_data` and `render`. These methods are used to render the navigation to a template. These new methods give greater flexibility for customizing the rendering of the navigation, as they can be overridden when defining a new `Nav`.
+  - `Nav.get_context_data` method takes a Django `HttpRequest` object and returns a dictionary of context data that can be used to render the navigation to a template.
+  - `Nav.render` method takes a Django `HttpRequest` object and an optional template name and renders the navigation to a template, returning the rendered template as a string.
+
+### Removed
+
+- `Nav.render_from_request` method has been removed. This was used in one spot in the template tag. It has been removed in favor of the new `Nav.render` method.
+
 ## [0.3.0]
 
 ### Added
