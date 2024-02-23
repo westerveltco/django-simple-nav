@@ -18,9 +18,17 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- `NavGroup` and `NavItem` now has a new `extra_context` attribute. This allows for passing additional context to the template when rendering the navigation, either via the extra attribute (`item.foo`) or the `extra_context` attribute itself (`item.extra_context.foo`).
+
 ### Changed
 
 - Now using v2024.13 of `django-twc-package`.
+
+### Fixed
+
+- `RenderedNavItem.items` property now correctly returns a list of `RenderedNavItem` objects, rather than a list of `NavItem` objects. This fixes a bug where the properties that should be available (e.g. `active`, `url`, etc.) were not available when iterating over the `RenderedNavItem.items` list if the item was a `NavGroup` object with child items.
 
 ## [0.2.0]
 

@@ -6,6 +6,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
+from django_simple_nav.nav import NavGroup
+from django_simple_nav.nav import NavItem
+from django_simple_nav.nav import RenderedNavItem
 from tests.navs import DummyNav
 from tests.utils import count_anchors
 
@@ -96,3 +99,89 @@ def test_nav_render_from_request_with_template_name(req):
     rendered_template = DummyNav.render_from_request(req, "tests/alternate.html")
 
     assert "This is an alternate template." in rendered_template
+
+
+def test_extra_context(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+        extra_context={"foo": "bar"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.foo == "bar"
+
+
+def test_extra_context_with_no_extra_context(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    with pytest.raises(AttributeError):
+        assert rendered_item.foo == "bar"
+
+
+def test_extra_context_shadowing(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+        extra_context={"title": "Shadowed"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.title == "Test"
+
+
+def test_extra_context_iteration(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+        extra_context={"foo": "bar", "baz": "qux"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.extra_context == {"foo": "bar", "baz": "qux"}
+    for key, value in rendered_item.extra_context.items():
+        assert getattr(rendered_item, key) == value
+
+
+def test_extra_context_builtins(req):
+    item = NavGroup(
+        title="Test",
+        items=[
+            NavItem(
+                title="Test",
+                url="/test/",
+                permissions=["is_staff"],
+                extra_context={"foo": "bar"},
+            ),
+        ],
+        url="/test/",
+        permissions=["is_staff"],
+        extra_context={"baz": "qux"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.title == "Test"
+    assert rendered_item.url == "/test/"
+    assert rendered_item.permissions == ["is_staff"]
+    assert rendered_item.extra_context == {"baz": "qux"}
+    assert rendered_item.baz == "qux"
+
+    assert rendered_item.items is not None
+    assert len(rendered_item.items) == 1
+
+    rendered_group_item = rendered_item.items[0]
+
+    assert rendered_group_item.title == "Test"
+    assert rendered_group_item.url == "/test/"
+    assert rendered_group_item.permissions == ["is_staff"]
+    assert rendered_group_item.extra_context == {"foo": "bar"}
+    assert rendered_group_item.foo == "bar"
