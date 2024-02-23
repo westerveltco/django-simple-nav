@@ -6,6 +6,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
+from django_simple_nav.nav import NavItem
+from django_simple_nav.nav import RenderedNavItem
 from tests.navs import DummyNav
 from tests.utils import count_anchors
 
@@ -96,3 +98,26 @@ def test_nav_render_from_request_with_template_name(req):
     rendered_template = DummyNav.render_from_request(req, "tests/alternate.html")
 
     assert "This is an alternate template." in rendered_template
+
+
+def test_extra_context(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+        extra_context={"foo": "bar"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.foo == "bar"
+
+
+def test_extra_context_with_no_extra_context(req):
+    item = NavItem(
+        title="Test",
+        url="/test/",
+    )
+    rendered_item = RenderedNavItem(item, req)
+
+    with pytest.raises(AttributeError):
+        assert rendered_item.foo == "bar"
