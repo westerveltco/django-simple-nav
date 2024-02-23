@@ -40,10 +40,10 @@ author = "Josh Thomas"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "autodoc2",
     "myst_parser",
     "sphinx_copybutton",
     "sphinx_inline_tabs",
-    "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
 ]
 
@@ -62,6 +62,10 @@ myst_heading_anchors = 3
 copybutton_selector = "div.copy pre"
 copybutton_prompt_text = "$ "
 
+# -- Options for autodoc2 -----------------------------------------------------
+autodoc2_packages = [f"../src/{project.replace('-', '_')}"]
+
+autodoc2_render_plugin = "myst"
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -74,6 +78,10 @@ html_theme = "furo"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+html_css_files = [
+    "css/custom.css",
+]
 
 html_title = project
 

@@ -1,5 +1,6 @@
 # Releasing a New Version
 
+<!-- releasing-start -->
 When it comes time to cut a new release, follow these steps:
 
 1. Create a new git branch off of `main` for the release.
@@ -52,7 +53,7 @@ When it comes time to cut a new release, follow these steps:
    bumpver update --tag=final
    ```
 
-3. Ensure the [CHANGELOG](CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
+3. Ensure the [CHANGELOG](https://github.com/westerveltco/django-simple-nav/CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
 
 4. Create a pull request from the release branch to `main`.
 
@@ -73,3 +74,4 @@ When it comes time to cut a new release, follow these steps:
 We try our best to adhere to [Semantic Versioning](https://semver.org/), but we do not promise to follow it perfectly (and let's be honest, this is the case with a lot of projects using SemVer).
 
 In general, use your best judgement when choosing the next version number. If you are unsure, you can always ask for a second opinion from another contributor.
+<!-- releasing-end -->

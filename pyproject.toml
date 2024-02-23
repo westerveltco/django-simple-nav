@@ -57,6 +57,7 @@ docs = [
   "myst-parser",
   "sphinx",
   "sphinx-autobuild",
+  "sphinx-autodoc2",
   "sphinx-copybutton",
   "sphinx-inline-tabs"
 ]
