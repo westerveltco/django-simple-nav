@@ -113,3 +113,11 @@ def lint(session):
 def mypy(session):
     session.install(".[dev]")
     session.run("python", "-m", "mypy", ".")
+
+
+@nox.session
+def demo(session):
+    addrport = session.posargs[0] if session.posargs else "localhost:8000"
+
+    session.install(".[dev]")
+    session.run("python", "example/demo.py", "runserver", addrport)

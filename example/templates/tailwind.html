@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load django_simple_nav %}
+{% block css %}
+  {{ block.super }}
+  <style type="text/tailwindcss">
+    @layer utilities {
+      [x-cloak] {
+        display: none !important;
+      }
+    }
+  </style>
+{% endblock css %}
+{% block content %}
+  {% django_simple_nav "navigation.TailwindMainNav" %}
+  {{ block.super }}
+{% endblock content %}

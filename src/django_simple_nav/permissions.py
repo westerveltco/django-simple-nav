@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Protocol
+from typing import cast
+
+from django.http import HttpRequest
 
 if TYPE_CHECKING:
     from django_simple_nav.nav import NavGroup
@@ -17,8 +20,13 @@ class User(Protocol):
         ...  # pragma: no cover
 
 
-def check_item_permissions(item: NavGroup | NavItem, user: User) -> bool:
+def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bool:
     for idx, perm in enumerate(item.permissions):
+        if not hasattr(request, "user"):
+            return False
+
+        user = cast(User, request.user)
+
         user_perm = user_has_perm(user, perm)
 
         if not user_perm:
