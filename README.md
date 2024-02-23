@@ -115,7 +115,7 @@
 
    Create a template to render the navigation structure. This is just a standard Django template so you can use any Django template features you like.
 
-   The template will be passed an `items` variable in the context.
+   The template will be passed an `items` variable in the context representing the structure of the navigation, containing the `NavItem` and `NavGroup` objects defined in your navigation.
 
    Any items with permissions attached will automatically filtered out before rendering the template based on the request user's permissions, so you don't need to worry about that in your template.
 
