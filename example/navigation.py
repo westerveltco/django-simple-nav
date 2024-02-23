@@ -15,16 +15,16 @@ class TailwindMainNav(Nav):
     template_name = "navs/tailwind_main.html"
     items = [
         NavItem(title="Dashboard", url="/tailwind/"),
-        NavItem(title="Team", url="/team/"),
-        NavItem(title="Projects", url="/projects/"),
-        NavItem(title="Calendar", url="/calendar/"),
+        NavItem(title="Team", url="#"),
+        NavItem(title="Projects", url="#"),
+        NavItem(title="Calendar", url="#"),
     ]
 
 
 class TailwindProfileNav(Nav):
     template_name = "navs/tailwind_profile.html"
     items = [
-        NavItem(title="Your Profile", url="/profile/"),
-        NavItem(title="Settings", url="/settings/"),
-        NavItem(title="Sign out", url="/sign-out/"),
+        NavItem(title="Your Profile", url="#"),
+        NavItem(title="Settings", url="#"),
+        NavItem(title="Sign out", url="#"),
     ]
