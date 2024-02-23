@@ -58,21 +58,24 @@ class RenderedNavItem:
     def __getattr__(self, name: str) -> Any:
         if name == "extra_context":
             return self.item.extra_context
-        try:
-            return self.item.extra_context[name]
-        except KeyError as err:
-            msg = f"{self.item!r} object has no attribute {name!r}"
-            raise AttributeError(msg) from err
+        elif hasattr(self.item, name):
+            return getattr(self.item, name)
+        else:
+            try:
+                return self.item.extra_context[name]
+            except KeyError as err:
+                msg = f"{self.item!r} object has no attribute {name!r}"
+                raise AttributeError(msg) from err
 
     @property
     def title(self) -> str:
         return mark_safe(self.item.title)
 
     @property
-    def items(self) -> list[NavGroup | NavItem] | None:
+    def items(self) -> list[RenderedNavItem] | None:
         if not isinstance(self.item, NavGroup):
             return None
-        return self.item.items
+        return [RenderedNavItem(item, self.request) for item in self.item.items]
 
     @property
     def url(self) -> str:

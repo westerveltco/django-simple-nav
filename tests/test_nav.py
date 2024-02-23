@@ -6,6 +6,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
+from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
 from django_simple_nav.nav import RenderedNavItem
 from tests.navs import DummyNav
@@ -148,3 +149,39 @@ def test_extra_context_iteration(req):
     assert rendered_item.extra_context == {"foo": "bar", "baz": "qux"}
     for key, value in rendered_item.extra_context.items():
         assert getattr(rendered_item, key) == value
+
+
+def test_extra_context_builtins(req):
+    item = NavGroup(
+        title="Test",
+        items=[
+            NavItem(
+                title="Test",
+                url="/test/",
+                permissions=["is_staff"],
+                extra_context={"foo": "bar"},
+            ),
+        ],
+        url="/test/",
+        permissions=["is_staff"],
+        extra_context={"baz": "qux"},
+    )
+
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.title == "Test"
+    assert rendered_item.url == "/test/"
+    assert rendered_item.permissions == ["is_staff"]
+    assert rendered_item.extra_context == {"baz": "qux"}
+    assert rendered_item.baz == "qux"
+
+    assert rendered_item.items is not None
+    assert len(rendered_item.items) == 1
+
+    rendered_group_item = rendered_item.items[0]
+
+    assert rendered_group_item.title == "Test"
+    assert rendered_group_item.url == "/test/"
+    assert rendered_group_item.permissions == ["is_staff"]
+    assert rendered_group_item.extra_context == {"foo": "bar"}
+    assert rendered_group_item.foo == "bar"

@@ -26,6 +26,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Now using v2024.13 of `django-twc-package`.
 
+### Fixed
+
+- `RenderedNavItem.items` property now correctly returns a list of `RenderedNavItem` objects, rather than a list of `NavItem` objects. This fixes a bug where the properties that should be available (e.g. `active`, `url`, etc.) were not available when iterating over the `RenderedNavItem.items` list if the item was a `NavGroup` object with child items.
+
 ## [0.2.0]
 
 ### Added
