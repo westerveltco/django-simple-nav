@@ -1,5 +1,6 @@
 # django-simple-nav
 
+<!-- intro-start -->
 [![PyPI](https://img.shields.io/pypi/v/django-simple-nav)](https://pypi.org/project/django-simple-nav/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-simple-nav)
 ![Django Version](https://img.shields.io/badge/django-3.2%20%7C%204.2%20%7C%205.0-%2344B78B?labelColor=%23092E20)
@@ -13,9 +14,11 @@
 
 - Python 3.8, 3.9, 3.10, 3.11, 3.12
 - Django 3.2, 4.2, 5.0
+<!-- intro-end -->
 
 ## Getting Started
 
+<!-- getting-started-start -->
 1. **Install the package from PyPI.**
 
    ```bash
@@ -33,9 +36,11 @@
        ...,
    ]
    ```
+<!-- getting-started-end -->
 
 ## Usage
 
+<!-- usage-start -->
 1. **Create a navigation definition.**
 
    Define your navigation structure in a Python file. This file can be located anywhere in your Django project, provided it's importable. You can also split the navigations across multiple files if desired.
@@ -199,6 +204,7 @@
    ```
 
 After configuring your navigation, you can use it across your Django project by calling the `django_simple_nav` template tag in your templates. This tag dynamically renders navigation based on your defined structure, ensuring a consistent and flexible navigation experience throughout your application.
+<!-- usage-end -->
 
 ## Documentation
 
