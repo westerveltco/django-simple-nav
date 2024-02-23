@@ -14,6 +14,7 @@
 - Python 3.8, 3.9, 3.10, 3.11, 3.12
 - Django 3.2, 4.2, 5.0
 
+<!-- getting-started-begin -->
 ## Getting Started
 
 1. Install the package from PyPI:
@@ -33,6 +34,7 @@
        ...,
    ]
    ```
+<!-- getting-started-end -->
 
 ## Usage
 
@@ -96,4 +98,4 @@ Please refer to the [documentation](https://django-simple-nav.westervelt.dev/) f
 
 ## License
 
-`django-simple-nav` is licensed under the MIT license. See the [`LICENSE`](LICENSE) file for more information.
+`django-simple-nav` is licensed under the MIT license. See the [`LICENSE`](./LICENSE) file for more information.
