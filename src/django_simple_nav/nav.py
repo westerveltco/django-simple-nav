@@ -33,12 +33,6 @@ class Nav:
             context=context,
         )
 
-    @classmethod
-    def render_from_request(
-        cls, request: HttpRequest, template_name: str | None = None
-    ) -> str:
-        return cls().render(request, template_name)
-
 
 @dataclass(frozen=True)
 class NavGroup:

@@ -39,10 +39,10 @@ class DjangoSimpleNavNode(template.Node):
             ) from err
 
         if isinstance(self.nav, str):
-            nav = import_string(self.nav)
+            nav = import_string(self.nav)()
         else:
             nav = self.nav
 
-        assert hasattr(nav, "render_from_request")
+        assert hasattr(nav, "render")
 
-        return nav.render_from_request(context["request"], self.template_name)
+        return nav.render(context["request"], self.template_name)

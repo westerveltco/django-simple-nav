@@ -50,16 +50,18 @@ def test_nav_render(user, expected_count, req):
         user = baker.make(get_user_model())
 
     req.user = user
-    rendered_template = DummyNav.render_from_request(req)
+
+    rendered_template = DummyNav().render(req)
 
     assert count_anchors(rendered_template) == expected_count
 
 
-def test_dotted_path_rendering(req):
+def test_dotted_path_nav_render(req):
     req.user = baker.make(get_user_model())
+
     nav = import_string("tests.navs.DummyNav")
 
-    assert nav.render_from_request(req)
+    assert nav().render(req)
 
 
 @pytest.mark.parametrize(
@@ -88,15 +90,15 @@ def test_nav_render_with_permissions(req, permission, expected_count):
     user.save()
 
     req.user = user
-    rendered_template = DummyNav.render_from_request(req)
+    rendered_template = DummyNav().render(req)
 
     assert count_anchors(rendered_template) == expected_count
 
 
-def test_nav_render_from_request_with_template_name(req):
+def test_nav_render_with_template_name(req):
     req.user = AnonymousUser()
 
-    rendered_template = DummyNav.render_from_request(req, "tests/alternate.html")
+    rendered_template = DummyNav().render(req, "tests/alternate.html")
 
     assert "This is an alternate template." in rendered_template
 
@@ -207,15 +209,7 @@ def test_get_context_data_override(req):
     assert context["foo"] == "bar"
 
 
-def test_render(req):
-    req.user = baker.make(get_user_model())
-
-    rendered_template = DummyNav().render(req)
-
-    assert count_anchors(rendered_template) == 10
-
-
-def test_render_override(req):
+def test_get_context_data_override_render(req):
     class OverrideNav(DummyNav):
         def get_context_data(self, request):
             return {"foo": "bar"}
