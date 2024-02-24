@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.test import override_settings
 from model_bakery import baker
 
 from django_simple_nav.nav import NavGroup
@@ -331,3 +333,17 @@ def test_check_item_permissions_auth_permission(item, expected, req):
     req.user = user
 
     assert check_item_permissions(item, req) == expected
+
+
+@override_settings(
+    INSTALLED_APPS=[
+        app for app in settings.INSTALLED_APPS if app != "django.contrib.auth"
+    ]
+)
+def test_check_item_permissions_no_contrib_auth(req, caplog):
+    item = NavItem("Test", "/test", permissions=["is_authenticated"])
+
+    with caplog.at_level("WARNING"):
+        assert check_item_permissions(item, req) is True
+
+    assert "The 'django.contrib.auth' app is not installed" in caplog.text
