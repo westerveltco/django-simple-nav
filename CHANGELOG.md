@@ -25,6 +25,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Fixed
 
 - `check_item_permission` now explicitly checks if `django.contrib.auth` is installed before attempting to check if a user has a permission. If it is not, it will return `True` by default and log a warning.
+- The `request` object is now passed to `render_to_string` when rendering the navigation template, so that the `request` object is available in the template context. This allows for nesting the `django_simple_nav` template tag within another `django_simple_nav` template tag, and having the `request` object available in the nested template.
 
 ## [0.4.0]
 
