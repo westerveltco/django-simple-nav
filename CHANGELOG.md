@@ -18,6 +18,14 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- `check_item_permission` now takes a `request` argument instead of a `user` argument.
+
+### Fixed
+
+- `check_item_permission` now explicitly checks if `django.contrib.auth` is installed before attempting to check if a user has a permission. If it is not, it will return `True` by default and log a warning.
+
 ## [0.4.0]
 
 ### Added

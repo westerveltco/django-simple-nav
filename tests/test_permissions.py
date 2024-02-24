@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.test import override_settings
 from model_bakery import baker
 
 from django_simple_nav.nav import NavGroup
@@ -100,10 +102,10 @@ def test_check_auth_permission_user_has_perm():
         ),
     ],
 )
-def test_check_item_permissions_anonymous(item, expected):
-    user = AnonymousUser()
+def test_check_item_permissions_anonymous(item, expected, req):
+    req.user = AnonymousUser()
 
-    assert check_item_permissions(item, user) == expected
+    assert check_item_permissions(item, req) == expected
 
 
 # authenticated user
@@ -154,10 +156,10 @@ def test_check_item_permissions_anonymous(item, expected):
         ),
     ],
 )
-def test_check_item_permissions_is_authenticated(item, expected):
-    user = baker.make(get_user_model())
+def test_check_item_permissions_is_authenticated(item, expected, req):
+    req.user = baker.make(get_user_model())
 
-    assert check_item_permissions(item, user) == expected
+    assert check_item_permissions(item, req) == expected
 
 
 # staff user
@@ -208,10 +210,10 @@ def test_check_item_permissions_is_authenticated(item, expected):
         ),
     ],
 )
-def test_check_item_permissions_is_staff(item, expected):
-    user = baker.make(get_user_model(), is_staff=True)
+def test_check_item_permissions_is_staff(item, expected, req):
+    req.user = baker.make(get_user_model(), is_staff=True)
 
-    assert check_item_permissions(item, user) == expected
+    assert check_item_permissions(item, req) == expected
 
 
 # superuser
@@ -262,10 +264,10 @@ def test_check_item_permissions_is_staff(item, expected):
         ),
     ],
 )
-def test_check_item_permissions_is_superuser(item, expected):
-    user = baker.make(get_user_model(), is_superuser=True)
+def test_check_item_permissions_is_superuser(item, expected, req):
+    req.user = baker.make(get_user_model(), is_superuser=True)
 
-    assert check_item_permissions(item, user) == expected
+    assert check_item_permissions(item, req) == expected
 
 
 # user with specific auth.Permission
@@ -316,7 +318,7 @@ def test_check_item_permissions_is_superuser(item, expected):
         ),
     ],
 )
-def test_check_item_permissions_auth_permission(item, expected):
+def test_check_item_permissions_auth_permission(item, expected, req):
     user = baker.make(get_user_model())
 
     dummy_perm = baker.make(
@@ -328,4 +330,20 @@ def test_check_item_permissions_auth_permission(item, expected):
 
     user.user_permissions.add(dummy_perm)
 
-    assert check_item_permissions(item, user) == expected
+    req.user = user
+
+    assert check_item_permissions(item, req) == expected
+
+
+@override_settings(
+    INSTALLED_APPS=[
+        app for app in settings.INSTALLED_APPS if app != "django.contrib.auth"
+    ]
+)
+def test_check_item_permissions_no_contrib_auth(req, caplog):
+    item = NavItem("Test", "/test", permissions=["is_authenticated"])
+
+    with caplog.at_level("WARNING"):
+        assert check_item_permissions(item, req) is True
+
+    assert "The 'django.contrib.auth' app is not installed" in caplog.text

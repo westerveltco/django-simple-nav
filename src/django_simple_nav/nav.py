@@ -22,7 +22,7 @@ class Nav:
         items = [
             RenderedNavItem(item, request)
             for item in self.items
-            if check_item_permissions(item, request.user)  # type: ignore[arg-type]
+            if check_item_permissions(item, request)
         ]
         return {"items": items}
 
