@@ -31,6 +31,7 @@ class Nav:
         return render_to_string(
             template_name=template_name or self.template_name,
             context=context,
+            request=request,
         )
 
 
