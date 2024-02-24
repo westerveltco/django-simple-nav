@@ -61,17 +61,11 @@ settings.configure(
 )
 
 
-def index(request):
-    return render(request, "base.html")
-
-
-def tailwind(request):
-    return render(request, "tailwind.html")
-
-
 urlpatterns = [
-    path("", index),
-    path("tailwind/", tailwind),
+    path("", lambda request: render(request, "base.html")),
+    path("tailwind/", lambda request: render(request, "tailwind.html")),
+    path("bootstrap4/", lambda request: render(request, "bootstrap4.html")),
+    path("bootstrap5/", lambda request: render(request, "bootstrap5.html")),
 ]
 
 app = get_wsgi_application()
