@@ -102,3 +102,16 @@ def test_templatetag_with_missing_variable():
 
     with pytest.raises(TemplateSyntaxError):
         template.render(Context({}))
+
+
+def test_nested_templatetag(req):
+    # called twice to simulate a nested call
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
+        "{% django_simple_nav 'tests.navs.DummyNav' %}"
+    )
+    req.user = AnonymousUser()
+
+    rendered_template = template.render(Context({"request": req}))
+
+    assert count_anchors(rendered_template) == 14
