@@ -12,7 +12,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarsExample">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="mb-2 navbar-nav me-auto mb-lg-0">
         {% for item in items %}
           {% if item.items %}
             <li class="nav-item dropdown{% if item.active %} active{% endif %}">
@@ -34,9 +34,7 @@
           {% else %}
             <li class="nav-item{% if item.active %} active{% endif %}">
               <a class="nav-link{% if item.disabled %} disabled{% endif %}"
-                 href="{{ item.url }}">
-            {{ item.title }}
-          </a>
+                 href="{{ item.url }}">{{ item.title }}</a>
             </li>
           {% endif %}
         {% endfor %}
