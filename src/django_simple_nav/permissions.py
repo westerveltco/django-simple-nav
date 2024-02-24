@@ -1,11 +1,18 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 from typing import Protocol
+from typing import cast
+
+from django.apps import apps
+from django.http import HttpRequest
 
 if TYPE_CHECKING:
     from django_simple_nav.nav import NavGroup
     from django_simple_nav.nav import NavItem
+
+logger = logging.getLogger(__name__)
 
 
 class User(Protocol):
@@ -17,7 +24,15 @@ class User(Protocol):
         ...  # pragma: no cover
 
 
-def check_item_permissions(item: NavGroup | NavItem, user: User) -> bool:
+def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bool:
+    if not apps.is_installed("django.contrib.auth"):
+        logger.warning(
+            "The 'django.contrib.auth' app is not installed, so no permissions will be checked."
+        )
+        return True
+
+    user = cast(User, request.user)
+
     for idx, perm in enumerate(item.permissions):
         user_perm = user_has_perm(user, perm)
 
@@ -31,7 +46,7 @@ def check_item_permissions(item: NavGroup | NavItem, user: User) -> bool:
         sub_items = [
             sub_item
             for sub_item in item.items
-            if check_item_permissions(sub_item, user)
+            if check_item_permissions(sub_item, request)
         ]
         if not sub_items and not item.url:
             return False
