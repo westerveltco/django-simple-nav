@@ -34,7 +34,9 @@
           {% else %}
             <li class="nav-item{% if item.active %} active{% endif %}">
               <a class="nav-link{% if item.disabled %} disabled{% endif %}"
-                 href="{{ item.url }}">{{ item.title }}</a>
+                 href="{{ item.url }}">
+            {{ item.title }}
+          </a>
             </li>
           {% endif %}
         {% endfor %}
