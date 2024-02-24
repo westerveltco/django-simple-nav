@@ -97,7 +97,11 @@
                role="menu"
                aria-orientation="vertical"
                aria-labelledby="user-menu-button"
-               tabindex="-1">{% django_simple_nav "navigation.TailwindProfileNav" %}</div>
+               tabindex="-1">
+            {# djlint:off #}
+            {% django_simple_nav "navigation.TailwindProfileNav" %}
+            {# djlint:on #}
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django_simple_nav.nav import Nav
+from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
 
 
@@ -8,6 +9,8 @@ class ExampleListNav(Nav):
     template_name = "navs/example_list.html"
     items = [
         NavItem(title="Tailwind CSS", url="/tailwind/"),
+        NavItem(title="Bootstrap 4", url="/bootstrap/?version=4"),
+        NavItem(title="Bootstrap 5", url="/bootstrap/?version=5"),
     ]
 
 
@@ -27,4 +30,21 @@ class TailwindProfileNav(Nav):
         NavItem(title="Your Profile", url="#"),
         NavItem(title="Settings", url="#"),
         NavItem(title="Sign out", url="#"),
+    ]
+
+
+class BootstrapNav(Nav):
+    template_name = "navs/bootstrap4.html"
+    items = [
+        NavItem(title="Home", url="/bootstrap/"),
+        NavItem(title="Link", url="#"),
+        NavItem(title="Disabled", url="#", extra_context={"disabled": True}),
+        NavGroup(
+            title="Dropdown",
+            items=[
+                NavItem(title="Action", url="#"),
+                NavItem(title="Another action", url="#"),
+                NavItem(title="Something else here", url="#"),
+            ],
+        ),
     ]
