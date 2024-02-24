@@ -9,8 +9,8 @@ class ExampleListNav(Nav):
     template_name = "navs/example_list.html"
     items = [
         NavItem(title="Tailwind CSS", url="/tailwind/"),
-        NavItem(title="Bootstrap 4", url="/bootstrap4/"),
-        NavItem(title="Bootstrap 5", url="/bootstrap5/"),
+        NavItem(title="Bootstrap 4", url="/bootstrap/?version=4"),
+        NavItem(title="Bootstrap 5", url="/bootstrap/?version=5"),
     ]
 
 
@@ -36,7 +36,7 @@ class TailwindProfileNav(Nav):
 class BootstrapNav(Nav):
     template_name = "navs/bootstrap4.html"
     items = [
-        NavItem(title="Home", url="#"),
+        NavItem(title="Home", url="/bootstrap/"),
         NavItem(title="Link", url="#"),
         NavItem(title="Disabled", url="#", extra_context={"disabled": True}),
         NavGroup(

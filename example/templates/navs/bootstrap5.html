@@ -15,8 +15,8 @@
       <ul class="mb-2 navbar-nav me-auto mb-lg-0">
         {% for item in items %}
           {% if item.items %}
-            <li class="nav-item dropdown{% if item.active %} active{% endif %}">
-              <a class="nav-link dropdown-toggle{% if item.disabled %} disabled{% endif %}"
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle{% if item.disabled %} disabled{% endif %}{% if item.active %} active{% endif %}"
                  href="{{ item.url }}"
                  id="navbarDropdown"
                  role="button"
@@ -32,8 +32,8 @@
               </ul>
             </li>
           {% else %}
-            <li class="nav-item{% if item.active %} active{% endif %}">
-              <a class="nav-link{% if item.disabled %} disabled{% endif %}"
+            <li class="nav-item">
+              <a class="nav-link{% if item.disabled %} disabled{% endif %}{% if item.active %} active{% endif %}"
                  href="{{ item.url }}">{{ item.title }}</a>
             </li>
           {% endif %}

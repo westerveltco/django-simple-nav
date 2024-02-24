@@ -16,35 +16,6 @@ settings.configure(
     INSTALLED_APPS=[
         "django_simple_nav",
     ],
-    LOGGING={
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "plain_console": {
-                "format": "%(levelname)s %(message)s",
-            },
-            "verbose": {
-                "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
-            },
-        },
-        "handlers": {
-            "stdout": {
-                "class": "logging.StreamHandler",
-                "stream": sys.stdout,
-                "formatter": "verbose",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["stdout"],
-                "level": "DEBUG",
-            },
-            "default": {
-                "handlers": ["stdout"],
-                "level": "DEBUG",
-            },
-        },
-    },
     ROOT_URLCONF=__name__,
     SECRET_KEY=secrets.token_hex(32),
     TEMPLATES=[
@@ -61,11 +32,16 @@ settings.configure(
 )
 
 
+def demo(request, template_name):
+    version = request.GET.get("version", "")
+    template = f"{template_name.split('.')[0]}{version}.html"
+    return render(request, template)
+
+
 urlpatterns = [
-    path("", lambda request: render(request, "base.html")),
-    path("tailwind/", lambda request: render(request, "tailwind.html")),
-    path("bootstrap4/", lambda request: render(request, "bootstrap4.html")),
-    path("bootstrap5/", lambda request: render(request, "bootstrap5.html")),
+    path("", demo, {"template_name": "base.html"}),
+    path("tailwind/", demo, {"template_name": "tailwind.html"}),
+    path("bootstrap/", demo, {"template_name": "bootstrap.html"}),
 ]
 
 app = get_wsgi_application()
