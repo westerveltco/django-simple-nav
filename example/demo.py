@@ -103,7 +103,6 @@ app = get_wsgi_application()
 if __name__ == "__main__":
     from django.contrib.auth.models import Permission
     from django.core.management import call_command
-    from django.core.management import execute_from_command_line
 
     call_command("migrate")
     Permission.objects.update_or_create(
@@ -111,4 +110,4 @@ if __name__ == "__main__":
         name="Demo Permission",
         content_type_id=1,
     )
-    execute_from_command_line(sys.argv)
+    call_command("runserver")
