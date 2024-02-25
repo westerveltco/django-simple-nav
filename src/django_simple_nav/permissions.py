@@ -34,6 +34,11 @@ def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bo
     user = cast(User, request.user)
 
     for idx, perm in enumerate(item.permissions):
+        if not hasattr(request, "user"):
+            return False
+
+        user = cast(User, request.user)
+
         user_perm = user_has_perm(user, perm)
 
         if not user_perm:

@@ -1,0 +1,23 @@
+<nav>
+  <ul>
+    {% for item in items %}
+      <li>
+        {% if item.url %}
+          <a href="{{ item.url }}"{% if item.active %} class="active"{% endif %}>{{ item.title }}</a>
+        {% else %}
+          <span {% if item.active %}class="active"{% endif %}>{{ item.title }}</span>
+        {% endif %}
+        {% if item.items %}
+          <ul>
+            {% for subitem in item.items %}
+              <li>
+                <a href="{{ subitem.url }}"
+                   {% if subitem.active %}class="active"{% endif %}>{{ subitem.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>

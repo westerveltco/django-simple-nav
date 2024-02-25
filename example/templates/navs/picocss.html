@@ -1,0 +1,33 @@
+<nav class="container">
+  <ul>
+    <li>
+      <strong>Acme Corp</strong>
+    </li>
+  </ul>
+  <ul>
+    {% for item in items %}
+      <li>
+        {% if item.items %}
+          <details class="dropdown">
+            <summary>{{ item.title }}</summary>
+            <ul>
+              {% for subitem in item.items %}
+                <li>
+                  <a href="{{ subitem.url }}"
+                     {% if subitem.active %}aria-current="page"{% endif %}>{{ subitem.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% else %}
+          {% if item.url %}
+            <a href="{{ item.url }}"
+               {% if item.active %}aria-current="page"{% endif %}>{{ item.title }}</a>
+          {% else %}
+            <span>{{ item.title }}</span>
+          {% endif %}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>

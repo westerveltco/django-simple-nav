@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load django_simple_nav %}
+{% block extra_head %}
+  <style>
+  .active {
+    font-weight: bold;
+  }
+  </style>
+{% endblock extra_head %}
+{% block nav %}
+  {% django_simple_nav "navigation.PermissionsNav" %}
+  <h2>Select a permission to see the nav for it</h2>
+  {% django_simple_nav "navigation.SetPermissionsNav" %}
+{% endblock nav %}

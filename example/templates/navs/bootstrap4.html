@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarsExample"
+          aria-controls="navbarsExample"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExample">
+    <ul class="mr-auto navbar-nav">
+      {% for item in items %}
+        {% if item.items %}
+          <li class="nav-item dropdown{% if item.active %} active{% endif %}">
+            <a class="nav-link dropdown-toggle{% if item.disabled %} disabled{% endif %}"
+               href="{{ item.url }}"
+               id="dropdown"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">{{ item.title }}</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown">
+              {% for subitem in item.items %}
+                <a class="dropdown-item{% if subitem.active %} active{% endif %}"
+                   href="{{ subitem.url }}">{{ subitem.title }}</a>
+              {% endfor %}
+            </div>
+          </li>
+        {% else %}
+          <li class="nav-item{% if item.active %} active{% endif %}">
+            <a class="nav-link{% if item.disabled %} disabled{% endif %}"
+               href="{{ item.url }}">{{ item.title }}
+              {% if item.active %}<span class="sr-only">(current)</span>{% endif %}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <form class="my-2 form-inline my-md-0">
+      <input class="form-control" type="text" placeholder="Search" />
+    </form>
+  </div>
+</nav>

@@ -1,0 +1,7 @@
+{% for item in items %}
+  <a href="{{ item.url }}"
+     class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100{% if item.active %} bg-gray-200{% endif %}"
+     role="menuitem"
+     tabindex="-1"
+     id="user-menu-item-0">{{ item.title }}</a>
+{% endfor %}

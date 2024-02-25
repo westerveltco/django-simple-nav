@@ -1,0 +1,76 @@
+{# djlint:off D018,H021,H031 #}
+{% load django_simple_nav %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      {% block title %}
+        django-simple-nav Demo
+      {% endblock title %}
+    </title>
+    <meta name="description" content="A demo of django-simple-nav" />
+    <meta name="author" content="Josh Thomas" />
+    <link rel="icon" href="https://fav.farm/📃" />
+    {% block extra_head %}
+      <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+      <style type="text/tailwindcss">
+        @layer utilities {
+          [x-cloak] {
+            display: none !important;
+          }
+        }
+      </style>
+      <script defer
+              src="https://unpkg.com/@alpinejs/ui@3.13.3-beta.4"
+              integrity="sha384-BOC0hrQPTXQv3X+4j0CDVtDdBplQLPPs6KJfKnc3r7/DNlbvpd9EjykBWP/sNH9v"
+              crossorigin="anonymous"></script>
+      <script defer
+              src="https://unpkg.com/@alpinejs/collapse@3.13.3"
+              integrity="sha384-2OH1oWuzGQTwIVsefc3w96FepRDcaddeEJiyo8ZXCQA4jP7C4mQMdI70jDKtgq0R"
+              crossorigin="anonymous"></script>
+      <script defer
+              src="https://unpkg.com/@alpinejs/focus@3.13.3"
+              integrity="sha384-KbHuoVQjZqKnY0E8Zy6AadqsgGJwz0QYY5kk9XyFE2GTDeOqNYsSBDLCNOuSwcis"
+              crossorigin="anonymous"></script>
+      <script defer
+              src="https://unpkg.com/alpinejs@3.13.3"
+              integrity="sha384-Rpe/8orFUm5Q1GplYBHxbuA8Az8O8C5sAoOsdbRWkqPjKFaxPgGZipj4zeHL7lxX"
+              crossorigin="anonymous"></script>
+    {% endblock extra_head %}
+  </head>
+  <body>
+    {% block nav %}
+    {% endblock nav %}
+    <main>
+      {% block content %}
+        <div class="prose"
+             style="margin-left: 1rem;
+                    margin-right: 1rem;
+                    margin-top: 2rem">
+          {% if request.path != "/" %}
+            <a href="/"
+               style="display: flex;
+                      align-items: center;
+                      font-size: 0.875rem">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 20 20"
+                   fill="currentColor"
+                   style="width: 1.25em;
+                          height: 1.25em;
+                          margin-right: 0.5em">
+                <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
+              </svg>
+              Back to index
+            </a>
+          {% endif %}
+          <h1 class="mt-8">
+            <code class="bg-gray-200 rounded">django-simple-nav</code> Examples
+          </h1>
+          {% django_simple_nav "navigation.ExampleListNav" %}
+        </div>
+      {% endblock content %}
+    </main>
+  </body>
+</html>

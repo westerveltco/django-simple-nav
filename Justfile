@@ -6,6 +6,9 @@ set dotenv-load := true
 bootstrap:
     python -m pip install --editable '.[dev]'
 
+demo:
+    python -m nox --reuse-existing-virtualenvs --session "demo"
+
 # ----------------------------------------------------------------------
 # DEPENDENCIES
 # ----------------------------------------------------------------------

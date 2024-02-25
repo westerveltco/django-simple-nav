@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"
+     aria-label="Navbar example">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarsExample"
+            aria-controls="navbarsExample"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample">
+      <ul class="mb-2 navbar-nav me-auto mb-lg-0">
+        {% for item in items %}
+          {% if item.items %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle{% if item.disabled %} disabled{% endif %}{% if item.active %} active{% endif %}"
+                 href="{{ item.url }}"
+                 id="navbarDropdown"
+                 role="button"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false">{{ item.title }}</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for subitem in item.items %}
+                  <li>
+                    <a class="dropdown-item{% if subitem.active %} active{% endif %}"
+                       href="{{ subitem.url }}">{{ subitem.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link{% if item.disabled %} disabled{% endif %}{% if item.active %} active{% endif %}"
+                 href="{{ item.url }}">{{ item.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <form role="search">
+        <input class="form-control"
+               type="search"
+               placeholder="Search"
+               aria-label="Search" />
+      </form>
+    </div>
+  </div>
+</nav>

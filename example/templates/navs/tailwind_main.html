@@ -1,0 +1,120 @@
+{# djlint:off H006 #}
+{% load django_simple_nav %}
+<nav x-data="{ open: false }" x-menu class="bg-gray-800">
+  <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="flex relative justify-between items-center h-16">
+      <div class="flex absolute inset-y-0 left-0 items-center sm:hidden">
+        <!-- Mobile menu button-->
+        <button x-menu:button
+                @click="open = !open"
+                @click.away="open = false"
+                type="button"
+                class="inline-flex relative justify-center items-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:ring-2 focus:ring-inset focus:ring-white focus:outline-none"
+                aria-controls="mobile-menu"
+                aria-expanded="false">
+          <span class="absolute -inset-0.5"></span>
+          <span class="sr-only">Open main menu</span>
+          <svg x-show="!open"
+               class="w-6 h-6"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke-width="1.5"
+               stroke="currentColor"
+               aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg x-show="open"
+               x-cloak
+               class="w-6 h-6"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke-width="1.5"
+               stroke="currentColor"
+               aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-1 justify-center items-center sm:justify-start sm:items-stretch">
+        <div class="flex flex-shrink-0 items-center">
+          <img class="w-auto h-8"
+               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+               alt="Your Company" />
+        </div>
+        <div class="hidden sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            {% for item in items %}
+              <a href="{{ item.url }}"
+                 {% if item.active %} class="py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-md" aria-current="page" {% else %} class="py-2 px-3 text-sm font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700" {% endif %}>
+                {{ item.title }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="flex absolute inset-y-0 right-0 items-center pr-2 sm:static sm:inset-auto sm:pr-0 sm:ml-6">
+        <button type="button"
+                class="relative p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none">
+          <span class="absolute -inset-1.5"></span>
+          <span class="sr-only">View notifications</span>
+          <svg class="w-6 h-6"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke-width="1.5"
+               stroke="currentColor"
+               aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+        </button>
+        <!-- Profile dropdown -->
+        <div x-data="{ open: false }" x-menu class="relative ml-3">
+          <div>
+            <button x-menu:button
+                    @click="open = !open"
+                    @click.away="open = false"
+                    type="button"
+                    class="flex relative text-sm bg-gray-800 rounded-full focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                    id="user-menu-button"
+                    aria-expanded="false"
+                    aria-haspopup="true">
+              <span class="absolute -inset-1.5"></span>
+              <span class="sr-only">Open user menu</span>
+              <img class="w-8 h-8 rounded-full"
+                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                   alt="" />
+            </button>
+          </div>
+          <!-- Dropdown menu, show/hide based on menu state. -->
+          <div x-show="open"
+               x-cloak
+               x-transition:enter="transition ease-out duration-100"
+               x-transition:enter-start="transform opacity-0 scale-95"
+               x-transition:enter-end="transform opacity-100 scale-100"
+               x-transition:leave="transition ease-in duration-75"
+               x-transition:leave-start="transform opacity-100 scale-100"
+               x-transition:leave-end="transform opacity-0 scale-95"
+               class="absolute right-0 z-10 py-1 mt-2 w-48 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none"
+               role="menu"
+               aria-orientation="vertical"
+               aria-labelledby="user-menu-button"
+               tabindex="-1">
+            {# djlint:off #}
+            {% django_simple_nav "navigation.TailwindProfileNav" %}
+            {# djlint:on #}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div x-show="open" x-cloak class="sm:hidden" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      {% for item in items %}
+        <a href="{{ item.url }}"
+           {% if item.active %} class="block py-2 px-3 text-base font-medium text-white bg-gray-900 rounded-md" aria-current="page" {% else %} class="block py-2 px-3 text-base font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700" {% endif %}>
+          {{ item.title }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</nav>

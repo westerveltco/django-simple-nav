@@ -206,6 +206,35 @@
 After configuring your navigation, you can use it across your Django project by calling the `django_simple_nav` template tag in your templates. This tag dynamically renders navigation based on your defined structure, ensuring a consistent and flexible navigation experience throughout your application.
 <!-- usage-end -->
 
+## Examples
+
+The [`example`](example/) directory contains a simple Django project that demonstrates how to use `django-simple-nav`. The example project includes a navigation definitions for a few different scenarios as well as some popular CSS frameworks.
+
+You can run the example project by following these steps. These steps assume you have `git` and `python` installed on your system and are using a Unix-like shell. If you are using Windows, you may need to adjust the commands accordingly.
+
+1. **Clone the repository.**
+
+   ```bash
+   git clone https://github.com/westerveltco/django-simple-nav
+   cd django-simple-nav
+   ```
+
+2. **Create a new virtual environment, activate it, and install `django-simple-nav`.**
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   python -m pip install .
+   ```
+
+3. **Run the example project.**
+
+   ```bash
+   python example/demo.py
+   ```
+
+4. **Open your browser to `http://localhost:8000` to see the examples in action.**
+
 ## Documentation
 
 Please refer to the [documentation](https://django-simple-nav.westervelt.dev/) for more information.
