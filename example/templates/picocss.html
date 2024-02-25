@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load django_simple_nav %}
+{% block extra_head %}
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+{% endblock extra_head %}
+{% block nav %}
+  {% django_simple_nav "navigation.PicoCSSNav" "navs/picocss.html" %}
+{% endblock nav %}

@@ -81,9 +81,9 @@ class RenderedNavItem:
         return [RenderedNavItem(item, self.request) for item in self.item.items]
 
     @property
-    def url(self) -> str:
+    def url(self) -> str | None:
         if not self.item.url:
-            return "#"
+            return None
         try:
             url = reverse(self.item.url)
         except NoReverseMatch:
