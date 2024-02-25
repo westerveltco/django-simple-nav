@@ -208,7 +208,7 @@ After configuring your navigation, you can use it across your Django project by 
 
 ## Examples
 
-The `examples` directory contains a simple Django project that demonstrates how to use `django-simple-nav`. The example project includes a navigation definitions for a few different scenarios as well as some popular CSS frameworks.
+The [`example`](example/) directory contains a simple Django project that demonstrates how to use `django-simple-nav`. The example project includes a navigation definitions for a few different scenarios as well as some popular CSS frameworks.
 
 You can run the example project by following these steps. These steps assume you have `git` and `python` installed on your system and are using a Unix-like shell. If you are using Windows, you may need to adjust the commands accordingly.
 
