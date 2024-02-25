@@ -49,9 +49,7 @@ settings.configure(
         },
     },
     MIDDLEWARE=[
-        "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
     ],
     ROOT_URLCONF=__name__,
