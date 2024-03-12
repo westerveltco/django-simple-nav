@@ -43,7 +43,7 @@ dev = [
   "hatch",
   "mypy",
   "model-bakery",
-  "nox",
+  "nox[uv]>=2024.03.02",
   "pytest",
   "pytest-cov",
   "pytest-django",
