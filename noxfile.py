@@ -5,8 +5,8 @@ from pathlib import Path
 
 import nox
 
-nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv|virtualenv"
+nox.options.reuse_existing_virtualenvs = True
 
 PY38 = "3.8"
 PY39 = "3.9"
