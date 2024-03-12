@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.5.1]
+
 ### Added
 
 - Added the requisite `py.typed` file to the package, so that it plays nicely when type-checking in projects using `django-simple-nav`.
@@ -97,9 +99,10 @@ Initial release! 🎉
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 - Jeff Triplett [@jefftriplett](https://github.com/jefftriplett)
 
-[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.5.1...HEAD
 [0.1.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.1.0
 [0.2.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.2.0
 [0.3.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.3.0
 [0.4.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.4.0
 [0.5.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.5.0
+[0.5.1]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.5.1
