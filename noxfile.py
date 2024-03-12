@@ -81,7 +81,6 @@ def tests(session, django):
 
 @nox.session
 def coverage(session):
-    session.install(".[dev]")
     session.install("django-simple-nav[dev] @ .")
     session.run("python", "-m", "pytest", "--cov=django_simple_nav")
 
