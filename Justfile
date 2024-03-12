@@ -7,7 +7,7 @@ bootstrap:
     python -m pip install --editable '.[dev]'
 
 demo:
-    python -m nox --reuse-existing-virtualenvs --session "demo"
+    python -m nox -session "demo"
 
 # ----------------------------------------------------------------------
 # DEPENDENCIES
@@ -25,16 +25,16 @@ update:
 # ----------------------------------------------------------------------
 
 test *ARGS:
-    python -m nox --reuse-existing-virtualenvs --session "test" -- "{{ ARGS }}"
+    python -m nox --session "test" -- "{{ ARGS }}"
 
 testall *ARGS:
-    python -m nox --reuse-existing-virtualenvs --session "tests" -- "{{ ARGS }}"
+    python -m nox --session "tests" -- "{{ ARGS }}"
 
 coverage:
-    python -m nox --reuse-existing-virtualenvs --session "coverage"
+    python -m nox --session "coverage"
 
 types:
-    python -m nox --reuse-existing-virtualenvs --session "mypy"
+    python -m nox --session "mypy"
 
 # ----------------------------------------------------------------------
 # DJANGO
@@ -98,7 +98,7 @@ fmt:
 
 # run pre-commit on all files
 lint:
-    python -m nox --reuse-existing-virtualenvs --session "lint"
+    python -m nox --session "lint"
 
 # ----------------------------------------------------------------------
 # COPIER

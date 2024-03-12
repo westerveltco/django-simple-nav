@@ -46,9 +46,13 @@ jobs:
           cache: "pip"
           allow-prereleases: true
 
+      - uses: wntrblm/nox@main
+        with:
+          python-versions: ${{ matrix.python-version }}
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip nox
+          python -m pip install --upgrade uv
 
       - name: Run tests
         run: |
@@ -75,6 +79,10 @@ jobs:
         with:
           python-versions: "3.8"
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade uv
+
       - name: Run mypy
         run: nox --session "mypy"
 
@@ -86,6 +94,10 @@ jobs:
       - uses: wntrblm/nox@main
         with:
           python-versions: "3.8"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade uv
 
       - name: Run coverage
         run: nox --session "coverage"
