@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added the requisite `py.typed` file to the package, so that it plays nicely when type-checking in projects using `django-simple-nav`.
+
 ## [0.5.0]
 
 ### Added
