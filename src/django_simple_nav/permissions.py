@@ -20,8 +20,7 @@ class User(Protocol):
     is_staff: bool
     is_superuser: bool
 
-    def has_perm(self, perm: str) -> bool:
-        ...  # pragma: no cover
+    def has_perm(self, perm: str) -> bool: ...  # pragma: no cover
 
 
 def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bool:
