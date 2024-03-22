@@ -3,9 +3,6 @@ set dotenv-load := true
 @_default:
     just --list
 
-bootstrap:
-    python -m pip install --editable '.[dev]'
-
 demo:
     python -m nox -session "demo"
 
@@ -13,12 +10,12 @@ demo:
 # DEPENDENCIES
 # ----------------------------------------------------------------------
 
-pup:
-    python -m pip install --upgrade pip
-
-update:
+bootstrap:
     @just pup
-    @just bootstrap
+    python -m uv pip install --editable '.[dev]'
+
+pup:
+    python -m pip install --upgrade pip uv
 
 # ----------------------------------------------------------------------
 # TESTING/TYPES
@@ -70,7 +67,8 @@ migrate *ARGS:
 # ----------------------------------------------------------------------
 
 @docs-install:
-    python -m pip install '.[docs]'
+    @just pup
+    python -m uv pip install 'django-simple-nav[docs] @ .'
 
 @docs-serve:
     #!/usr/bin/env sh
