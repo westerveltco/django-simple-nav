@@ -43,7 +43,7 @@ dev = [
   "hatch",
   "mypy",
   "model-bakery",
-  "nox[uv]>=2024.03.02",
+  "nox[uv]",
   "pytest",
   "pytest-cov",
   "pytest-django",
@@ -173,7 +173,7 @@ extend-include = ["*.pyi?"]
 indent-width = 4
 # Same as Black.
 line-length = 88
-# Assume Python >3.8.
+# Assume Python >3.8
 target-version = "py38"
 
 [tool.ruff.format]

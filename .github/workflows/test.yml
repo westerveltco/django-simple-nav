@@ -20,14 +20,18 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: wntrblm/nox@main
         with:
-          python-versions: "3.8"
+          persist-credentials: false
+
+      - uses: westerveltco/setup-ci-action@v0
+        with:
+          python-version: 3.8
+          extra-python-dependencies: nox
+          use-uv: true
 
       - id: set-matrix
         run: |
-          echo "matrix=$(nox -l --json | jq -c '[.[] | select(.name == "tests") | {"python-version": .python, "django-version": .call_spec.django}] | {include: .}')" >> $GITHUB_OUTPUT
+          echo "matrix=$(python -m nox -l --json | jq -c '[.[] | select(.name == "tests") | {"python-version": .python, "django-version": .call_spec.django}] | {include: .}')" >> $GITHUB_OUTPUT
 
   test:
     name: Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
@@ -38,21 +42,14 @@ jobs:
       matrix: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: "pip"
-          allow-prereleases: true
+          persist-credentials: false
 
-      - uses: wntrblm/nox@main
+      - uses: westerveltco/setup-ci-action@v0
         with:
-          python-versions: ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade uv
+          python-version: 3.8
+          extra-python-dependencies: nox
+          use-uv: true
 
       - name: Run tests
         run: |
@@ -74,10 +71,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: wntrblm/nox@main
         with:
-          python-versions: "3.8"
+          persist-credentials: false
+
+      - uses: westerveltco/setup-ci-action@v0
+        with:
+          python-version: 3.8
+          extra-python-dependencies: nox
+          use-uv: true
 
       - name: Install dependencies
         run: |
@@ -85,16 +86,20 @@ jobs:
 
       - name: Run mypy
         run: |
-          nox --session "mypy"
+          python -m nox --session "mypy"
 
   coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: wntrblm/nox@main
         with:
-          python-versions: "3.8"
+          persist-credentials: false
+
+      - uses: westerveltco/setup-ci-action@v0
+        with:
+          python-version: 3.8
+          extra-python-dependencies: nox
+          use-uv: true
 
       - name: Install dependencies
         run: |
@@ -102,4 +107,4 @@ jobs:
 
       - name: Run coverage
         run: |
-          nox --session "coverage"
+          python -m nox --session "coverage"
