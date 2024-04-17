@@ -16,14 +16,14 @@ from django_simple_nav.permissions import check_item_permissions
 
 @dataclass(frozen=True)
 class Nav:
-    template_name: str | None = None
-    items: list[NavGroup | NavItem] | None = None
+    template_name: str | None = field(init=False, default=None)
+    items: list[NavGroup | NavItem] | None = field(init=False, default=None)
 
     def get_template_name(self) -> str:
         if self.template_name is not None:
             return self.template_name
 
-        msg = f"'{self.__class__!r}' must define 'template_name' or override 'get_template_name()'"
+        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_items(self, request: HttpRequest) -> list[RenderedNavItem]:
@@ -34,7 +34,7 @@ class Nav:
                 if check_item_permissions(item, request)
             ]
 
-        msg = f"'{self.__class__!r}' must define 'items' or override 'get_items()'"
+        msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
         raise ImproperlyConfigured(msg)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, Any]:
