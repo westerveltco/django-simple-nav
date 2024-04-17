@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+-   Added two new methods to `Nav`: `get_items` and `get_template_name`. These should allow for further flexibility and customization of rendering the `Nav`.
+
 ### Changed
 
 -   Now using v2024.16 of `django-twc-package`.
