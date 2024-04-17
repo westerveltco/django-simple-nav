@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Any
 
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -15,22 +16,37 @@ from django_simple_nav.permissions import check_item_permissions
 
 @dataclass(frozen=True)
 class Nav:
-    template_name: str = field(init=False)
-    items: list[NavGroup | NavItem] = field(init=False)
+    template_name: str | None = field(init=False, default=None)
+    items: list[NavGroup | NavItem] | None = field(init=False, default=None)
+
+    def get_template_name(self) -> str:
+        if self.template_name is not None:
+            return self.template_name
+
+        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+    def get_items(self, request: HttpRequest) -> list[RenderedNavItem]:
+        if self.items is not None:
+            return [
+                RenderedNavItem(item, request)
+                for item in self.items
+                if check_item_permissions(item, request)
+            ]
+
+        msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
+        raise ImproperlyConfigured(msg)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, Any]:
-        items = [
-            RenderedNavItem(item, request)
-            for item in self.items
-            if check_item_permissions(item, request)
-        ]
-        return {"items": items}
+        return {
+            "items": self.get_items(request),
+            "request": request,
+        }
 
     def render(self, request: HttpRequest, template_name: str | None = None) -> str:
         context = self.get_context_data(request)
-        context["request"] = request
         return render_to_string(
-            template_name=template_name or self.template_name,
+            template_name=template_name or self.get_template_name(),
             context=context,
             request=request,
         )
