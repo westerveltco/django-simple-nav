@@ -26,6 +26,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 -   Now using v2024.16 of `django-twc-package`.
 
+### Fixed
+
+-   Active nav item matching is now correctly using the `url` property on `RenderedNavItem`.
+
 ## [0.5.1]
 
 ### Added
