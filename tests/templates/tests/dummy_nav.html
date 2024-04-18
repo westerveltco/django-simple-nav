@@ -1,6 +1,12 @@
-{% for item in items %}
-  <a href="{{ item.url }}">{{ item.title }}</a>
-  {% if item.items %}
-    {% include "tests/dummy_nav.html" with items=item.items %}
-  {% endif %}
-{% endfor %}
+{{ items }}
+<ul>
+  {% for item in items %}
+    <li>
+      <a href="{{ item.url }}">{{ item.title }}</a>
+      {% if item.items %}
+        Hello {{ item.title }}
+        {% include "tests/dummy_nav.html" with items=item.items %}
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
