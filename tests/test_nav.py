@@ -233,9 +233,18 @@ def test_rendered_nav_item_active(req):
     assert rendered_item.active is True
 
 
-def test_rendered_nav_item_active_no_url(req):
+def test_rendered_nav_group_active_no_url(req):
     item = NavGroup(title="Test", items=[NavItem(title="Test", url="/test/")])
 
     rendered_item = RenderedNavItem(item, req)
 
     assert rendered_item.active is False
+
+
+def test_rendered_nav_item_active_named_url(req):
+    item = NavItem(title="Test", url="fake-view")
+
+    req.path = "/fake-view/"
+    rendered_item = RenderedNavItem(item, req)
+
+    assert rendered_item.active is True

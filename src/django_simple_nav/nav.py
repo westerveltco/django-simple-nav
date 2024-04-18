@@ -108,10 +108,10 @@ class RenderedNavItem:
 
     @property
     def active(self) -> bool:
-        if not self.item.url:
+        if not self.url:
             return False
         return (
-            self.request.path.startswith(self.item.url)
-            and self.item.url != "/"
-            or self.request.path == self.item.url
+            self.request.path.startswith(self.url)
+            and self.url != "/"
+            or self.request.path == self.url
         )
