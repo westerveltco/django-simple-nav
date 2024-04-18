@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import pytest
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from django.test import override_settings
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
@@ -241,5 +239,3 @@ def test_rendered_nav_group_active_no_url(req):
     rendered_item = item.render(req)
 
     assert rendered_item.active is False
-
-
