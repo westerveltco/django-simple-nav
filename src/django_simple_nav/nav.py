@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Any
+from typing import cast
 
+from django.apps import apps
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
 from django.template.loader import render_to_string
@@ -11,7 +15,7 @@ from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
 
-from django_simple_nav.permissions import check_item_permissions
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -26,25 +30,30 @@ class Nav:
         msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
-    def get_items(self, request: HttpRequest) -> list[RenderedNavItem]:
+    def get_items(self, request: HttpRequest) -> list[dict[str, object]]:
         if self.items is not None:
-            return [
-                RenderedNavItem(item, request)
-                for item in self.items
-                if check_item_permissions(item, request)
-            ]
+            items = [item.render(request) for item in self.items]
+            print(f"{items=}")
+            print(f"{len(items)=}")
+            none_items = [item for item in items if item is not None]
+            print(f"{none_items=}")
+            print(f"{len(none_items)=}")
+            return none_items
 
         msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
         raise ImproperlyConfigured(msg)
 
-    def get_context_data(self, request: HttpRequest) -> dict[str, Any]:
+    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
+        items = self.get_items(request)
+        print(f"get_context_data: {items=}")
         return {
-            "items": self.get_items(request),
+            "items": items,
             "request": request,
         }
 
     def render(self, request: HttpRequest, template_name: str | None = None) -> str:
         context = self.get_context_data(request)
+        print(f"render: {context=}")
         return render_to_string(
             template_name=template_name or self.get_template_name(),
             context=context,
@@ -53,65 +62,89 @@ class Nav:
 
 
 @dataclass(frozen=True)
-class NavGroup:
-    title: str
-    items: list[NavGroup | NavItem]
-    url: str | None = None
-    permissions: list[str] = field(default_factory=list)
-    extra_context: dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass(frozen=True)
 class NavItem:
     title: str
     url: str
     permissions: list[str] = field(default_factory=list)
-    extra_context: dict[str, Any] = field(default_factory=dict)
+    extra_context: dict[str, object] = field(default_factory=dict)
+
+    def render(self, request: HttpRequest) -> dict[str, object] | None:
+        if not self.check_permissions(request):
+            print(f"{self.__class__!r} failed permissions")
+            print(f"{self.title=}")
+            print(f"{self.url=}")
+            print(f"{self.permissions=}")
+            print(f"{self.extra_context=}")
+            return None
+
+        # item.items returns the dictionary, not the list of NavItems, even on this
+        return {
+            "title": self.get_title(),
+            "url": self.get_url(),
+            "active": self.get_active(request),
+            **self.extra_context,
+        }
+
+    def check_permissions(self, request: HttpRequest) -> bool:
+        if not apps.is_installed("django.contrib.auth"):
+            logger.warning(
+                "The 'django.contrib.auth' app is not installed, so permissions will not be checked."
+            )
+            return True
+
+        if not self.permissions:
+            return True
+
+        if hasattr(request, "user") and isinstance(request.user, AnonymousUser):
+            return False
+
+        has_perm = False
+
+        user = cast(AbstractUser, request.user)
+
+        for perm in self.permissions:
+            if perm in ["is_authenticated", "is_staff", "is_superuser"]:
+                has_perm = getattr(user, perm, False)
+            else:
+                has_perm = user.has_perm(perm)
+
+            if has_perm:
+                break
+
+        return has_perm
+
+    def get_title(self) -> str:
+        return mark_safe(self.title)
+
+    def get_url(self) -> str | None:
+        try:
+            url = reverse(self.url)
+        except NoReverseMatch:
+            url = self.url
+        return url
+
+    def get_active(self, request: HttpRequest) -> bool:
+        url = self.get_url()
+        if url is None:
+            return False
+        return request.path.startswith(url) and url != "/" or request.path == url
 
 
 @dataclass(frozen=True)
-class RenderedNavItem:
-    item: NavItem | NavGroup
-    request: HttpRequest
+class NavGroup(NavItem):
+    url: str = "#"
+    items: list[NavGroup | NavItem] = field(default_factory=list)
 
-    def __getattr__(self, name: str) -> Any:
-        if name == "extra_context":
-            return self.item.extra_context
-        elif hasattr(self.item, name):
-            return getattr(self.item, name)
-        else:
-            try:
-                return self.item.extra_context[name]
-            except KeyError as err:
-                msg = f"{self.item!r} object has no attribute {name!r}"
-                raise AttributeError(msg) from err
-
-    @property
-    def title(self) -> str:
-        return mark_safe(self.item.title)
-
-    @property
-    def items(self) -> list[RenderedNavItem] | None:
-        if not isinstance(self.item, NavGroup):
+    def render(self, request: HttpRequest) -> dict[str, object] | None:
+        context = super().render(request)
+        if context is None:
             return None
-        return [RenderedNavItem(item, self.request) for item in self.item.items]
+        items = [item.render(request) for item in self.items]
+        context["items"] = [item for item in items if item is not None]
+        return context
 
-    @property
-    def url(self) -> str | None:
-        if not self.item.url:
+    def get_url(self) -> str | None:
+        url = super().get_url()
+        if url == "#":
             return None
-        try:
-            url = reverse(self.item.url)
-        except NoReverseMatch:
-            url = self.item.url
         return url
-
-    @property
-    def active(self) -> bool:
-        if not self.url:
-            return False
-        return (
-            self.request.path.startswith(self.url)
-            and self.url != "/"
-            or self.request.path == self.url
-        )

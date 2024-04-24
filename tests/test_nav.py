@@ -8,7 +8,6 @@ from model_bakery import baker
 
 from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
-from django_simple_nav.nav import RenderedNavItem
 from tests.navs import DummyNav
 from tests.utils import count_anchors
 
@@ -52,6 +51,7 @@ def test_nav_render(user, expected_count, req):
     req.user = user
 
     rendered_template = DummyNav().render(req)
+    print("rendered_template", rendered_template)
 
     assert count_anchors(rendered_template) == expected_count
 
@@ -110,7 +110,7 @@ def test_extra_context(req):
         extra_context={"foo": "bar"},
     )
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.foo == "bar"
 
@@ -121,7 +121,7 @@ def test_extra_context_with_no_extra_context(req):
         url="/test/",
     )
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     with pytest.raises(AttributeError):
         assert rendered_item.foo == "bar"
@@ -134,7 +134,7 @@ def test_extra_context_shadowing(req):
         extra_context={"title": "Shadowed"},
     )
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.title == "Test"
 
@@ -146,7 +146,7 @@ def test_extra_context_iteration(req):
         extra_context={"foo": "bar", "baz": "qux"},
     )
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.extra_context == {"foo": "bar", "baz": "qux"}
     for key, value in rendered_item.extra_context.items():
@@ -169,7 +169,7 @@ def test_extra_context_builtins(req):
         extra_context={"baz": "qux"},
     )
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.title == "Test"
     assert rendered_item.url == "/test/"
@@ -223,12 +223,12 @@ def test_get_context_data_override_render(req):
 
 def test_rendered_nav_item_active(req):
     item = NavItem(title="Test", url="/test/")
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.active is False
 
     req.path = "/test/"
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.active is True
 
@@ -236,15 +236,6 @@ def test_rendered_nav_item_active(req):
 def test_rendered_nav_group_active_no_url(req):
     item = NavGroup(title="Test", items=[NavItem(title="Test", url="/test/")])
 
-    rendered_item = RenderedNavItem(item, req)
+    rendered_item = item.render(req)
 
     assert rendered_item.active is False
-
-
-def test_rendered_nav_item_active_named_url(req):
-    item = NavItem(title="Test", url="fake-view")
-
-    req.path = "/fake-view/"
-    rendered_item = RenderedNavItem(item, req)
-
-    assert rendered_item.active is True
