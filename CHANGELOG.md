@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+-   Check for the existence of a user attached to the `request` object passed in to `django_simple_nav.permissions.check_item_permissions` has been moved to allow for an early return if there is no user. There are instances where the `django.contrib.auth` app can be installed, but no user is attached to the request object. This change will allow this function to correctly be used in those instances.
+
 ## [0.6.0]
 
 ### Added
