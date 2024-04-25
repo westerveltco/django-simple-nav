@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from typing import Protocol
 from typing import cast
 
 from django.apps import apps
+from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest
 
 if TYPE_CHECKING:
@@ -13,14 +13,6 @@ if TYPE_CHECKING:
     from django_simple_nav.nav import NavItem
 
 logger = logging.getLogger(__name__)
-
-
-class User(Protocol):
-    is_authenticated: bool
-    is_staff: bool
-    is_superuser: bool
-
-    def has_perm(self, perm: str) -> bool: ...  # pragma: no cover
 
 
 def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bool:
@@ -35,7 +27,11 @@ def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bo
         # and we should hide if *any* permissions are set
         return not item.permissions
 
-    user = cast(User, request.user)
+    # explicitly cast to AbstractUser to make static type checkers happy
+    # `django-stubs` types `request.user` as `django.contrib.auth.base_user.AbstractBaseUser`
+    # as opposed to `django.contrib.auth.models.AbstractUser` or `django.contrib.auth.models.User`
+    # so any type checkers will complain if this is not casted
+    user = cast(AbstractUser, request.user)
 
     for idx, perm in enumerate(item.permissions):
         user_perm = user_has_perm(user, perm)
@@ -58,7 +54,7 @@ def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bo
     return True
 
 
-def user_has_perm(user: User, perm: str) -> bool:
+def user_has_perm(user: AbstractUser, perm: str) -> bool:
     """Check if the user has a certain auth attribute or permission."""
 
     has_perm = False
