@@ -30,14 +30,14 @@ def check_item_permissions(item: NavGroup | NavItem, request: HttpRequest) -> bo
         )
         return True
 
+    if not hasattr(request, "user"):
+        # if no user attached to request, we assume that the user is not authenticated
+        # and we should hide if *any* permissions are set
+        return not item.permissions
+
     user = cast(User, request.user)
 
     for idx, perm in enumerate(item.permissions):
-        if not hasattr(request, "user"):
-            return False
-
-        user = cast(User, request.user)
-
         user_perm = user_has_perm(user, perm)
 
         if not user_perm:
