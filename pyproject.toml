@@ -77,15 +77,9 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-".copier/package.yml" = [
-  'current_version: {version}'
-]
-"src/django_simple_nav/__init__.py" = [
-  '__version__ = "{version}"'
-]
-"tests/test_version.py" = [
-  'assert __version__ == "{version}"'
-]
+".copier/package.yml" = ['current_version: {version}']
+"src/django_simple_nav/__init__.py" = ['__version__ = "{version}"']
+"tests/test_version.py" = ['assert __version__ == "{version}"']
 
 [tool.coverage.paths]
 source = ["src"]
@@ -142,7 +136,7 @@ ignore_missing_model_attributes = true
 [tool.pytest.ini_options]
 addopts = "--create-db -n auto --dist loadfile --doctest-modules"
 django_find_project = false
-norecursedirs = ".* bin build dist *.egg htmlcov logs node_modules templates venv"
+norecursedirs = ".* bin build dist *.egg example htmlcov logs node_modules templates venv"
 python_files = "tests.py test_*.py *_tests.py"
 pythonpath = "src"
 testpaths = ["tests"]
