@@ -11,20 +11,20 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.18.0
+    rev: 1.19.0
     hooks:
       - id: django-upgrade
         args: [--target-version, "3.2"]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.10
+    rev: v0.5.1
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.16.0
+    rev: 1.18.0
     hooks:
       - id: blacken-docs
         alias: autoformat
