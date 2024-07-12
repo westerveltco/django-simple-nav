@@ -9,49 +9,8 @@ from model_bakery import baker
 
 from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
-from django_simple_nav.permissions import check_item_permissions
-from django_simple_nav.permissions import user_has_perm
 
 pytestmark = pytest.mark.django_db
-
-
-def test_check_anonymous_user_has_perm():
-    user = AnonymousUser()
-
-    assert not user_has_perm(user, "is_authenticated")
-
-
-def test_check_authenticated_user_has_perm():
-    user = baker.make(get_user_model())
-
-    assert user_has_perm(user, "is_authenticated")
-
-
-def test_check_staff_user_has_perm():
-    user = baker.make(get_user_model(), is_staff=True)
-
-    assert user_has_perm(user, "is_staff")
-
-
-def test_check_superuser_user_has_perm():
-    user = baker.make(get_user_model(), is_superuser=True)
-
-    assert user_has_perm(user, "is_superuser")
-
-
-def test_check_auth_permission_user_has_perm():
-    user = baker.make(get_user_model())
-
-    dummy_perm = baker.make(
-        "auth.Permission",
-        codename="dummy_perm",
-        name="Dummy Permission",
-        content_type=baker.make("contenttypes.ContentType", app_label="tests"),
-    )
-
-    user.user_permissions.add(dummy_perm)
-
-    assert user_has_perm(user, "tests.dummy_perm")
 
 
 # anonymous user
@@ -65,28 +24,36 @@ def test_check_auth_permission_user_has_perm():
         (NavItem("Test", "/test", permissions=["is_superuser"]), False),
         (NavItem("Test", "/test", permissions=["tests.dummy_perm"]), False),
         # nav group with url
-        (NavGroup("Test", [], "/test"), True),
-        (NavGroup("Test", [], "/test", permissions=["is_authenticated"]), False),
-        (NavGroup("Test", [], "/test", permissions=["is_staff"]), False),
-        (NavGroup("Test", [], "/test", permissions=["is_superuser"]), False),
-        (NavGroup("Test", [], "/test", permissions=["tests.dummy_perm"]), False),
+        (NavGroup("Test", "/test", items=[]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_authenticated"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["is_staff"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["is_superuser"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["tests.dummy_perm"]), False),
         # nav group with no url and items with perms
-        (NavGroup("Test", [NavItem("Test", "/test")]), True),
+        (NavGroup("Test", items=[NavItem("Test", "/test")]), True),
         (
             NavGroup(
                 "Test",
-                [NavItem("Test", "/test", permissions=["is_authenticated"])],
+                items=[NavItem("Test", "/test", permissions=["is_authenticated"])],
             ),
-            False,
-        ),
-        (NavGroup("Test", [NavItem("Test", "/test", permissions=["is_staff"])]), False),
-        (
-            NavGroup("Test", [NavItem("Test", "/test", permissions=["is_superuser"])]),
             False,
         ),
         (
             NavGroup(
-                "Test", [NavItem("Test", "/test", permissions=["tests.dummy_perm"])]
+                "Test", items=[NavItem("Test", "/test", permissions=["is_staff"])]
+            ),
+            False,
+        ),
+        (
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_superuser"])]
+            ),
+            False,
+        ),
+        (
+            NavGroup(
+                "Test",
+                items=[NavItem("Test", "/test", permissions=["tests.dummy_perm"])],
             ),
             False,
         ),
@@ -105,7 +72,7 @@ def test_check_auth_permission_user_has_perm():
 def test_check_item_permissions_anonymous(item, expected, req):
     req.user = AnonymousUser()
 
-    assert check_item_permissions(item, req) == expected
+    assert item.check_permissions(req) == expected
 
 
 # authenticated user
@@ -119,28 +86,36 @@ def test_check_item_permissions_anonymous(item, expected, req):
         (NavItem("Test", "/test", permissions=["is_superuser"]), False),
         (NavItem("Test", "/test", permissions=["tests.dummy_perm"]), False),
         # nav group with url
-        (NavGroup("Test", [], "/test"), True),
-        (NavGroup("Test", [], "/test", permissions=["is_authenticated"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_staff"]), False),
-        (NavGroup("Test", [], "/test", permissions=["is_superuser"]), False),
-        (NavGroup("Test", [], "/test", permissions=["tests.dummy_perm"]), False),
+        (NavGroup("Test", "/test", items=[]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_authenticated"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_staff"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["is_superuser"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["tests.dummy_perm"]), False),
         # nav group with no url and items with perms
-        (NavGroup("Test", [NavItem("Test", "/test")], "/test"), True),
+        (NavGroup("Test", items=[NavItem("Test", "/test")]), True),
         (
             NavGroup(
                 "Test",
-                [NavItem("Test", "/test", permissions=["is_authenticated"])],
+                items=[NavItem("Test", "/test", permissions=["is_authenticated"])],
             ),
             True,
         ),
-        (NavGroup("Test", [NavItem("Test", "/test", permissions=["is_staff"])]), False),
         (
-            NavGroup("Test", [NavItem("Test", "/test", permissions=["is_superuser"])]),
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_staff"])]
+            ),
             False,
         ),
         (
             NavGroup(
-                "Test", [NavItem("Test", "/test", permissions=["tests.dummy_perm"])]
+                "Test", items=[NavItem("Test", "/test", permissions=["is_superuser"])]
+            ),
+            False,
+        ),
+        (
+            NavGroup(
+                "Test",
+                items=[NavItem("Test", "/test", permissions=["tests.dummy_perm"])],
             ),
             False,
         ),
@@ -159,7 +134,7 @@ def test_check_item_permissions_anonymous(item, expected, req):
 def test_check_item_permissions_is_authenticated(item, expected, req):
     req.user = baker.make(get_user_model())
 
-    assert check_item_permissions(item, req) == expected
+    assert item.check_permissions(req) == expected
 
 
 # staff user
@@ -173,28 +148,36 @@ def test_check_item_permissions_is_authenticated(item, expected, req):
         (NavItem("Test", "/test", permissions=["is_superuser"]), False),
         (NavItem("Test", "/test", permissions=["tests.dummy_perm"]), False),
         # nav group with url
-        (NavGroup("Test", [], "/test"), True),
-        (NavGroup("Test", [], "/test", permissions=["is_authenticated"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_staff"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_superuser"]), False),
-        (NavGroup("Test", [], "/test", permissions=["tests.dummy_perm"]), False),
+        (NavGroup("Test", "/test", items=[]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_authenticated"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_staff"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_superuser"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["tests.dummy_perm"]), False),
         # nav group with no url and items with perms
-        (NavGroup("Test", [NavItem("Test", "/test")]), True),
+        (NavGroup("Test", items=[NavItem("Test", "/test")]), True),
         (
             NavGroup(
                 "Test",
-                [NavItem("Test", "/test", permissions=["is_authenticated"])],
+                items=[NavItem("Test", "/test", permissions=["is_authenticated"])],
             ),
             True,
         ),
-        (NavGroup("Test", [NavItem("Test", "/test", permissions=["is_staff"])]), True),
         (
-            NavGroup("Test", [NavItem("Test", "/test", permissions=["is_superuser"])]),
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_staff"])]
+            ),
+            True,
+        ),
+        (
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_superuser"])]
+            ),
             False,
         ),
         (
             NavGroup(
-                "Test", [NavItem("Test", "/test", permissions=["tests.dummy_perm"])]
+                "Test",
+                items=[NavItem("Test", "/test", permissions=["tests.dummy_perm"])],
             ),
             False,
         ),
@@ -213,7 +196,7 @@ def test_check_item_permissions_is_authenticated(item, expected, req):
 def test_check_item_permissions_is_staff(item, expected, req):
     req.user = baker.make(get_user_model(), is_staff=True)
 
-    assert check_item_permissions(item, req) == expected
+    assert item.check_permissions(req) == expected
 
 
 # superuser
@@ -227,28 +210,36 @@ def test_check_item_permissions_is_staff(item, expected, req):
         (NavItem("Test", "/test", permissions=["is_superuser"]), True),
         (NavItem("Test", "/test", permissions=["tests.dummy_perm"]), True),
         # nav group with url
-        (NavGroup("Test", [], "/test"), True),
-        (NavGroup("Test", [], "/test", permissions=["is_authenticated"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_staff"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_superuser"]), True),
-        (NavGroup("Test", [], "/test", permissions=["tests.dummy_perm"]), True),
+        (NavGroup("Test", "/test", items=[]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_authenticated"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_staff"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_superuser"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["tests.dummy_perm"]), True),
         # nav group with no url and items with perms
-        (NavGroup("Test", [NavItem("Test", "/test")], "/test"), True),
+        (NavGroup("Test", items=[NavItem("Test", "/test")]), True),
         (
             NavGroup(
                 "Test",
-                [NavItem("Test", "/test", permissions=["is_authenticated"])],
+                items=[NavItem("Test", "/test", permissions=["is_authenticated"])],
             ),
-            True,
-        ),
-        (NavGroup("Test", [NavItem("Test", "/test", permissions=["is_staff"])]), True),
-        (
-            NavGroup("Test", [NavItem("Test", "/test", permissions=["is_superuser"])]),
             True,
         ),
         (
             NavGroup(
-                "Test", [NavItem("Test", "/test", permissions=["tests.dummy_perm"])]
+                "Test", items=[NavItem("Test", "/test", permissions=["is_staff"])]
+            ),
+            True,
+        ),
+        (
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_superuser"])]
+            ),
+            True,
+        ),
+        (
+            NavGroup(
+                "Test",
+                items=[NavItem("Test", "/test", permissions=["tests.dummy_perm"])],
             ),
             True,
         ),
@@ -267,7 +258,7 @@ def test_check_item_permissions_is_staff(item, expected, req):
 def test_check_item_permissions_is_superuser(item, expected, req):
     req.user = baker.make(get_user_model(), is_superuser=True)
 
-    assert check_item_permissions(item, req) == expected
+    assert item.check_permissions(req) == expected
 
 
 # user with specific auth.Permission
@@ -281,28 +272,36 @@ def test_check_item_permissions_is_superuser(item, expected, req):
         (NavItem("Test", "/test", permissions=["is_superuser"]), False),
         (NavItem("Test", "/test", permissions=["tests.dummy_perm"]), True),
         # nav group with url
-        (NavGroup("Test", [], "/test"), True),
-        (NavGroup("Test", [], "/test", permissions=["is_authenticated"]), True),
-        (NavGroup("Test", [], "/test", permissions=["is_staff"]), False),
-        (NavGroup("Test", [], "/test", permissions=["is_superuser"]), False),
-        (NavGroup("Test", [], "/test", permissions=["tests.dummy_perm"]), True),
+        (NavGroup("Test", "/test", items=[]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_authenticated"]), True),
+        (NavGroup("Test", "/test", items=[], permissions=["is_staff"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["is_superuser"]), False),
+        (NavGroup("Test", "/test", items=[], permissions=["tests.dummy_perm"]), True),
         # nav group with no url and items with perms
-        (NavGroup("Test", [NavItem("Test", "/test")], "/test"), True),
+        (NavGroup("Test", items=[NavItem("Test", "/test")]), True),
         (
             NavGroup(
                 "Test",
-                [NavItem("Test", "/test", permissions=["is_authenticated"])],
+                items=[NavItem("Test", "/test", permissions=["is_authenticated"])],
             ),
             True,
         ),
-        (NavGroup("Test", [NavItem("Test", "/test", permissions=["is_staff"])]), False),
         (
-            NavGroup("Test", [NavItem("Test", "/test", permissions=["is_superuser"])]),
+            NavGroup(
+                "Test", items=[NavItem("Test", "/test", permissions=["is_staff"])]
+            ),
             False,
         ),
         (
             NavGroup(
-                "Test", [NavItem("Test", "/test", permissions=["tests.dummy_perm"])]
+                "Test", items=[NavItem("Test", "/test", permissions=["is_superuser"])]
+            ),
+            False,
+        ),
+        (
+            NavGroup(
+                "Test",
+                items=[NavItem("Test", "/test", permissions=["tests.dummy_perm"])],
             ),
             True,
         ),
@@ -332,7 +331,7 @@ def test_check_item_permissions_auth_permission(item, expected, req):
 
     req.user = user
 
-    assert check_item_permissions(item, req) == expected
+    assert item.check_permissions(req) == expected
 
 
 @override_settings(
@@ -344,6 +343,6 @@ def test_check_item_permissions_no_contrib_auth(req, caplog):
     item = NavItem("Test", "/test", permissions=["is_authenticated"])
 
     with caplog.at_level("WARNING"):
-        assert check_item_permissions(item, req) is True
+        assert item.check_permissions(req) is True
 
     assert "The 'django.contrib.auth' app is not installed" in caplog.text

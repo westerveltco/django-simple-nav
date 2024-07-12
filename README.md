@@ -124,7 +124,7 @@
 
    Any items with permissions attached will automatically filtered out before rendering the template based on the request user's permissions, so you don't need to worry about that in your template.
 
-   Items with extra context will have that context passed to the template when rendering the navigation, which you can access either directly or through the `item.extra_context` attribute.
+   Items with extra context will have that context passed to the template when rendering the navigation, which you can access directly.
 
    For example, given the above example `MainNav`, you could create a `main_nav.html` template:
 
@@ -140,7 +140,7 @@
            <ul>
              {% for subitem in item.items %}
                <li>
-                 <a href="{{ subitem.url }}"{% if subitem.active %} class="active"{% endif %}{% if item.extra_context.foo %} data-foo="{{ item.extra_context.foo }}"{% endif %}>
+                 <a href="{{ subitem.url }}"{% if subitem.active %} class="active"{% endif %}{% if item.foo %} data-foo="{{ item.foo }}"{% endif %}>
                    {{ subitem.title }}
                  </a>
                </li>
