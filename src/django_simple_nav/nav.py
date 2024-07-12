@@ -148,10 +148,10 @@ class NavItem:
             has_perm = True
 
         for idx, perm in enumerate(self.permissions):
-            if perm in ["is_authenticated", "is_staff", "is_superuser"]:
-                if getattr(user, "is_superuser", False):
-                    has_perm = True
-                    break
+            if getattr(user, "is_superuser", False):
+                has_perm = True
+                break
+            if perm in ["is_authenticated", "is_staff"]:
                 has_perm = getattr(user, perm, False)
             else:
                 has_perm = user.has_perm(perm)
