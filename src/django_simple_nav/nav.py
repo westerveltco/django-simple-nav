@@ -100,6 +100,8 @@ class NavItem:
         return mark_safe(self.title)
 
     def get_url(self) -> str:
+        url: str | None
+
         try:
             url = reverse(self.url)
         except NoReverseMatch:
