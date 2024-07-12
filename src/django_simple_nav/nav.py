@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Any
 
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
@@ -37,7 +36,7 @@ class Nav:
         msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
         raise ImproperlyConfigured(msg)
 
-    def get_context_data(self, request: HttpRequest) -> dict[str, Any]:
+    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
         return {
             "items": self.get_items(request),
             "request": request,
@@ -58,7 +57,7 @@ class NavGroup:
     items: list[NavGroup | NavItem]
     url: str | None = None
     permissions: list[str] = field(default_factory=list)
-    extra_context: dict[str, Any] = field(default_factory=dict)
+    extra_context: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -66,7 +65,7 @@ class NavItem:
     title: str
     url: str
     permissions: list[str] = field(default_factory=list)
-    extra_context: dict[str, Any] = field(default_factory=dict)
+    extra_context: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -74,11 +73,11 @@ class RenderedNavItem:
     item: NavItem | NavGroup
     request: HttpRequest
 
-    def __getattr__(self, name: str) -> Any:
+    def __getattr__(self, name: str) -> object:
         if name == "extra_context":
             return self.item.extra_context
         elif hasattr(self.item, name):
-            return getattr(self.item, name)
+            return getattr(self.item, name)  # pyright: ignore[reportAny]
         else:
             try:
                 return self.item.extra_context[name]
