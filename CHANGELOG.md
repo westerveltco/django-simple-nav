@@ -18,7 +18,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
-## Added
+### Added
 
 - The `Nav` class now has a `get_items_context_data` that loops through all `items` and calls `item.get_context_data` for each.
 - `NavItem` and `NavGroup` now both have a `get_context_data` that returns the context needed for template rendering.
@@ -27,14 +27,14 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - `NavItem` and `NavGroup` now both have a `check_permissions` method for checking whether the item should be rendered for a given request.
 - `NavItem` and `NavGroup` now support using a callable in the list of `permissions`. This callable should take an `HttpRequest` and return a `bool` indicating whether the item should be rendered for a given request.
 
-## Changed
+### Changed
 
 - Internals of library have been refactored to slightly simplify it, including `Nav`, `NavGroup`, `NavItem` and the `django_simple_nav` templatetag.
 - `Nav.get_items` now returns a list of `NavGroup` or `NavItem`, instead of a list of `RenderedNavItem`.
 - Check for the existence of a user attached to the `request` object passed in to `django_simple_nav.permissions.check_item_permissions` has been moved to allow for an early return if there is no user. There are instances where the `django.contrib.auth` app can be installed, but no user is attached to the request object. This change will allow this function to correctly be used in those instances.
 - Now using v2024.20 of `django-twc-package`.
 
-## Removed
+### Removed
 
 - The `extra_context` attribute of `NavItem` and `NavGroup` now only renders the contents of the dictionary to the template context. Previously it did that as well as provided `extra_context` to the context. If this sounds confusing, that's because it kinda is. 😅 This basically just means instead of two places to get the extra context (`extra_context` and the keys provided within the `extra_context` attribute), there is now just one (the keys provided within the `extra_context` attribute).
 - `RenderedNavItem` has been removed and it's functionality refactored into both `NavItem` and `NavGroup`. This should not affect the public API of this library, but I thought it should be noted.
