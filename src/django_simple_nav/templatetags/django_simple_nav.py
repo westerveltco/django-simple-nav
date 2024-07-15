@@ -70,7 +70,8 @@ class DjangoSimpleNavNode(template.Node):
             raise template.TemplateSyntaxError(
                 f"Not a valid `Nav` instance: {nav_instance}"
             )
-        elif not hasattr(nav_instance, "render"):
+
+        if not hasattr(nav_instance, "render"):
             raise template.TemplateSyntaxError(
                 f"`Nav` instance does not have a 'render' method: {nav_instance}"
             )
@@ -96,7 +97,8 @@ class DjangoSimpleNavNode(template.Node):
             raise template.TemplateSyntaxError(
                 f"`request` not found in template context: {context}"
             )
-        elif not isinstance(request, HttpRequest):
+
+        if not isinstance(request, HttpRequest):
             raise template.TemplateSyntaxError(
                 f"`request` not a valid `HttpRequest`: {request}"
             )
