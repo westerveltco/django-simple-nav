@@ -1,21 +1,34 @@
 from __future__ import annotations
 
+import sys
+
 from django import template
+from django.http import HttpRequest
+from django.template.base import Parser
+from django.template.base import Token
+from django.template.context import Context
 from django.utils.module_loading import import_string
 
+from django_simple_nav.nav import Nav
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override  # pyright: ignore[reportUnreachable]
 register = template.Library()
 
 
 @register.tag(name="django_simple_nav")
-def do_django_simple_nav(parser, token):
+def do_django_simple_nav(parser: Parser, token: Token) -> DjangoSimpleNavNode:
     try:
-        _, args = token.contents.split(None, 1)
+        args = token.split_contents()[1:]
+        if len(args) == 0:
+            raise ValueError
     except ValueError as err:
         raise template.TemplateSyntaxError(
             f"{token.contents.split()[0]} tag requires arguments"
         ) from err
 
-    args = args.split()
     nav = args[0]
     template_name = args[1] if len(args) > 1 else None
 
@@ -23,16 +36,21 @@ def do_django_simple_nav(parser, token):
 
 
 class DjangoSimpleNavNode(template.Node):
-    def __init__(self, nav, template_name):
+    def __init__(self, nav: str, template_name: str | None) -> None:
         self.nav = template.Variable(nav)
         self.template_name = template.Variable(template_name) if template_name else None
 
-    def render(self, context):
+    @override
+    def render(self, context: Context) -> str:
+        nav = self.get_nav(context)
+        template_name = self.get_template_name(context)
+        request = self.get_request(context)
+
+        return nav.render(request, template_name)
+
+    def get_nav(self, context: Context) -> Nav:
         try:
-            nav = self.nav.resolve(context)
-            template_name = (
-                self.template_name.resolve(context) if self.template_name else None
-            )
+            nav: str | Nav = self.nav.resolve(context)
         except template.VariableDoesNotExist as err:
             raise template.TemplateSyntaxError(
                 f"Variable does not exist: {err}"
@@ -40,7 +58,7 @@ class DjangoSimpleNavNode(template.Node):
 
         if isinstance(nav, str):
             try:
-                nav_instance = import_string(nav)()
+                nav_instance: Nav = import_string(nav)()
             except ImportError as err:
                 raise template.TemplateSyntaxError(f"Failed to import: {nav}") from err
         else:
@@ -51,4 +69,30 @@ class DjangoSimpleNavNode(template.Node):
                 "The object does not have a 'render' method."
             )
 
-        return nav_instance.render(context["request"], template_name)
+        return nav_instance
+
+    def get_template_name(self, context: Context) -> str | None:
+        try:
+            template_name = (
+                self.template_name.resolve(context) if self.template_name else None
+            )
+        except template.VariableDoesNotExist as err:
+            raise template.TemplateSyntaxError(
+                f"Variable does not exist: {err}"
+            ) from err
+
+        return template_name
+
+    def get_request(self, context: Context) -> HttpRequest:
+        request = context.get("request", None)
+
+        if not request:
+            raise template.TemplateSyntaxError(
+                f"`request` not found in template context: {context}"
+            )
+        elif not isinstance(request, HttpRequest):
+            raise template.TemplateSyntaxError(
+                f"`request` not a valid `HttpRequest`: {request}"
+            )
+
+        return request
