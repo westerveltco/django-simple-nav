@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import pytest
 from django.conf import settings
@@ -29,6 +30,7 @@ TEST_SETTINGS = {
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
             "APP_DIRS": True,
+            "DIRS": [Path(__file__).parent / "templates"],
         }
     ],
 }

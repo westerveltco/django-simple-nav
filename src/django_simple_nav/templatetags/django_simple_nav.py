@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sys
-
 from django import template
 from django.http import HttpRequest
 from django.template.base import Parser
@@ -9,13 +7,8 @@ from django.template.base import Token
 from django.template.context import Context
 from django.utils.module_loading import import_string
 
+from django_simple_nav._type_utils import override
 from django_simple_nav.nav import Nav
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override  # pyright: ignore[reportUnreachable]
-
 
 register = template.Library()
 

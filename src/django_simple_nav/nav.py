@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import sys
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
@@ -11,15 +10,14 @@ from django.apps import apps
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
-from django.template.loader import render_to_string
+from django.template.loader import get_template
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
 
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override  # pyright: ignore[reportUnreachable]
+from django_simple_nav._templates import get_template_engine
+from django_simple_nav._type_utils import EngineTemplate
+from django_simple_nav._type_utils import override
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +54,15 @@ class Nav:
 
     def render(self, request: HttpRequest, template_name: str | None = None) -> str:
         context = self.get_context_data(request)
-        return render_to_string(
+        template = self.get_template(template_name)
+        if isinstance(template, str):
+            engine = get_template_engine()
+            template = engine.from_string(template)
+        return template.render(context, request)
+
+    def get_template(self, template_name: str | None = None) -> EngineTemplate | str:
+        return get_template(
             template_name=template_name or self.get_template_name(),
-            context=context,
-            request=request,
         )
 
 
