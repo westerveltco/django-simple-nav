@@ -26,7 +26,7 @@ def do_django_simple_nav(parser: Parser, token: Token) -> DjangoSimpleNavNode:
             raise ValueError
     except ValueError as err:
         raise template.TemplateSyntaxError(
-            f"{token.contents.split()[0]} tag requires arguments"
+            f"{token.split_contents()[0]} tag requires arguments"
         ) from err
 
     nav = args[0]
@@ -58,15 +58,21 @@ class DjangoSimpleNavNode(template.Node):
 
         if isinstance(nav, str):
             try:
-                nav_instance: Nav = import_string(nav)()
+                nav_instance: object = import_string(nav)()
             except ImportError as err:
-                raise template.TemplateSyntaxError(f"Failed to import: {nav}") from err
+                raise template.TemplateSyntaxError(
+                    f"Failed to import from dotted string: {nav}"
+                ) from err
         else:
             nav_instance = nav
 
-        if not hasattr(nav_instance, "render"):
+        if not isinstance(nav_instance, Nav):
             raise template.TemplateSyntaxError(
-                "The object does not have a 'render' method."
+                f"Not a valid `Nav` instance: {nav_instance}"
+            )
+        elif not hasattr(nav_instance, "render"):
+            raise template.TemplateSyntaxError(
+                f"`Nav` instance does not have a 'render' method: {nav_instance}"
             )
 
         return nav_instance
