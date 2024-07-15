@@ -25,7 +25,7 @@ class EngineTemplate(Protocol):
 def from_string(template_code: str, using: str | None = None) -> EngineTemplate:
     if app_settings.TEMPLATE_BACKEND is None:
         try:
-            engine = engines.all()[0]
+            engine = engines.all()[0] if using is None else engines[using]
         except IndexError as err:
             msg = "No `BACKEND` found for a template engine. Please configure at least one in your TEMPLATES setting or set DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']"
             raise ImproperlyConfigured(msg) from err
