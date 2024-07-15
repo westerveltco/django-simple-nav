@@ -67,7 +67,7 @@ class Nav:
 class NavItem:
     title: str
     url: str | None = None
-    permissions: list[str] = field(default_factory=list)
+    permissions: list[str | Callable[[HttpRequest], bool]] = field(default_factory=list)
     extra_context: dict[str, object] = field(default_factory=dict)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
@@ -178,7 +178,6 @@ class NavItem:
 @dataclass(frozen=True)
 class NavGroup(NavItem):
     items: list[NavGroup | NavItem] = field(default_factory=list)
-    permissions: list[str] = field(default_factory=list)
 
     @override
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
