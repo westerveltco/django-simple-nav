@@ -30,9 +30,9 @@
 
    ```python
    INSTALLED_APPS = [
-       ...,
+       # ...,
        "django_simple_nav",
-       ...,
+       # ...,
    ]
    ```
 
@@ -43,9 +43,12 @@
    ```python
    TEMPLATES = [
        {
+           # ...,
            "OPTIONS": {
+               # ...,
                "context_processors": [
                    "django.template.context_processors.request",
+                   # ...,
                ]
            }
        }
@@ -56,9 +59,9 @@
 
    ```python
    INSTALLED_APPS = [
-       ...
+       # ...,
        "django.contrib.auth",
-       ...
+       # ...,
    ]
    ```
 
