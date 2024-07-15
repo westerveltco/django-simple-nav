@@ -25,6 +25,7 @@ class EngineTemplate(Protocol):
 
 def get_template_engine(using: str | None = None) -> BaseEngine:
     if template_backend := app_settings.TEMPLATE_BACKEND:
+        # https://github.com/django/django/blob/082fe2b5a83571dec4aa97580af0fe8cf2a5214e/django/template/utils.py#L33-L42
         try:
             backend_alias = template_backend.rsplit(".", 2)[-2]
         except Exception as err:
@@ -44,6 +45,7 @@ def get_template_engine(using: str | None = None) -> BaseEngine:
             msg = "Multiple `BACKEND` defined for a template engine. Will proceed with first defined in list, otherwise set `DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']` to specify which one to use."
             logger.warning(msg)
 
+        # https://github.com/django/django/blob/082fe2b5a83571dec4aa97580af0fe8cf2a5214e/django/template/loader.py#L65-L66
         engine = all_engines[0] if using is None else engines[using]
 
     return engine
