@@ -108,7 +108,9 @@
                title="myapp.django_perm Item", url="#", permissions=["myapp.django_perm"]
            ),
            NavItem(
-               title="Item with callable permission", url="#", permissions=[simple_permissions_check]
+               title="Item with callable permission",
+               url="#",
+               permissions=[simple_permissions_check],
            ),
            NavGroup(
                title="Group with Extra Context",
