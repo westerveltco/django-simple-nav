@@ -11,10 +11,13 @@ from django.apps import apps
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
-from django.template.loader import render_to_string
+from django.template.loader import get_template
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
+
+from django_simple_nav._templates import EngineTemplate
+from django_simple_nav._templates import from_string
 
 if sys.version_info >= (3, 12):
     from typing import override
@@ -29,12 +32,23 @@ class Nav:
     template_name: str | None = field(init=False, default=None)
     items: list[NavGroup | NavItem] | None = field(init=False, default=None)
 
-    def get_template_name(self) -> str:
-        if self.template_name is not None:
-            return self.template_name
+    def render(self, request: HttpRequest, template_name: str | None = None) -> str:
+        context = self.get_context_data(request)
+        template = self.get_template(template_name)
+        if isinstance(template, str):
+            template = from_string(template)
+        return template.render(context, request)
 
-        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
-        raise ImproperlyConfigured(msg % self.__class__.__name__)
+    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
+        return {
+            "items": self.get_items_context_data(request),
+            "request": request,
+        }
+
+    def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
+        items = self.get_items(request)
+        context = [item.get_context_data(request) for item in items]
+        return context
 
     def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
         if self.items is not None:
@@ -43,24 +57,20 @@ class Nav:
         msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
         raise ImproperlyConfigured(msg)
 
-    def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
-        items = self.get_items(request)
-        context = [item.get_context_data(request) for item in items]
-        return context
-
-    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
-        return {
-            "items": self.get_items_context_data(request),
-            "request": request,
-        }
-
-    def render(self, request: HttpRequest, template_name: str | None = None) -> str:
-        context = self.get_context_data(request)
-        return render_to_string(
+    def get_template(
+        self,
+        template_name: str | None = None,
+    ) -> EngineTemplate | str:
+        return get_template(
             template_name=template_name or self.get_template_name(),
-            context=context,
-            request=request,
         )
+
+    def get_template_name(self) -> str:
+        if self.template_name is not None:
+            return self.template_name
+
+        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
 
 @dataclass(frozen=True)

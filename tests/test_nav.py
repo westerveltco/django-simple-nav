@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.template.backends.django import Template
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
@@ -220,3 +221,32 @@ def test_rendered_nav_item_active_named_url(req):
     rendered_item = item.get_context_data(req)
 
     assert rendered_item.get("active") is True
+
+
+def test_get_template():
+    template = DummyNav().get_template()
+
+    assert isinstance(template, Template)
+
+
+def test_get_template_override_render(req):
+    class TemplateOverrideNav(DummyNav):
+        def get_template(self, template_name):
+            return """\
+<h1>Overridden Template</h1>
+<ul>
+  {% for item in items %}
+    <li>
+      <a href="{{ item.url }}"
+         class="{% if item.active %}text-indigo-500 hover:text-indigo-300{% else %}hover:text-gray-400{% endif %}">
+        {{ item.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>"""
+
+    req.user = baker.make(get_user_model())
+
+    rendered_template = TemplateOverrideNav().render(req)
+
+    assert "<h1>Overridden Template</h1>" in rendered_template
