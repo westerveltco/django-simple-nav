@@ -17,6 +17,7 @@ else:
 override = typing_override
 
 
+# https://github.com/typeddjango/django-stubs/blob/b6e8ea9b4279ece87d14e38226c265e4f0aadccd/django-stubs/template/backends/base.pyi#L22-L28
 class EngineTemplate(Protocol):
     def render(
         self,
