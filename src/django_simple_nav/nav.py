@@ -27,31 +27,6 @@ class Nav:
     template_name: str | None = field(init=False, default=None)
     items: list[NavGroup | NavItem] | None = field(init=False, default=None)
 
-    def get_template_name(self) -> str:
-        if self.template_name is not None:
-            return self.template_name
-
-        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
-        raise ImproperlyConfigured(msg % self.__class__.__name__)
-
-    def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
-        if self.items is not None:
-            return [item for item in self.items if item.check_permissions(request)]
-
-        msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
-        raise ImproperlyConfigured(msg)
-
-    def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
-        items = self.get_items(request)
-        context = [item.get_context_data(request) for item in items]
-        return context
-
-    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
-        return {
-            "items": self.get_items_context_data(request),
-            "request": request,
-        }
-
     def render(self, request: HttpRequest, template_name: str | None = None) -> str:
         context = self.get_context_data(request)
         template = self.get_template(template_name)
@@ -60,10 +35,35 @@ class Nav:
             template = engine.from_string(template)
         return template.render(context, request)
 
+    def get_context_data(self, request: HttpRequest) -> dict[str, object]:
+        return {
+            "items": self.get_items_context_data(request),
+            "request": request,
+        }
+
+    def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
+        items = self.get_items(request)
+        context = [item.get_context_data(request) for item in items]
+        return context
+
+    def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
+        if self.items is not None:
+            return [item for item in self.items if item.check_permissions(request)]
+
+        msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
+        raise ImproperlyConfigured(msg)
+
     def get_template(self, template_name: str | None = None) -> EngineTemplate | str:
         return get_template(
             template_name=template_name or self.get_template_name(),
         )
+
+    def get_template_name(self) -> str:
+        if self.template_name is not None:
+            return self.template_name
+
+        msg = f"{self.__class__!r} must define 'template_name' or override 'get_template_name()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
 
 @dataclass(frozen=True)
