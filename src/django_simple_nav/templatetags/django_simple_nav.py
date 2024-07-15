@@ -7,7 +7,7 @@ from django.template.base import Token
 from django.template.context import Context
 from django.utils.module_loading import import_string
 
-from django_simple_nav._types import override
+from django_simple_nav._type_utils import override
 from django_simple_nav.nav import Nav
 
 register = template.Library()
