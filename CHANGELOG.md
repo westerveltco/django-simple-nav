@@ -25,6 +25,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - `NavItem` and `NavGroup` now both have a `get_url` method for returning the URL for the item.
 - `NavItem` and `NavGroup` now both have a `get_active` method for returning whether the item is active or not, meaning it's the URL currently being requested.
 - `NavItem` and `NavGroup` now both have a `check_permissions` method for checking whether the item should be rendered for a given request.
+- `NavItem` and `NavGroup` now support using a callable in the list of `permissions`. This callable should take an `HttpRequest` and return a `bool` indicated whether the item should be rendered for a given request.
 
 ## Changed
 
