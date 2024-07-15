@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from django.template.backends.django import Template
+from django.template.backends.django import Template as DjangoTemplate
+from django.template.backends.jinja2 import Template as JinjaTemplate
+from django.test import override_settings
 from django.utils.module_loading import import_string
 from model_bakery import baker
 
@@ -223,10 +226,30 @@ def test_rendered_nav_item_active_named_url(req):
     assert rendered_item.get("active") is True
 
 
-def test_get_template():
-    template = DummyNav().get_template()
+@pytest.mark.parametrize(
+    "engine,template_name,expected",
+    [
+        (
+            "django.template.backends.django.DjangoTemplates",
+            "tests/dummy_nav.html",
+            DjangoTemplate,
+        ),
+        (
+            "django.template.backends.jinja2.Jinja2",
+            "tests/jinja2/dummy_nav.html",
+            JinjaTemplate,
+        ),
+    ],
+)
+def test_get_template(engine, template_name, expected):
+    class TemplateEngineNav(DummyNav):
+        def get_template_name(self):
+            return template_name
 
-    assert isinstance(template, Template)
+    with override_settings(TEMPLATES=[dict(settings.TEMPLATES[0], BACKEND=engine)]):
+        template = TemplateEngineNav().get_template()
+
+    assert isinstance(template, expected)
 
 
 def test_get_template_override_render(req):
