@@ -74,7 +74,7 @@ def demo(request, template_name):
 
 def permissions(request):
     perm = request.GET.get("permission", None)
-    if perm:
+    if perm and perm != "query_param_permission":
         request.user = type(
             "User", (), {"is_authenticated": True, "has_perm": lambda p: p == perm}
         )

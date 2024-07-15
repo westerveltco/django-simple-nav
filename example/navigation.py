@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from django.http import HttpRequest
+
 from django_simple_nav.nav import Nav
 from django_simple_nav.nav import NavGroup
 from django_simple_nav.nav import NavItem
@@ -47,6 +49,10 @@ class BasicNav(Nav):
     ]
 
 
+def query_param_permission(request: HttpRequest) -> bool:
+    return request.GET.get("permission", None) == "query_param_permission"
+
+
 class PermissionsNav(Nav):
     template_name = "navs/basic.html"
     items = [
@@ -71,6 +77,11 @@ class PermissionsNav(Nav):
             url="#",
             permissions=["demo_permission"],
         ),
+        NavItem(
+            title="This item depends on a permission in the query params of the URL",
+            url="#",
+            permissions=[query_param_permission],
+        ),
     ]
 
 
@@ -93,6 +104,10 @@ class SetPermissionsNav(Nav):
         NavItem(
             title="Permission `demo_permission`",
             url="/permissions/?permission=demo_permission",
+        ),
+        NavItem(
+            title="Callable permission",
+            url="/permissions/?permission=query_param_permission",
         ),
     ]
 
