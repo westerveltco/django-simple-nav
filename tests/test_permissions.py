@@ -4,6 +4,7 @@ import pytest
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.http import HttpRequest
 from django.test import override_settings
 from model_bakery import baker
 
@@ -346,3 +347,29 @@ def test_check_item_permissions_no_contrib_auth(req, caplog):
         assert item.check_permissions(req) is True
 
     assert "The 'django.contrib.auth' app is not installed" in caplog.text
+
+
+def test_item_permissions_with_callable(req):
+    def dummy_check(request: HttpRequest) -> bool:
+        return True
+
+    item = NavItem("Test", "/test", permissions=[dummy_check])
+
+    req.user = AnonymousUser()
+
+    assert item.check_permissions(req)
+
+
+def test_item_permissions_with_callable_and_user(req):
+    def check_is_authenticated(request: HttpRequest) -> bool:
+        return request.user.is_authenticated
+
+    item = NavItem("Test", "/test", permissions=[check_is_authenticated])
+
+    req.user = AnonymousUser()
+
+    assert not item.check_permissions(req)
+
+    req.user = baker.make(get_user_model())
+
+    assert item.check_permissions(req)

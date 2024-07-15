@@ -4,6 +4,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from dataclasses import field
+from typing import Callable
 from typing import cast
 
 from django.apps import apps
@@ -66,7 +67,7 @@ class Nav:
 class NavItem:
     title: str
     url: str | None = None
-    permissions: list[str] = field(default_factory=list)
+    permissions: list[str | Callable[[HttpRequest], bool]] = field(default_factory=list)
     extra_context: dict[str, object] = field(default_factory=dict)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
@@ -151,7 +152,9 @@ class NavItem:
             if getattr(user, "is_superuser", False):
                 has_perm = True
                 break
-            if perm in ["is_authenticated", "is_staff"]:
+            elif callable(perm):
+                has_perm = perm(request)
+            elif perm in ["is_authenticated", "is_staff"]:
                 has_perm = getattr(user, perm, False)
             else:
                 has_perm = user.has_perm(perm)
@@ -174,7 +177,6 @@ class NavItem:
 @dataclass(frozen=True)
 class NavGroup(NavItem):
     items: list[NavGroup | NavItem] = field(default_factory=list)
-    permissions: list[str] = field(default_factory=list)
 
     @override
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:

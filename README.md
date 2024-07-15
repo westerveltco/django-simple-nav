@@ -55,21 +55,27 @@
      - `title`: The title of the group.
      - `items`: A list of `NavItem` or `NavGroup`objects that represent the structure of the group.
      - `url` (optional): The URL of the group. If not provided, the group will not be a link but just a container for the items.
-     - `permissions` (optional): A list of permissions that control the visibility of the group. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`) or Django permissions (e.g. `myapp.django_perm`).
+     - `permissions` (optional): A list of permissions that control the visibility of the group. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`), Django permissions (e.g. `myapp.django_perm`), or a callable that takes an `HttpRequest` and returns a `bool`.
      - `extra_context` (optional): A dictionary of additional context to pass to the template when rendering the navigation.
    - `NavItem`: A single navigation item. It has two required and three optional attributes:
      - `title`: The title of the item.
      - `url`: The URL of the item. This can be a URL string (e.g. `https://example.com/about/` or `/about/`) or a Django URL name (e.g. `about-view`).
-     - `permissions` (optional): A list of permissions that control the visibility of the item. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`) or Django permissions (e.g. `myapp.django_perm`).
+     - `permissions` (optional): A list of permissions that control the visibility of the item. These permissions can be `User` attributes (e.g. `is_authenticated`, `is_staff`, `is_superuser`), Django permissions (e.g. `myapp.django_perm`), or a callable that takes an `HttpRequest` and returns a `bool`.
      - `extra_context` (optional): A dictionary of additional context to pass to the template when rendering the navigation.
 
    Here's an example configuration:
 
    ```python
    # config/nav.py
+   from django.http import HttpRequest
+
    from django_simple_nav.nav import Nav
    from django_simple_nav.nav import NavGroup
    from django_simple_nav.nav import NavItem
+
+
+   def simple_permissions_check(request: HttpRequest) -> bool:
+       return True
 
 
    class MainNav(Nav):
@@ -100,6 +106,11 @@
            NavItem(title="is_superuser Item", url="#", permissions=["is_superuser"]),
            NavItem(
                title="myapp.django_perm Item", url="#", permissions=["myapp.django_perm"]
+           ),
+           NavItem(
+               title="Item with callable permission",
+               url="#",
+               permissions=[simple_permissions_check],
            ),
            NavGroup(
                title="Group with Extra Context",
