@@ -4,6 +4,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from dataclasses import field
+from typing import Callable
 from typing import cast
 
 from django.apps import apps
@@ -151,8 +152,11 @@ class NavItem:
             if getattr(user, "is_superuser", False):
                 has_perm = True
                 break
-            if perm in ["is_authenticated", "is_staff"]:
+            elif perm in ["is_authenticated", "is_staff"]:
                 has_perm = getattr(user, perm, False)
+            elif callable(perm):
+                cast(Callable[[HttpRequest], bool], perm)
+                has_perm = perm(request)
             else:
                 has_perm = user.has_perm(perm)
 
