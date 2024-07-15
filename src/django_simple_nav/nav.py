@@ -152,11 +152,10 @@ class NavItem:
             if getattr(user, "is_superuser", False):
                 has_perm = True
                 break
+            elif callable(perm):
+                has_perm = perm(request)
             elif perm in ["is_authenticated", "is_staff"]:
                 has_perm = getattr(user, perm, False)
-            elif callable(perm):
-                cast(Callable[[HttpRequest], bool], perm)
-                has_perm = perm(request)
             else:
                 has_perm = user.has_perm(perm)
 
