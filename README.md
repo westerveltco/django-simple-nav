@@ -35,6 +35,36 @@
        ...,
    ]
    ```
+
+3. **Adjust your Django project's settings.**
+
+   `django-simple-nav` requires `django.template.context_processors.request` to be in the list of `context_processors` in your `TEMPLATES[n]["OPTIONS"]` setting:
+
+   ```python
+   TEMPLATES = [
+       {
+           ...,
+           "OPTIONS": {
+               "context_processors": [
+                   "django.template.context_processors.request",
+                   ...,
+               ]
+           }
+       }
+   ]
+   ```
+
+   Additionally, if you plan to use the permissions feature of `django-simple-nav` to filter your navigation items based on the `request.user`, `django.contrib.auth` must be added to your `INSTALLED_APPS` as well:
+
+   ```python
+   INSTALLED_APPS = [
+       ...
+       "django.contrib.auth",
+       ...
+   ]
+   ```
+
+   If you do not add `django.contrib.auth` to your `INSTALLED_APPS` and you define any permissions for your navigation items, `django-simple-nav` will simply ignore the permissions and render all items regardless of whether the permission check is `True` or `False.`
 <!-- getting-started-end -->
 
 ## Usage
