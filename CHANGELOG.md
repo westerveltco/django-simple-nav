@@ -29,7 +29,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## Changed
 
-- Internals of library have been refactored to slightly simplify it.
+- Internals of library have been refactored to slightly simplify it, including `Nav`, `NavGroup`, `NavItem` and the `django_simple_nav` templatetag.
 - `Nav.get_items` now returns a list of `NavGroup` or `NavItem`, instead of a list of `RenderedNavItem`.
 - Now using v2024.20 of `django-twc-package`.
 
