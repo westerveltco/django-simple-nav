@@ -38,7 +38,6 @@ class Nav:
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
         return {
             "items": self.get_items_context_data(request),
-            "request": request,
         }
 
     def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
