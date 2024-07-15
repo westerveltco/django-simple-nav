@@ -1,14 +1,10 @@
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 
 from django.conf import settings
 
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override  # pyright: ignore[reportUnreachable]
+from django_simple_nav._types import override
 
 DJANGO_SIMPLE_NAV_SETTINGS_NAME = "DJANGO_SIMPLE_NAV"
 

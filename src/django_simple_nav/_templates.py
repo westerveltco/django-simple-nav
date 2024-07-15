@@ -1,26 +1,14 @@
 from __future__ import annotations
 
 import logging
-from typing import Protocol
 
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpRequest
 from django.template import engines
 from django.template.backends.base import BaseEngine
-from django.template.context import Context
-from django.utils.safestring import SafeString
 
 from django_simple_nav.conf import app_settings
 
 logger = logging.getLogger(__name__)
-
-
-class EngineTemplate(Protocol):
-    def render(
-        self,
-        context: Context | dict[str, object] | None = ...,
-        request: HttpRequest | None = ...,
-    ) -> SafeString: ...
 
 
 def get_template_engine(using: str | None = None) -> BaseEngine:

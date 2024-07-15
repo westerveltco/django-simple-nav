@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import sys
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
@@ -16,13 +15,9 @@ from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
 
-from django_simple_nav._templates import EngineTemplate
 from django_simple_nav._templates import get_template_engine
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override  # pyright: ignore[reportUnreachable]
+from django_simple_nav._type_utils import EngineTemplate
+from django_simple_nav._type_utils import override
 
 logger = logging.getLogger(__name__)
 
