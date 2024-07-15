@@ -65,10 +65,7 @@ class Nav:
             template = engine.from_string(template)
         return template.render(context, request)
 
-    def get_template(
-        self,
-        template_name: str | None = None,
-    ) -> EngineTemplate | str:
+    def get_template(self, template_name: str | None = None) -> EngineTemplate | str:
         return get_template(
             template_name=template_name or self.get_template_name(),
         )
