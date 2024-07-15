@@ -23,14 +23,18 @@ class EngineTemplate(Protocol):
     ) -> SafeString: ...
 
 
-def from_string(template_code: str, using: str | None = None) -> EngineTemplate:
-    engine = get_engine(using)
-    return engine.from_string(template_code)
+def get_template_engine(using: str | None = None) -> BaseEngine:
+    if template_backend := app_settings.TEMPLATE_BACKEND:
+        try:
+            backend_alias = template_backend.rsplit(".", 2)[-2]
+        except Exception as err:
+            msg = f"Invalid `TEMPLATE_BACKEND` for a template engine: {app_settings.TEMPLATE_BACKEND}. Check your `DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']` setting."
+            raise ImproperlyConfigured(msg) from err
 
-
-def get_engine(using: str | None = None) -> BaseEngine:
-    if app_settings.TEMPLATE_BACKEND is None:
-        num_of_engines = len(engines.all())
+        engine = engines[backend_alias]
+    else:
+        all_engines = engines.all()
+        num_of_engines = len(all_engines)
 
         if num_of_engines == 0:
             msg = "No `BACKEND` found for a template engine. Please configure at least one in your `TEMPLATES` setting or set `DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']`."
@@ -40,14 +44,6 @@ def get_engine(using: str | None = None) -> BaseEngine:
             msg = "Multiple `BACKEND` defined for a template engine. Will proceed with first defined in list, otherwise set `DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']` to specify which one to use."
             logger.warning(msg)
 
-        engine = engines.all()[0] if using is None else engines[using]
-    else:
-        try:
-            backend_alias = app_settings.TEMPLATE_BACKEND.rsplit(".", 2)[-2]
-        except Exception as err:
-            msg = f"Invalid `TEMPLATE_BACKEND` for a template engine: {app_settings.TEMPLATE_BACKEND}. Check your `DJANGO_SIMPLE_NAV['TEMPLATE_BACKEND']` setting."
-            raise ImproperlyConfigured(msg) from err
-
-        engine = engines[backend_alias]
+        engine = all_engines[0] if using is None else engines[using]
 
     return engine

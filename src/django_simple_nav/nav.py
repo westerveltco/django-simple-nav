@@ -17,7 +17,7 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
 
 from django_simple_nav._templates import EngineTemplate
-from django_simple_nav._templates import from_string
+from django_simple_nav._templates import get_template_engine
 
 if sys.version_info >= (3, 12):
     from typing import override
@@ -36,7 +36,8 @@ class Nav:
         context = self.get_context_data(request)
         template = self.get_template(template_name)
         if isinstance(template, str):
-            template = from_string(template)
+            engine = get_template_engine()
+            template = engine.from_string(template)
         return template.render(context, request)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
