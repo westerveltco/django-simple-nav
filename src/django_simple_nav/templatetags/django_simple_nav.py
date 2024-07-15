@@ -15,6 +15,8 @@ if sys.version_info >= (3, 12):
     from typing import override
 else:
     from typing_extensions import override  # pyright: ignore[reportUnreachable]
+
+
 register = template.Library()
 
 
