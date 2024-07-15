@@ -80,10 +80,6 @@ jobs:
           extra-python-dependencies: nox
           use-uv: true
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade uv
-
       - name: Run mypy
         run: |
           python -m nox --session "mypy"
@@ -100,10 +96,6 @@ jobs:
           python-version: 3.8
           extra-python-dependencies: nox
           use-uv: true
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade uv
 
       - name: Run coverage
         run: |

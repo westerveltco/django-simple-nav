@@ -3,9 +3,9 @@
 <!-- intro-start -->
 [![PyPI](https://img.shields.io/pypi/v/django-simple-nav)](https://pypi.org/project/django-simple-nav/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-simple-nav)
-![Django Version](https://img.shields.io/badge/django-3.2%20%7C%204.2%20%7C%205.0-%2344B78B?labelColor=%23092E20)
+![Django Version](https://img.shields.io/badge/django-4.2%20%7C%205.0-%2344B78B?labelColor=%23092E20)
 <!-- https://shields.io/badges -->
-<!-- django-3.2 | 4.2 | 5.0-#44B78B -->
+<!-- django-4.2 | 5.0-#44B78B -->
 <!-- labelColor=%23092E20 -->
 
 `django-simple-nav` is a Python/Django application designed to simplify the integration of navigation and menu bars in your Django projects. With a straightforward API and customizable options, you can easily add and manage navigational elements in your web applications. It is designed to be simple to start with, but flexible enough to handle complex navigation structures while maintaining that same simplicity.
@@ -13,8 +13,7 @@
 ## Requirements
 
 - Python 3.8, 3.9, 3.10, 3.11, 3.12
-- Django 3.2, 4.2, 5.0
-<!-- intro-end -->
+- Django 4.2, 5.0
 
 ## Getting Started
 

@@ -30,12 +30,14 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Internals of library have been refactored to slightly simplify it.
 - `Nav.get_items` now returns a list of `NavGroup` or `NavItem`, instead of a list of `RenderedNavItem`.
+- Now using v2024.20 of `django-twc-package`.
 
 ## Removed
 
 - The `extra_context` attribute of `NavItem` and `NavGroup` now only renders the contents of the dictionary to the template context. Previously it did that as well as provided `extra_context` to the context. If this sounds confusing, that's because it kinda is. 😅 This basically just means instead of two places to get the extra context (`extra_context` and the keys provided within the `extra_context` attribute), there is now just one (the keys provided within the `extra_context` attribute).
 - `RenderedNavItem` has been removed and it's functionality refactored into both `NavItem` and `NavGroup`. This should not affect the public API of this library, but I thought it should be noted.
 - `django_simple_nav.permissions` module has been removed and it's functionality refactored into `NavItem`.
+- Dropped support for Django 3.2.
 
 ### Changed
 

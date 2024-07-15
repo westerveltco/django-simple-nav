@@ -1,11 +1,10 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2024.16
+_commit: v2024.20
 _src_path: gh:westerveltco/django-twc-package
 author_email: josh@joshthomas.dev
 author_name: Josh Thomas
 current_version: 0.6.0
 django_versions:
-- '3.2'
 - '4.2'
 - '5.0'
 docs_domain: westervelt.dev
