@@ -20,7 +20,6 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Added
 
-- The `Nav` class now has a `get_items_context_data` that loops through all `items` and calls `item.get_context_data` for each.
 - `NavItem` and `NavGroup` now both have a `get_context_data` that returns the context needed for template rendering.
 - `NavItem` and `NavGroup` now both have a `get_url` method for returning the URL for the item.
 - `NavItem` and `NavGroup` now both have a `get_active` method for returning whether the item is active or not, meaning it's the URL currently being requested.
