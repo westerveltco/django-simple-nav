@@ -9,7 +9,7 @@ from django.utils.safestring import SafeString
 
 if sys.version_info >= (3, 12):
     from typing import override as typing_override
-else:
+else:  # pragma: no cover
     from typing_extensions import (
         override as typing_override,  # pyright: ignore[reportUnreachable]
     )
