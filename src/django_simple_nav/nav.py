@@ -37,13 +37,10 @@ class Nav:
         return template.render(context, request)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
-        return {
-            "items": self.get_items_context_data(request),
-        }
-
-    def get_items_context_data(self, request: HttpRequest) -> list[dict[str, object]]:
         items = self.get_items(request)
-        return [item.get_context_data(request) for item in items]
+        return {
+            "items": [item.get_context_data(request) for item in items],
+        }
 
     def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
         if self.items is not None:
