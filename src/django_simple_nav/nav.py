@@ -7,6 +7,7 @@ from typing import Callable
 from typing import cast
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpRequest
@@ -108,6 +109,8 @@ class NavItem:
             url = self.url
 
         if url is not None:
+            if settings.APPEND_SLASH and not url.endswith("/"):  # pyright: ignore[reportAny]
+                url += "/"
             return url
 
         msg = f"{self.__class__!r} must define 'url' or override 'get_url()'"
@@ -122,7 +125,10 @@ class NavItem:
         if not url:
             return False
 
-        return request.path.startswith(url) and url != "/" or request.path == url
+        if settings.APPEND_SLASH and not request.path.endswith("/"):  # pyright: ignore[reportAny]
+            request.path += "/"
+
+        return request.path == url
 
     def check_permissions(self, request: HttpRequest) -> bool:
         if not apps.is_installed("django.contrib.auth"):
