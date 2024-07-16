@@ -42,6 +42,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - `django_simple_nav.permissions` module has been removed and it's functionality refactored into `NavItem`.
 - Dropped support for Django 3.2.
 
+### Fixed
+
+- `active` boolean for a `NavItem` should now accurately match the request URL, taking into account any potential nesting and a project's `APPEND_SLASH` setting.
+
 ## [0.6.0]
 
 ### Added
