@@ -142,20 +142,22 @@ class NavItem:
             # and we should hide if *any* permissions are set
             return not self.permissions
 
+        if not self.permissions:
+            return True
+
         # explicitly cast to AbstractUser to make static type checkers happy
         # `django-stubs` types `request.user` as `django.contrib.auth.base_user.AbstractBaseUser`
         # as opposed to `django.contrib.auth.models.AbstractUser` or `django.contrib.auth.models.User`
         # so any type checkers will complain if this is not casted
         user = cast(AbstractUser, request.user)
 
-        has_perm = False
-
-        if not self.permissions:
-            has_perm = True
+        permission_checks: list[bool] = []
 
         for idx, perm in enumerate(self.permissions):
+            has_perm = False
+
             if getattr(user, "is_superuser", False):
-                has_perm = True
+                permission_checks.append(True)
                 break
             elif callable(perm):
                 has_perm = perm(request)
@@ -164,19 +166,12 @@ class NavItem:
             else:
                 has_perm = user.has_perm(perm)
 
+            permission_checks.append(has_perm)
+
             if not idx == len(self.permissions) - 1:
                 continue
 
-        if isinstance(self, NavGroup) and hasattr(self, "items"):
-            sub_items = [
-                sub_item
-                for sub_item in self.items
-                if sub_item.check_permissions(request) is not False
-            ]
-            if not sub_items and not self.url:
-                has_perm = False
-
-        return has_perm
+        return all(permission_checks)
 
 
 @dataclass(frozen=True)
@@ -186,8 +181,14 @@ class NavGroup(NavItem):
     @override
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
         context = super().get_context_data(request)
-        context["items"] = [item.get_context_data(request) for item in self.items]
+
+        items = self.get_items(request)
+        context["items"] = [item.get_context_data(request) for item in items]
+
         return context
+
+    def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
+        return [item for item in self.items if item.check_permissions(request)]
 
     @override
     def get_url(self) -> str:
@@ -196,3 +197,17 @@ class NavGroup(NavItem):
         except ImproperlyConfigured:
             return ""
         return url
+
+    @override
+    def check_permissions(self, request: HttpRequest) -> bool:
+        has_perm = super().check_permissions(request)
+
+        sub_items = [
+            sub_item
+            for sub_item in self.items
+            if sub_item.check_permissions(request) is not False
+        ]
+        if not sub_items and not self.url:
+            has_perm = False
+
+        return has_perm
