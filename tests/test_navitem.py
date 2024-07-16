@@ -158,6 +158,12 @@ def test_active_reverse_no_match(req):
     assert item.get_active(req) is False
 
 
+def test_get_items(req):
+    item = NavItem(title=..., url=...)
+
+    assert item.get_items(req) is None
+
+
 @pytest.mark.parametrize(
     "permissions,expected",
     [

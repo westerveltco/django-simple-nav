@@ -72,15 +72,7 @@ class NavItem:
             "title": self.get_title(),
             "url": self.get_url(),
             "active": self.get_active(request),
-            # this needs to be set to shadow the built-in `items()` of the dict
-            # returned by this method for `NavItem`. otherwise when looping through
-            # the items in a `Nav`, calling `{% if item.items %}` will resolve to `True`.
-            # this is a consequence of getting rid of `RenderedNavItem` from earlier versions
-            # of `django-simple-nav` which was done to slightly simplfy the library. though
-            # given this hack, maybe that wasn't really worth it? idk... i guess it could
-            # have been called `children` or `subnav`, but i started with `items` and
-            # i'd rather have API consistency and this hack.
-            "items": None,
+            "items": self.get_items(request),
         }
         # filter out any items in `extra_context` that may be shadowing the
         # above `context` dict
@@ -126,6 +118,17 @@ class NavItem:
             request.path += "/"
 
         return request.path == url
+
+    def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem] | None:
+        # this needs to be set to shadow the built-in `items()` of the dict
+        # returned by this method for `NavItem`. otherwise when looping through
+        # the items in a `Nav`, calling `{% if item.items %}` will resolve to `True`.
+        # this is a consequence of getting rid of `RenderedNavItem` from earlier versions
+        # of `django-simple-nav` which was done to slightly simplfy the library. though
+        # given this hack, maybe that wasn't really worth it? idk... i guess it could
+        # have been called `children` or `subnav`, but i started with `items` and
+        # i'd rather have API consistency and this hack.
+        return None
 
     def check_permissions(self, request: HttpRequest) -> bool:
         if not apps.is_installed("django.contrib.auth"):
@@ -184,6 +187,7 @@ class NavGroup(NavItem):
 
         return context
 
+    @override
     def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem]:
         return [item for item in self.items if item.check_permissions(request)]
 
