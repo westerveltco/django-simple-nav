@@ -50,7 +50,8 @@ dev = [
   "pytest-django",
   "pytest-randomly",
   "pytest-reverse",
-  "pytest-xdist"
+  "pytest-xdist",
+  "ruff"
 ]
 docs = [
   "cogapp",
