@@ -115,3 +115,53 @@ def test_nested_templatetag(req):
     rendered_template = template.render(Context({"request": req}))
 
     assert count_anchors(rendered_template) == 14
+
+
+def test_invalid_dotted_string(req):
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'path.to.DoesNotExist' %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context({"request": req}))
+
+
+class InvalidNav: ...
+
+
+def test_invalid_nav_instance(req):
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'tests.test_templatetags.InvalidNav' %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context({"request": req}))
+
+
+def test_template_name_variable_does_not_exist(req):
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' nonexistent_template_name_variable %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context({"request": req}))
+
+
+def test_request_not_in_context():
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context())
+
+
+def test_invalid_request():
+    class InvalidRequest: ...
+
+    template = Template(
+        "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
+    )
+
+    with pytest.raises(TemplateSyntaxError):
+        template.render(Context({"request": InvalidRequest()}))
