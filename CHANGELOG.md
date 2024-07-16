@@ -44,6 +44,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Fixed
 
 - `active` boolean for a `NavItem` should now accurately match the request URL, taking into account any potential nesting and a project's `APPEND_SLASH` setting.
+- The permissions check for `NavGroup` has been fixed to apply to the child items as well. Previously, it only checked the top-level permissions on the `NavGroup` instance itself. If the items within the `NavGroup` have permissions defined, they will now be checked and filtered out. If the check ends up filtering all of the items out and the `NavGroup` has no url set, then it will not be rendered.
 
 ## [0.6.0]
 
