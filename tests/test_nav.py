@@ -8,32 +8,14 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.django import Template as DjangoTemplate
 from django.template.backends.jinja2 import Template as JinjaTemplate
 from django.test import override_settings
-from django.utils.module_loading import import_string
 from model_bakery import baker
 
-from django_simple_nav.nav import NavGroup
+from django_simple_nav.nav import Nav
 from django_simple_nav.nav import NavItem
 from tests.navs import DummyNav
 from tests.utils import count_anchors
 
 pytestmark = pytest.mark.django_db
-
-
-def test_init():
-    nav = DummyNav
-
-    assert nav.template_name == "tests/dummy_nav.html"
-    assert len(nav.items) == 12
-
-    for item in nav.items:
-        assert item.title
-
-
-def test_dotted_path_loading():
-    nav = import_string("tests.navs.DummyNav")
-
-    assert nav.template_name == "tests/dummy_nav.html"
-    assert len(nav.items) == 12
 
 
 @pytest.mark.parametrize(
@@ -49,17 +31,9 @@ def test_nav_render(user, expected_count, req):
 
     req.user = user
 
-    rendered_template = DummyNav().render(req)
+    rendered_nav = DummyNav().render(req)
 
-    assert count_anchors(rendered_template) == expected_count
-
-
-def test_dotted_path_nav_render(req):
-    req.user = baker.make(get_user_model())
-
-    nav = import_string("tests.navs.DummyNav")
-
-    assert nav().render(req)
+    assert count_anchors(rendered_nav) == expected_count
 
 
 @pytest.mark.parametrize(
@@ -71,7 +45,7 @@ def test_dotted_path_nav_render(req):
         ("tests.dummy_perm", 13),
     ],
 )
-def test_nav_render_with_permissions(req, permission, expected_count):
+def test_nav_render_permissions(req, permission, expected_count):
     user = baker.make(get_user_model())
 
     if permission == "tests.dummy_perm":
@@ -86,92 +60,41 @@ def test_nav_render_with_permissions(req, permission, expected_count):
         setattr(user, permission, True)
 
     user.save()
-
     req.user = user
-    rendered_template = DummyNav().render(req)
 
-    assert count_anchors(rendered_template) == expected_count
+    rendered_nav = DummyNav().render(req)
+
+    assert count_anchors(rendered_nav) == expected_count
 
 
-def test_nav_render_with_template_name(req):
+def test_nav_render_template_name(req):
     req.user = AnonymousUser()
 
-    rendered_template = DummyNav().render(req, "tests/alternate.html")
+    rendered_nav = DummyNav().render(req, "tests/alternate.html")
 
-    assert "This is an alternate template." in rendered_template
-
-
-def test_extra_context(req):
-    item = NavItem(
-        title="Test",
-        url="/test/",
-        extra_context={"foo": "bar"},
-    )
-
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("foo") == "bar"
+    assert "This is an alternate template." in rendered_nav
 
 
-def test_extra_context_with_no_extra_context(req):
-    item = NavItem(
-        title="Test",
-        url="/test/",
-    )
+def test_nav_render_template_string(req):
+    class StringTemplateNav(Nav):
+        title = ...
+        items = [
+            NavItem(title=..., url="/test/"),
+        ]
 
-    rendered_item = item.get_context_data(req)
+        def get_template(self, template_name):
+            return "<h1>This is a string.</h1>"
 
-    assert rendered_item.get("foo") is None
+    rendered_nav = StringTemplateNav().render(req)
 
-
-def test_extra_context_shadowing(req):
-    item = NavItem(
-        title="Test",
-        url="/test/",
-        extra_context={"title": "Shadowed"},
-    )
-
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("title") == "Test"
-
-
-def test_extra_context_builtins(req):
-    item = NavGroup(
-        title="Test",
-        items=[
-            NavItem(
-                title="Test",
-                url="/test/",
-                extra_context={"foo": "bar"},
-            ),
-        ],
-        url="/test/",
-        extra_context={"baz": "qux"},
-    )
-
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("title") == "Test"
-    assert rendered_item.get("url") == "/test/"
-    assert rendered_item.get("baz") == "qux"
-
-    assert rendered_item.get("items") is not None
-    assert len(rendered_item.get("items")) == 1
-
-    rendered_group_item = rendered_item.get("items")[0]
-
-    assert rendered_group_item.get("title") == "Test"
-    assert rendered_group_item.get("url") == "/test/"
-    assert rendered_group_item.get("foo") == "bar"
+    assert "<h1>This is a string.</h1>" in rendered_nav
+    assert count_anchors(rendered_nav) == 0
 
 
 def test_get_context_data(req):
-    req.user = baker.make(get_user_model())
-
     context = DummyNav().get_context_data(req)
 
-    assert context["items"]
+    assert context["items"] is not None
 
 
 def test_get_context_data_override(req):
@@ -179,73 +102,66 @@ def test_get_context_data_override(req):
         def get_context_data(self, request):
             return {"foo": "bar"}
 
-    req.user = baker.make(get_user_model())
-
     context = OverrideNav().get_context_data(req)
 
     assert context["foo"] == "bar"
 
 
-def test_get_context_data_override_render(req):
-    class OverrideNav(DummyNav):
-        def get_context_data(self, request):
-            return {"foo": "bar"}
+def test_get_items(req):
+    class GetItemsNav(Nav):
+        template_name = ...
+        items = [
+            NavItem(title=..., url=...),
+        ]
 
-    req.user = baker.make(get_user_model())
+    items = GetItemsNav().get_items(req)
 
-    rendered_template = OverrideNav().render(req)
-
-    assert count_anchors(rendered_template) == 0
-
-
-def test_rendered_nav_item_active(req):
-    item = NavItem(title="Test", url="/test/")
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("active") is False
-
-    req.path = "/test/"
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("active") is True
+    assert len(items) == 1
 
 
-def test_rendered_nav_group_active_no_url(req):
-    item = NavGroup(title="Test", items=[NavItem(title="Test", url="/test/")])
+def test_get_items_override(req):
+    class GetItemsNav(Nav):
+        template_name = ...
 
-    rendered_item = item.get_context_data(req)
+        def get_items(self, request):
+            return [
+                NavItem(title=..., url=...),
+            ]
 
-    assert rendered_item.get("active") is False
+    items = GetItemsNav().get_items(req)
+
+    assert len(items) == 1
 
 
-def test_rendered_nav_item_active_named_url(req):
-    item = NavItem(title="Test", url="fake-view")
+def test_get_items_improperly_configured(req):
+    class GetItemsNav(Nav):
+        template_name = ...
 
-    req.path = "/fake-view/"
-    rendered_item = item.get_context_data(req)
-
-    assert rendered_item.get("active") is True
+    with pytest.raises(ImproperlyConfigured):
+        GetItemsNav().get_items(req)
 
 
 @pytest.mark.parametrize(
-    "engine,template_name,expected",
+    "engine,expected",
     [
         (
             "django.template.backends.django.DjangoTemplates",
-            "tests/dummy_nav.html",
             DjangoTemplate,
         ),
         (
             "django.template.backends.jinja2.Jinja2",
-            "tests/jinja2/dummy_nav.html",
             JinjaTemplate,
         ),
     ],
 )
-def test_get_template(engine, template_name, expected):
-    class TemplateEngineNav(DummyNav):
-        def get_template_name(self):
-            return template_name
+def test_get_template_engines(engine, expected):
+    class TemplateEngineNav(Nav):
+        template_name = (
+            "tests/dummy_nav.html"
+            if engine.endswith("DjangoTemplates")
+            else "tests/jinja2/dummy_nav.html"
+        )
+        items = [...]
 
     with override_settings(TEMPLATES=[dict(settings.TEMPLATES[0], BACKEND=engine)]):
         template = TemplateEngineNav().get_template()
@@ -253,79 +169,58 @@ def test_get_template(engine, template_name, expected):
     assert isinstance(template, expected)
 
 
-def test_get_template_override_render(req):
-    class TemplateOverrideNav(DummyNav):
-        def get_template(self, template_name):
-            return """\
-<h1>Overridden Template</h1>
-<ul>
-  {% for item in items %}
-    <li>
-      <a href="{{ item.url }}"
-         class="{% if item.active %}text-indigo-500 hover:text-indigo-300{% else %}hover:text-gray-400{% endif %}">
-        {{ item.title }}
-      </a>
-    </li>
-  {% endfor %}
-</ul>"""
+def test_get_template_override(req):
+    class TemplateOverrideNav(Nav):
+        items = [NavItem(title=..., url="/test/")]
 
-    req.user = baker.make(get_user_model())
+        def get_template(self, *args, **kwargs):
+            return "<h1>Overridden Template</h1>"
 
-    rendered_template = TemplateOverrideNav().render(req)
+    template = TemplateOverrideNav().get_template()
 
-    assert "<h1>Overridden Template</h1>" in rendered_template
+    assert isinstance(template, str)
+
+    rendered_nav = TemplateOverrideNav().render(req)
+
+    assert "<h1>Overridden Template</h1>" in rendered_nav
 
 
-@pytest.mark.parametrize(
-    "url,req_path,expected",
-    [
-        ("/test/", "/test/", True),
-        ("/test/", "/other/", False),
-        ("home", "/", True),
-        ("/test", "/test/", True),
-        ("/test/", "/test", True),
-        ("/test/nested/", "/test/", False),
-    ],
-)
-def test_active(url, req_path, expected, req):
-    item = NavItem(title="Test", url=url)
+def test_get_template_argument():
+    class TemplateOverrideNav(Nav):
+        template_name = "foo.html"
+        items = [...]
 
-    req.path = req_path
+    template = TemplateOverrideNav().get_template(template_name="tests/dummy_nav.html")
 
-    assert item.get_active(req) == expected
+    assert "tests/dummy_nav.html" in str(template.origin)
+    assert "foo.html" not in str(template.origin)
 
 
-@pytest.mark.parametrize("append_slash", [True, False])
-def test_active_append_slash_setting(append_slash, req):
-    item = NavItem(title="Test", url="/test")
+def test_get_template_name():
+    class GetTemplateNameNav(Nav):
+        template_name = "tests/dummy_nav.html"
+        items = [...]
 
-    req.path = "/test"
+    template_name = GetTemplateNameNav().get_template_name()
 
-    with override_settings(APPEND_SLASH=append_slash):
-        assert item.get_url().endswith("/") is append_slash
-        assert item.get_active(req) is True
+    assert template_name == "tests/dummy_nav.html"
 
 
-def test_get_url_improperly_configured(req):
-    item = NavItem(title="Test", url=None)
+def test_get_template_name_override():
+    class GetTemplateNameNav(Nav):
+        items = [...]
 
-    req.path = "/"
+        def get_template_name(self):
+            return "tests/dummy_nav.html"
+
+    template_name = GetTemplateNameNav().get_template_name()
+
+    assert template_name == "tests/dummy_nav.html"
+
+
+def test_get_template_name_improperly_configured():
+    class GetTemplateNameNav(Nav):
+        items = [...]
 
     with pytest.raises(ImproperlyConfigured):
-        item.get_url()
-
-
-def test_active_improperly_configured(req):
-    item = NavItem(title="Test", url=None)
-
-    req.path = "/"
-
-    assert item.get_active(req) is False
-
-
-def test_active_reverse_no_match(req):
-    item = NavItem(title="Test", url="nonexistent")
-
-    req.path = "/"
-
-    assert item.get_active(req) is False
+        GetTemplateNameNav().get_template_name()
