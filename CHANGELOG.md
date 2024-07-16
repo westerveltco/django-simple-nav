@@ -26,6 +26,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - `NavItem` and `NavGroup` now both have a `check_permissions` method for checking whether the item should be rendered for a given request.
 - `NavItem` and `NavGroup` now support using a callable in the list of `permissions`. This callable should take an `HttpRequest` and return a `bool` indicating whether the item should be rendered for a given request.
 - The `Nav` class now has a `get_template` method that returns the template to render. This method takes an optional `template_name` argument, and if not provided is taken from the `get_template_name` method. If overridden, you can return a string as a way to embed a template directly in the `Nav` definition.
+- `NavItem` now has a `get_items` method. This is to aid a future refactor.
 
 ### Changed
 
