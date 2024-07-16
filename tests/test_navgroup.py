@@ -193,6 +193,29 @@ def test_get_url_override():
 
 
 @pytest.mark.parametrize(
+    "url,expected",
+    [
+        ("/test/", True),
+        ("/test/active/", True),
+        ("/foo/", False),
+    ],
+)
+def test_get_active(url, expected, req):
+    group = NavGroup(
+        title=...,
+        url="/test/",
+        items=[
+            NavItem(title=..., url="/test/active/"),
+            NavItem(title=..., url="/test/not-active/"),
+        ],
+    )
+
+    req.path = url
+
+    assert group.get_active(req) is expected
+
+
+@pytest.mark.parametrize(
     "url,items,expected",
     [
         (
