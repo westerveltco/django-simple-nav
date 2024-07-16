@@ -4,6 +4,7 @@ import pytest
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.django import Template as DjangoTemplate
 from django.template.backends.jinja2 import Template as JinjaTemplate
 from django.test import override_settings
@@ -273,3 +274,58 @@ def test_get_template_override_render(req):
     rendered_template = TemplateOverrideNav().render(req)
 
     assert "<h1>Overridden Template</h1>" in rendered_template
+
+
+@pytest.mark.parametrize(
+    "url,req_path,expected",
+    [
+        ("/test/", "/test/", True),
+        ("/test/", "/other/", False),
+        ("home", "/", True),
+        ("/test", "/test/", True),
+        ("/test/", "/test", True),
+        ("/test/nested/", "/test/", False),
+    ],
+)
+def test_active(url, req_path, expected, req):
+    item = NavItem(title="Test", url=url)
+
+    req.path = req_path
+
+    assert item.get_active(req) == expected
+
+
+@pytest.mark.parametrize("append_slash", [True, False])
+def test_active_append_slash_setting(append_slash, req):
+    item = NavItem(title="Test", url="/test")
+
+    req.path = "/test"
+
+    with override_settings(APPEND_SLASH=append_slash):
+        assert item.get_url().endswith("/") is append_slash
+        assert item.get_active(req) is True
+
+
+def test_get_url_improperly_configured(req):
+    item = NavItem(title="Test", url=None)
+
+    req.path = "/"
+
+    with pytest.raises(ImproperlyConfigured):
+        item.get_url()
+
+
+def test_active_improperly_configured(req):
+    item = NavItem(title="Test", url=None)
+
+    req.path = "/"
+
+    assert item.get_active(req) is False
+
+
+def test_active_reverse_no_match(req):
+    item = NavItem(title="Test", url="nonexistent")
+
+    req.path = "/"
+
+    assert item.get_active(req) is False
