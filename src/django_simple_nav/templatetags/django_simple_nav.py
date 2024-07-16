@@ -66,11 +66,6 @@ class DjangoSimpleNavNode(template.Node):
                 f"Not a valid `Nav` instance: {nav_instance}"
             )
 
-        if not hasattr(nav_instance, "render"):
-            raise template.TemplateSyntaxError(
-                f"`Nav` instance does not have a 'render' method: {nav_instance}"
-            )
-
         return nav_instance
 
     def get_template_name(self, context: Context) -> str | None:
