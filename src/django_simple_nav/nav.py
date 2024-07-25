@@ -67,7 +67,7 @@ class Nav:
 @dataclass(frozen=True)
 class NavItem:
     title: str
-    url: str | Callable[..., str] | None = None
+    url: str | Callable[..., str] | Promise | None = None
     permissions: list[str | Callable[[HttpRequest], bool]] = field(default_factory=list)
     extra_context: dict[str, object] = field(default_factory=dict)
 
