@@ -38,4 +38,9 @@ TEST_SETTINGS = {
 
 @pytest.fixture
 def req():
-    return HttpRequest()
+    # adding a HTTP_HOST header for now to fix tests, but
+    # we really should switch to using a RequestFactory
+    # instead of this fixture
+    request = HttpRequest()
+    request.META = {"HTTP_HOST": "test"}
+    return request

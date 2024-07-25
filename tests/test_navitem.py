@@ -120,20 +120,23 @@ def test_get_url_override():
 
 
 @pytest.mark.parametrize(
-    "url,req_path,expected",
+    "url,req_path,req_params,expected",
     [
-        ("/test/", "/test/", True),
-        ("/test/", "/other/", False),
-        ("fake-view", "/fake-view/", True),
-        ("/test", "/test/", True),
-        ("/test/", "/test", True),
-        ("/test/nested/", "/test/", False),
+        ("/test/", "/test/", None, True),
+        ("/test/", "/other/", None, False),
+        ("fake-view", "/fake-view/", None, True),
+        ("/test", "/test/", None, True),
+        ("/test/", "/test", None, True),
+        ("/test/nested/", "/test/", None, False),
+        ("/test/?query=param", "/test/", {"query": "param"}, True),
+        ("/test/?query=param", "/test/", None, False),
     ],
 )
-def test_active(url, req_path, expected, req):
+def test_active(url, req_path, req_params, expected, rf):
     item = NavItem(title=..., url=url)
 
-    req.path = req_path
+    req = rf.get(req_path, req_params)
+    print(f"{req.path=}")
 
     assert item.get_active(req) == expected
 

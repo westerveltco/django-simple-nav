@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `NavItem.get_active` to allow for using URLs that contain query strings.
+
 ## [0.8.0]
 
 ### Changed

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
 from typing import cast
+from urllib.parse import parse_qs
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
@@ -136,10 +137,20 @@ class NavItem:
         if not url:
             return False
 
-        if settings.APPEND_SLASH and not request.path.endswith("/"):  # pyright: ignore[reportAny]
-            request.path += "/"
+        parsed_url = urlparse(url)
+        parsed_request = urlparse(request.build_absolute_uri())
 
-        return request.path == url
+        url_path = parsed_url.path
+        request_path = parsed_request.path
+
+        if settings.APPEND_SLASH:
+            url_path = url_path.rstrip("/") + "/"
+            request_path = request_path.rstrip("/") + "/"
+
+        url_query = parse_qs(parsed_url.query)
+        request_query = parse_qs(parsed_request.query)
+
+        return url_path == request_path and url_query == request_query
 
     def get_items(self, request: HttpRequest) -> list[NavGroup | NavItem] | None:
         # this needs to be set to shadow the built-in `items()` of the dict
