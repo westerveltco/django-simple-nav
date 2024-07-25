@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `NavItem.url` and `NavItem.get_url` to allow for using a callable. This allows `NavItem.url` to support `django.urls.reverse` or `django.urls.reverse_lazy` primarily, but it can be any callable as long as it returns a string.
+
 ## [0.7.0]
 
 ### Added

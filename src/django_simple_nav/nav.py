@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
 from typing import cast
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
 
 from django.apps import apps
 from django.conf import settings
@@ -14,6 +16,7 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
 from django_simple_nav._templates import get_template_engine
@@ -63,7 +66,7 @@ class Nav:
 @dataclass(frozen=True)
 class NavItem:
     title: str
-    url: str | None = None
+    url: str | Callable[..., str] | None = None
     permissions: list[str | Callable[[HttpRequest], bool]] = field(default_factory=list)
     extra_context: dict[str, object] = field(default_factory=dict)
 
@@ -92,14 +95,33 @@ class NavItem:
     def get_url(self) -> str:
         url: str | None
 
-        try:
-            url = reverse(self.url)
-        except NoReverseMatch:
-            url = self.url
+        if isinstance(self.url, Promise):
+            # django.urls.base.reverse_lazy
+            url = str(self.url)
+        elif callable(self.url):
+            # django.urls.base.reverse (or some other basic callable)
+            url = self.url()
+        else:
+            try:
+                url = reverse(self.url)
+            except NoReverseMatch:
+                url = self.url
 
         if url is not None:
-            if settings.APPEND_SLASH and not url.endswith("/"):  # pyright: ignore[reportAny]
-                url += "/"
+            parsed_url = urlparse(url)
+            path = parsed_url.path
+            if settings.APPEND_SLASH and not path.endswith("/"):
+                path += "/"
+            url = urlunparse(
+                (
+                    parsed_url.scheme,
+                    parsed_url.netloc,
+                    path,
+                    parsed_url.params,
+                    parsed_url.query,
+                    parsed_url.fragment,
+                )
+            )
             return url
 
         msg = f"{self.__class__!r} must define 'url' or override 'get_url()'"

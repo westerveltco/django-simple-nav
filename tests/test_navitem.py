@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
 from django.test import override_settings
+from django.urls import reverse
+from django.urls import reverse_lazy
 from model_bakery import baker
 
 from django_simple_nav.nav import NavItem
@@ -83,6 +85,10 @@ def test_get_title_override():
         ("/test", False, "/test"),
         ("home", True, "/"),
         ("home", False, "/"),
+        (reverse("home"), True, "/"),
+        (reverse("home"), False, "/"),
+        (reverse_lazy("home"), True, "/"),
+        (reverse_lazy("home"), False, "/"),
     ],
 )
 def test_get_url(url, append_slash, expected):
