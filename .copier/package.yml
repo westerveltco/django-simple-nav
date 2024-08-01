@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2024.20
+_commit: v2024.23
 _src_path: gh:westerveltco/django-twc-package
 author_email: josh@joshthomas.dev
 author_name: Josh Thomas
@@ -19,5 +19,6 @@ python_versions:
 - '3.10'
 - '3.11'
 - '3.12'
+- '3.13'
 test_django_main: true
 versioning_scheme: SemVer
