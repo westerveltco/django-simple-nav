@@ -12,10 +12,10 @@
 
 ## Requirements
 
-- Python 3.8, 3.9, 3.10, 3.11, 3.12
+- Python 3.8, 3.9, 3.10, 3.11, 3.12, 3.13
 - Django 4.2, 5.0
 
-## Getting Started
+## Installation
 
 <!-- getting-started-start -->
 1. **Install the package from PyPI.**
@@ -52,7 +52,7 @@
    If you do not add `django.contrib.auth` to your `INSTALLED_APPS` and you define any permissions for your navigation items, `django-simple-nav` will simply ignore the permissions and render all items regardless of whether the permission check is `True` or `False.`
 <!-- getting-started-end -->
 
-## Usage
+## Getting Started
 
 <!-- usage-start -->
 1. **Create a navigation definition.**

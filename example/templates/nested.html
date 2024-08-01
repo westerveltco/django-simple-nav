@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load django_simple_nav %}
+
 {% block extra_head %}
   <style>
   .active {
@@ -7,6 +9,7 @@
   }
   </style>
 {% endblock extra_head %}
+
 {% block nav %}
   {% django_simple_nav "navigation.NestedNav" %}
 {% endblock nav %}

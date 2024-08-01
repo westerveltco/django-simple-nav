@@ -18,6 +18,15 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Support for Python 3.13.
+
+### Changed
+
+- Bumped `django-twc-package` template to v2024.23.
+- Removed `westerveltco/setup-ci-action` from GitHub Actions workflows.
+
 ## [0.9.0]
 
 ### Changed

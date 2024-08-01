@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from django.conf import settings
 
-from django_simple_nav._type_utils import override
+from ._typing import override
 
 DJANGO_SIMPLE_NAV_SETTINGS_NAME = "DJANGO_SIMPLE_NAV"
 

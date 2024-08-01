@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load django_simple_nav %}
+
 {% block extra_head %}
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -15,6 +17,7 @@
           integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
           crossorigin="anonymous"></script>
 {% endblock extra_head %}
+
 {% block nav %}
   {% django_simple_nav "navigation.Bootstrap4Nav" %}
 {% endblock nav %}

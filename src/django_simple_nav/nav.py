@@ -20,9 +20,9 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.functional import Promise
 from django.utils.safestring import mark_safe
 
-from django_simple_nav._templates import get_template_engine
-from django_simple_nav._type_utils import EngineTemplate
-from django_simple_nav._type_utils import override
+from ._templates import get_template_engine
+from ._typing import EngineTemplate
+from ._typing import override
 
 logger = logging.getLogger(__name__)
 
