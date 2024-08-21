@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.11.0]
+
 ### Fixed
 
 - Checking whether a `NavItem` or `NavGroup` is active now takes into account the URL scheme and domain name for both the nav item and request.
@@ -172,7 +174,7 @@ Initial release! 🎉
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 - Jeff Triplett [@jefftriplett](https://github.com/jefftriplett)
 
-[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-simple-nav/compare/v0.11.0...HEAD
 [0.1.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.1.0
 [0.2.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.2.0
 [0.3.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.3.0
@@ -184,3 +186,4 @@ Initial release! 🎉
 [0.8.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.8.0
 [0.9.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.9.0
 [0.10.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.10.0
+[0.11.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.11.0
