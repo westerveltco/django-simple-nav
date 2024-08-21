@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Checking whether a `NavItem` or `NavGroup` is active now takes into account the URL scheme and domain name for both the nav item and request.
+
 ## [0.10.0]
 
 ### Added

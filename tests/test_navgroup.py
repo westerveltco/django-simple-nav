@@ -200,17 +200,17 @@ def test_get_url_override():
         ("/foo/", False),
     ],
 )
-def test_get_active(url, expected, req):
+def test_get_active(url, expected, rf):
     group = NavGroup(
         title=...,
-        url="/test/",
+        url="http://testserver/test/",
         items=[
-            NavItem(title=..., url="/test/active/"),
-            NavItem(title=..., url="/test/not-active/"),
+            NavItem(title=..., url="http://testserver/test/active/"),
+            NavItem(title=..., url="http://testserver/test/not-active/"),
         ],
     )
 
-    req.path = url
+    req = rf.get(url)
 
     assert group.get_active(req) is expected
 
