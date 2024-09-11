@@ -59,13 +59,13 @@ exclude_patterns = []
 # -- MyST configuration ------------------------------------------------------
 myst_heading_anchors = 3
 
-copybutton_selector = "div.copy pre"
-copybutton_prompt_text = "$ "
-
 # -- Options for autodoc2 -----------------------------------------------------
 autodoc2_packages = [f"../src/{project.replace('-', '_')}"]
-
 autodoc2_render_plugin = "myst"
+
+# -- Options for sphinx_copybutton -----------------------------------------------------
+copybutton_selector = "div.copy pre"
+copybutton_prompt_text = "$ "
 
 # -- Options for HTML output -------------------------------------------------
 

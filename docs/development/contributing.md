@@ -2,4 +2,4 @@
 
 ```
 
-The next section has more information about which `just` commands are available.
+See the [documentation](./just.md) for more information.

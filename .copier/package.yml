@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2024.23
+_commit: v2024.27
 _src_path: gh:westerveltco/django-twc-package
 author_email: josh@joshthomas.dev
 author_name: Josh Thomas
@@ -7,6 +7,7 @@ current_version: 0.11.0
 django_versions:
 - '4.2'
 - '5.0'
+- '5.1'
 docs_domain: westervelt.dev
 github_owner: westerveltco
 github_repo: django-simple-nav

@@ -9,7 +9,7 @@ from django.http import HttpRequest
 
 from .settings import DEFAULT_SETTINGS
 
-pytest_plugins = []  # type: ignore
+pytest_plugins = []
 
 
 def pytest_configure(config):
