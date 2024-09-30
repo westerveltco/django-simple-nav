@@ -45,6 +45,10 @@ def should_skip(python: str, django: str) -> bool:
         # Django 5.0 requires Python 3.10+
         return True
 
+    if django == DJ51 and version(python) < version(PY310):
+        # Django 5.1 requires Python 3.10+
+        return True
+
     return False
 
 
