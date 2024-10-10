@@ -3,12 +3,10 @@ from __future__ import annotations
 from django.urls import path
 
 
-def home(request):
-    ...
+def home(request): ...
 
 
-def fake_view(request):
-    ...
+def fake_view(request): ...
 
 
 urlpatterns = [

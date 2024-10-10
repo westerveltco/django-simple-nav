@@ -126,8 +126,7 @@ def test_invalid_dotted_string(req):
         template.render(Context({"request": req}))
 
 
-class InvalidNav:
-    ...
+class InvalidNav: ...
 
 
 def test_invalid_nav_instance(req):
@@ -158,8 +157,7 @@ def test_request_not_in_context():
 
 
 def test_invalid_request():
-    class InvalidRequest:
-        ...
+    class InvalidRequest: ...
 
     template = Template(
         "{% load django_simple_nav %} {% django_simple_nav 'tests.navs.DummyNav' %}"
