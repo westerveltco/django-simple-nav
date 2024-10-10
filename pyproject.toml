@@ -37,28 +37,28 @@ requires-python = ">=3.9"
 
 [project.optional-dependencies]
 docs = [
-  "cogapp",
-  "furo",
-  "myst-parser",
-  "sphinx",
-  "sphinx-autobuild",
-  "sphinx-autodoc2",
-  "sphinx-copybutton",
-  "sphinx-inline-tabs"
+  "cogapp>=3.4.1",
+  "furo>=2024.8.6",
+  "myst-parser>=3.0.1",
+  "sphinx>=7.1.2",
+  "sphinx-autobuild>=2021.3.14",
+  "sphinx-autodoc2>=0.5.0",
+  "sphinx-copybutton>=0.5.2",
+  "sphinx-inline-tabs>=2023.4.21"
 ]
 tests = [
-  "faker",
-  "model-bakery",
-  "pytest",
-  "pytest-cov",
-  "pytest-django",
-  "pytest-randomly",
-  "pytest-xdist"
+  "faker>=30.3.0",
+  "model-bakery>=1.20.0",
+  "pytest>=8.3.3",
+  "pytest-cov>=5.0.0",
+  "pytest-django>=4.9.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-xdist>=3.6.1"
 ]
 types = [
-  "django-stubs",
-  "django-stubs-ext",
-  "mypy"
+  "django-stubs>=5.1.0",
+  "django-stubs-ext>=5.1.0",
+  "mypy>=1.11.2"
 ]
 
 [project.urls]
@@ -163,7 +163,7 @@ ignore_missing_model_attributes = true
 [tool.pytest.ini_options]
 addopts = "--create-db -n auto --dist loadfile --doctest-modules"
 django_find_project = false
-norecursedirs = ".* bin build dist *.egg htmlcov logs node_modules templates venv"
+norecursedirs = ".* bin build dist *.egg example htmlcov logs node_modules templates venv"
 python_files = "tests.py test_*.py *_tests.py"
 pythonpath = "src"
 testpaths = ["tests"]
@@ -235,10 +235,10 @@ keep-runtime-typing = true
 
 [tool.uv]
 dev-dependencies = [
-  "copier",
-  "copier-templates-extensions",
-  "django-stubs",
-  "django-stubs-ext",
-  "nox[uv]",
-  "ruff"
+  "copier>=9.3.1",
+  "copier-templates-extensions>=0.3.0",
+  "django-stubs>=5.1.0",
+  "django-stubs-ext>=5.1.0",
+  "nox[uv]>=2024.10.9",
+  "ruff>=0.6.9"
 ]

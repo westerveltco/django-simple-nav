@@ -379,35 +379,35 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "cogapp", marker = "extra == 'docs'" },
+    { name = "cogapp", marker = "extra == 'docs'", specifier = ">=3.4.1" },
     { name = "django", specifier = ">=4.2" },
-    { name = "django-stubs", marker = "extra == 'types'" },
-    { name = "django-stubs-ext", marker = "extra == 'types'" },
-    { name = "faker", marker = "extra == 'tests'" },
-    { name = "furo", marker = "extra == 'docs'" },
-    { name = "model-bakery", marker = "extra == 'tests'" },
-    { name = "mypy", marker = "extra == 'types'" },
-    { name = "myst-parser", marker = "extra == 'docs'" },
-    { name = "pytest", marker = "extra == 'tests'" },
-    { name = "pytest-cov", marker = "extra == 'tests'" },
-    { name = "pytest-django", marker = "extra == 'tests'" },
-    { name = "pytest-randomly", marker = "extra == 'tests'" },
-    { name = "pytest-xdist", marker = "extra == 'tests'" },
-    { name = "sphinx", marker = "extra == 'docs'" },
-    { name = "sphinx-autobuild", marker = "extra == 'docs'" },
-    { name = "sphinx-autodoc2", marker = "extra == 'docs'" },
-    { name = "sphinx-copybutton", marker = "extra == 'docs'" },
-    { name = "sphinx-inline-tabs", marker = "extra == 'docs'" },
+    { name = "django-stubs", marker = "extra == 'types'", specifier = ">=5.1.0" },
+    { name = "django-stubs-ext", marker = "extra == 'types'", specifier = ">=5.1.0" },
+    { name = "faker", marker = "extra == 'tests'", specifier = ">=30.3.0" },
+    { name = "furo", marker = "extra == 'docs'", specifier = ">=2024.8.6" },
+    { name = "model-bakery", marker = "extra == 'tests'", specifier = ">=1.20.0" },
+    { name = "mypy", marker = "extra == 'types'", specifier = ">=1.11.2" },
+    { name = "myst-parser", marker = "extra == 'docs'", specifier = ">=3.0.1" },
+    { name = "pytest", marker = "extra == 'tests'", specifier = ">=8.3.3" },
+    { name = "pytest-cov", marker = "extra == 'tests'", specifier = ">=5.0.0" },
+    { name = "pytest-django", marker = "extra == 'tests'", specifier = ">=4.9.0" },
+    { name = "pytest-randomly", marker = "extra == 'tests'", specifier = ">=3.15.0" },
+    { name = "pytest-xdist", marker = "extra == 'tests'", specifier = ">=3.6.1" },
+    { name = "sphinx", marker = "extra == 'docs'", specifier = ">=7.1.2" },
+    { name = "sphinx-autobuild", marker = "extra == 'docs'", specifier = ">=2021.3.14" },
+    { name = "sphinx-autodoc2", marker = "extra == 'docs'", specifier = ">=0.5.0" },
+    { name = "sphinx-copybutton", marker = "extra == 'docs'", specifier = ">=0.5.2" },
+    { name = "sphinx-inline-tabs", marker = "extra == 'docs'", specifier = ">=2023.4.21" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "copier" },
-    { name = "copier-templates-extensions" },
-    { name = "django-stubs" },
-    { name = "django-stubs-ext" },
-    { name = "nox", extras = ["uv"] },
-    { name = "ruff" },
+    { name = "copier", specifier = ">=9.3.1" },
+    { name = "copier-templates-extensions", specifier = ">=0.3.0" },
+    { name = "django-stubs", specifier = ">=5.1.0" },
+    { name = "django-stubs-ext", specifier = ">=5.1.0" },
+    { name = "nox", extras = ["uv"], specifier = ">=2024.10.9" },
+    { name = "ruff", specifier = ">=0.6.9" },
 ]
 
 [[package]]
@@ -557,7 +557,7 @@ name = "importlib-metadata"
 version = "8.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.13'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/cd/12/33e59336dca5be0c398a7482335911a33aa0e20776128f038019f1a95f1b/importlib_metadata-8.5.0.tar.gz", hash = "sha256:71522656f0abace1d072b9e5481a48f07c138e00f079c38c8f883823f9c26bd7", size = 55304 }
 wheels = [
