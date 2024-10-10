@@ -17,7 +17,6 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -34,7 +33,7 @@ keywords = []
 license = {file = "LICENSE"}
 name = "django-simple-nav"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
 docs = [
@@ -202,8 +201,8 @@ extend-include = ["*.pyi?"]
 indent-width = 4
 # Same as Black.
 line-length = 88
-# Assume Python >3.8
-target-version = "py38"
+# Assume Python >3.9
+target-version = "py39"
 
 [tool.ruff.format]
 # Like Black, indent with spaces, rather than tabs.
