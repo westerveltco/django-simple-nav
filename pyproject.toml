@@ -66,6 +66,13 @@ Documentation = "https://django-simple-nav.westervelt.dev/"
 Issues = "https://github.com/westerveltco/django-simple-nav/issues"
 Source = "https://github.com/westerveltco/django-simple-nav"
 
+[tool.basedpyright]
+exclude = [
+  "**/node_modules",
+  "**/__pycache__"
+]
+include = ["src"]
+
 [tool.bumpver]
 commit = true
 commit_message = ":bookmark: bump version {old_version} -> {new_version}"
