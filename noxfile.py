@@ -118,7 +118,9 @@ def coverage(session):
                 output_buffer.flush()
                 session.run(*report_cmd, stdout=output_buffer)
         else:
-            session.run("python", "-m", "coverage", "html", "--skip-covered", "--skip-empty")
+            session.run(
+                "python", "-m", "coverage", "html", "--skip-covered", "--skip-empty"
+            )
 
 
 @nox.session
