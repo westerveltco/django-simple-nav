@@ -35,37 +35,30 @@ readme = "README.md"
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
-dev = [
-  "bumpver",
-  "copier",
-  "copier-templates-extensions",
-  "coverage[toml]",
-  "django-stubs",
-  "django-stubs-ext",
-  "faker",
-  "hatch",
-  "mypy",
-  "model-bakery",
-  "nox[uv]",
-  "pytest",
-  "pytest-cov",
-  "pytest-django",
-  "pytest-randomly",
-  "pytest-reverse",
-  "pytest-xdist",
-  "ruff"
-]
 docs = [
-  "cogapp",
-  "furo",
-  "myst-parser",
-  "sphinx",
-  "sphinx-autobuild",
-  "sphinx-autodoc2",
-  "sphinx-copybutton",
-  "sphinx-inline-tabs"
+  "cogapp>=3.4.1",
+  "furo>=2024.8.6",
+  "myst-parser>=3.0.1",
+  "sphinx>=7.1.2",
+  "sphinx-autobuild>=2021.3.14",
+  "sphinx-autodoc2>=0.5.0",
+  "sphinx-copybutton>=0.5.2",
+  "sphinx-inline-tabs>=2023.4.21"
 ]
-lint = ["pre-commit"]
+tests = [
+  "faker>=30.3.0",
+  "model-bakery>=1.20.0",
+  "pytest>=8.3.3",
+  "pytest-cov>=5.0.0",
+  "pytest-django>=4.9.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-xdist>=3.6.1"
+]
+types = [
+  "django-stubs>=5.1.0",
+  "django-stubs-ext>=5.1.0",
+  "mypy>=1.11.2"
+]
 
 [project.urls]
 Documentation = "https://django-simple-nav.westervelt.dev/"
@@ -108,7 +101,10 @@ exclude_lines = [
 fail_under = 75
 
 [tool.coverage.run]
-omit = ["src/django_simple_nav/migrations/*", "tests/*"]
+omit = [
+  "src/django_simple_nav/migrations/*",
+  "tests/*"
+]
 source = ["django_simple_nav"]
 
 [tool.django-stubs]
@@ -135,11 +131,11 @@ path = "src/django_simple_nav/__init__.py"
 [tool.mypy]
 check_untyped_defs = true
 exclude = [
+  ".venv",
   "docs",
-  "tests",
   "migrations",
-  "venv",
-  ".venv"
+  "tests",
+  "venv"
 ]
 mypy_path = "src/"
 no_implicit_optional = true
@@ -153,8 +149,8 @@ ignore_errors = true
 ignore_missing_imports = true
 module = [
   "*.migrations.*",
-  "tests.*",
-  "docs.*"
+  "docs.*",
+  "tests.*"
 ]
 
 [tool.mypy_django_plugin]
@@ -232,3 +228,13 @@ required-imports = ["from __future__ import annotations"]
 [tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = true
+
+[tool.uv]
+dev-dependencies = [
+  "copier>=9.3.1",
+  "copier-templates-extensions>=0.3.0",
+  "django-stubs>=5.1.0",
+  "django-stubs-ext>=5.1.0",
+  "nox[uv]>=2024.10.9",
+  "ruff>=0.6.9"
+]
