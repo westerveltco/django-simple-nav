@@ -52,7 +52,7 @@ When it comes time to cut a new release, follow these steps:
    bumpver update --tag=final
    ```
 
-3. Ensure the [CHANGELOG](CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
+3. Ensure the [CHANGELOG](https://github.com/westerveltco/django-simple-nav/blob/main/CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
 
 4. Create a pull request from the release branch to `main`.
 
