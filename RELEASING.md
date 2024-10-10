@@ -1,11 +1,10 @@
 # Releasing a New Version
 
-<!-- releasing-start -->
 When it comes time to cut a new release, follow these steps:
 
 1. Create a new git branch off of `main` for the release.
 
-   Prefer the convention `release-<version>`, where `<version>` is the next incremental version number (e.g. `release-v0.2.0` for version 0.2.0).
+   Prefer the convention `release-<version>`, where `<version>` is the next incremental version number (e.g. `release-v0.11.0` for version 0.11.0).
 
    ```shell
    git checkout -b release-v<version>
@@ -53,7 +52,7 @@ When it comes time to cut a new release, follow these steps:
    bumpver update --tag=final
    ```
 
-3. Ensure the [CHANGELOG](https://github.com/westerveltco/django-simple-nav/CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
+3. Ensure the [CHANGELOG](https://github.com/westerveltco/django-simple-nav/blob/main/CHANGELOG.md) is up to date. If updates are needed, add them now in the release branch.
 
 4. Create a pull request from the release branch to `main`.
 
@@ -61,7 +60,7 @@ When it comes time to cut a new release, follow these steps:
 
 6. Draft a [new release](https://github.com/westerveltco/django-simple-nav/releases/new) on GitHub.
 
-   Use the version number with a leading `v` as the tag name (e.g. `v0.2.0`).
+   Use the version number with a leading `v` as the tag name (e.g. `v0.11.0`).
 
    Allow GitHub to generate the release title and release notes, using the 'Generate release notes' button above the text box. If this is a final release coming from a tagged release (or multiple tagged releases), make sure to copy the release notes from the previous tagged release(s) to the new release notes (after the release notes already generated for this final release).
 
@@ -74,4 +73,3 @@ When it comes time to cut a new release, follow these steps:
 We try our best to adhere to [Semantic Versioning](https://semver.org/), but we do not promise to follow it perfectly (and let's be honest, this is the case with a lot of projects using SemVer).
 
 In general, use your best judgement when choosing the next version number. If you are unsure, you can always ask for a second opinion from another contributor.
-<!-- releasing-end -->

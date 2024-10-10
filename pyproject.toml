@@ -3,7 +3,9 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-authors = [{name = "Josh Thomas", email = "josh@joshthomas.dev"}]
+authors = [
+  {name = "Josh Thomas", email = "josh@joshthomas.dev"}
+]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Framework :: Django",
@@ -15,7 +17,6 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -32,7 +33,7 @@ keywords = []
 license = {file = "LICENSE"}
 name = "django-simple-nav"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
 docs = [
@@ -71,7 +72,6 @@ exclude = [
   "**/__pycache__"
 ]
 include = ["src"]
-stubPath = "src/stubs"
 
 [tool.bumpver]
 commit = true
@@ -82,9 +82,15 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-".copier/package.yml" = ['current_version: {version}']
-"src/django_simple_nav/__init__.py" = ['__version__ = "{version}"']
-"tests/test_version.py" = ['assert __version__ == "{version}"']
+".copier/package.yml" = [
+  'current_version: {version}'
+]
+"src/django_simple_nav/__init__.py" = [
+  '__version__ = "{version}"'
+]
+"tests/test_version.py" = [
+  'assert __version__ == "{version}"'
+]
 
 [tool.coverage.paths]
 source = ["src"]
@@ -120,7 +126,10 @@ indent = 2
 profile = "django"
 
 [tool.hatch.build]
-exclude = [".*", "Justfile"]
+exclude = [
+  ".*",
+  "Justfile"
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/django_simple_nav"]
@@ -131,15 +140,17 @@ path = "src/django_simple_nav/__init__.py"
 [tool.mypy]
 check_untyped_defs = true
 exclude = [
-  ".venv",
   "docs",
   "migrations",
   "tests",
-  "venv"
+  "venv",
+  ".venv"
 ]
 mypy_path = "src/"
 no_implicit_optional = true
-plugins = ["mypy_django_plugin.main"]
+plugins = [
+  "mypy_django_plugin.main"
+]
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
@@ -190,8 +201,8 @@ extend-include = ["*.pyi?"]
 indent-width = 4
 # Same as Black.
 line-length = 88
-# Assume Python >3.8
-target-version = "py38"
+# Assume Python >3.9
+target-version = "py39"
 
 [tool.ruff.format]
 # Like Black, indent with spaces, rather than tabs.

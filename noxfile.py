@@ -9,13 +9,12 @@ import nox
 nox.options.default_venv_backend = "uv|virtualenv"
 nox.options.reuse_existing_virtualenvs = True
 
-PY38 = "3.8"
 PY39 = "3.9"
 PY310 = "3.10"
 PY311 = "3.11"
 PY312 = "3.12"
 PY313 = "3.13"
-PY_VERSIONS = [PY38, PY39, PY310, PY311, PY312, PY313]
+PY_VERSIONS = [PY39, PY310, PY311, PY312, PY313]
 PY_DEFAULT = PY_VERSIONS[0]
 PY_LATEST = PY_VERSIONS[-1]
 
@@ -104,6 +103,7 @@ def coverage(session):
         "tests",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
+
     try:
         session.run("python", "-m", "pytest", "--cov", "--cov-report=")
     finally:
@@ -112,6 +112,7 @@ def coverage(session):
 
         if summary := os.getenv("GITHUB_STEP_SUMMARY"):
             report_cmd.extend(["--skip-covered", "--skip-empty", "--format=markdown"])
+
             with Path(summary).open("a") as output_buffer:
                 output_buffer.write("")
                 output_buffer.write("### Coverage\n\n")
@@ -133,8 +134,7 @@ def types(session):
         "types",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
-
-    command = ["mypy", "."]
+    command = ["python", "-m", "mypy", "."]
     if session.posargs and all(arg for arg in session.posargs):
         command.append(*session.posargs)
     session.run(*command)
