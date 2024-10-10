@@ -141,6 +141,25 @@ def types(session):
 
 
 @nox.session
+def demo(session):
+    session.run_install(
+        "uv",
+        "sync",
+        "--frozen",
+        "--extra",
+        "types",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
+
+    command = ["python", "example/demo.py", "runserver"]
+    if session.posargs and all(arg for arg in session.posargs):
+        command.append(*session.posargs)
+    else:
+        command.append("localhost:8000")
+    session.run(*command)
+
+
+@nox.session
 def gha_matrix(session):
     sessions = session.run("python", "-m", "nox", "-l", "--json", silent=True)
     matrix = {
