@@ -161,7 +161,7 @@ def demo(session):
 
 @nox.session
 def gha_matrix(session):
-    sessions = session.run("python", "-m", "nox", "-l", "--json", silent=True)
+    sessions = session.run("nox", "-l", "--json", silent=True)
     matrix = {
         "include": [
             {
