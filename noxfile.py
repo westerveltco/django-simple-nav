@@ -69,7 +69,17 @@ def test(session):
     ],
 )
 def tests(session, django):
-    session.install("django-simple-nav[dev] @ .")
+    session.run_install(
+        "uv",
+        "sync",
+        "--frozen",
+        "--extra",
+        "tests",
+        "--inexact",
+        "--no-install-package",
+        "django",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
 
     if django == DJMAIN:
         session.install(
@@ -78,59 +88,73 @@ def tests(session, django):
     else:
         session.install(f"django=={django}")
 
-    if session.posargs:
-        session.run("python", "-m", "pytest", *session.posargs)
-    else:
-        session.run("python", "-m", "pytest")
+    command = ["python", "-m", "pytest"]
+    if session.posargs and all(arg for arg in session.posargs):
+        command.append(*session.posargs)
+    session.run(*command)
 
 
 @nox.session
 def coverage(session):
-    session.install("django-simple-nav[dev] @ .")
-    session.run("python", "-m", "pytest", "--cov=django_simple_nav")
-
+    session.run_install(
+        "uv",
+        "sync",
+        "--frozen",
+        "--extra",
+        "tests",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
     try:
-        summary = os.environ["GITHUB_STEP_SUMMARY"]
-        with Path(summary).open("a") as output_buffer:
-            output_buffer.write("")
-            output_buffer.write("### Coverage\n\n")
-            output_buffer.flush()
-            session.run(
-                "python",
-                "-m",
-                "coverage",
-                "report",
-                "--skip-covered",
-                "--skip-empty",
-                "--format=markdown",
-                stdout=output_buffer,
-            )
-    except KeyError:
-        session.run(
-            "python", "-m", "coverage", "html", "--skip-covered", "--skip-empty"
-        )
+        session.run("python", "-m", "pytest", "--cov", "--cov-report=")
+    finally:
+        report_cmd = ["python", "-m", "coverage", "report"]
+        session.run(*report_cmd)
 
-    session.run("python", "-m", "coverage", "report")
+        if summary := os.getenv("GITHUB_STEP_SUMMARY"):
+            report_cmd.extend(["--skip-covered", "--skip-empty", "--format=markdown"])
+            with Path(summary).open("a") as output_buffer:
+                output_buffer.write("")
+                output_buffer.write("### Coverage\n\n")
+                output_buffer.flush()
+                session.run(*report_cmd, stdout=output_buffer)
+        else:
+            session.run("python", "-m", "coverage", "html", "--skip-covered", "--skip-empty")
 
 
 @nox.session
-def lint(session):
-    session.install("django-simple-nav[lint] @ .")
-    session.run("python", "-m", "pre_commit", "run", "--all-files")
+def types(session):
+    session.run_install(
+        "uv",
+        "sync",
+        "--frozen",
+        "--extra",
+        "types",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
 
-
-@nox.session
-def mypy(session):
-    session.install("django-simple-nav[dev] @ .")
-    session.run("python", "-m", "mypy", ".")
+    command = ["mypy", "."]
+    if session.posargs and all(arg for arg in session.posargs):
+        command.append(*session.posargs)
+    session.run(*command)
 
 
 @nox.session
 def demo(session):
-    addrport = session.posargs[0] if session.posargs else "localhost:8000"
+    session.run_install(
+        "uv",
+        "sync",
+        "--frozen",
+        "--extra",
+        "types",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
 
-    session.install("django-simple-nav[dev] @ .")
-    session.run("python", "example/demo.py", "runserver", addrport)
+    command = ["python", "example/demo.py", "runserver"]
+    if session.posargs and all(arg for arg in session.posargs):
+        command.append(*session.posargs)
+    else:
+        command.append("localhost:8000")
+    session.run(*command)
 
 
 @nox.session
