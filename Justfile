@@ -25,9 +25,6 @@ bootstrap:
 coverage:
     @just nox coverage
 
-demo:
-    @just nox demo
-
 lint:
     uv run --with pre-commit-uv pre-commit run --all-files
     just fmt

@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2024.27
+_commit: v2024.29
 _src_path: gh:westerveltco/django-twc-package
 author_email: josh@joshthomas.dev
 author_name: Josh Thomas
@@ -15,7 +15,6 @@ module_name: django_simple_nav
 package_description: A simple, flexible, and extensible navigation menu for Django.
 package_name: django-simple-nav
 python_versions:
-- '3.8'
 - '3.9'
 - '3.10'
 - '3.11'

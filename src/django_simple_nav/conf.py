@@ -11,8 +11,6 @@ DJANGO_SIMPLE_NAV_SETTINGS_NAME = "DJANGO_SIMPLE_NAV"
 
 @dataclass(frozen=True)
 class AppSettings:
-    TEMPLATE_BACKEND: str | None = None
-
     @override
     def __getattribute__(self, __name: str) -> object:
         user_settings = getattr(settings, DJANGO_SIMPLE_NAV_SETTINGS_NAME, {})

@@ -190,6 +190,3 @@ mediafiles/
 
 # pyright config for nvim-lspconfig
 pyrightconfig.json
-
-# auto-generated apidocs
-apidocs/
