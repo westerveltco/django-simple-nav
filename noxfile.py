@@ -71,12 +71,14 @@ def tests(session, django):
     session.run_install(
         "uv",
         "sync",
-        "--frozen",
         "--extra",
         "tests",
+        "--frozen",
         "--inexact",
         "--no-install-package",
         "django",
+        "--python",
+        session.python,
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
 
@@ -98,9 +100,11 @@ def coverage(session):
     session.run_install(
         "uv",
         "sync",
-        "--frozen",
         "--extra",
         "tests",
+        "--frozen",
+        "--python",
+        PY_LATEST,
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
 
@@ -129,9 +133,11 @@ def types(session):
     session.run_install(
         "uv",
         "sync",
-        "--frozen",
         "--extra",
         "types",
+        "--frozen",
+        "--python",
+        PY_LATEST,
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
     command = ["python", "-m", "mypy", "."]
@@ -145,9 +151,11 @@ def demo(session):
     session.run_install(
         "uv",
         "sync",
-        "--frozen",
         "--extra",
         "types",
+        "--frozen",
+        "--python",
+        PY_DEFAULT,
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
 

@@ -13,8 +13,6 @@ concurrency:
 env:
   PYTHONUNBUFFERED: "1"
   FORCE_COLOR: "1"
-  PY_MAX_VERSION: "3.13"
-  PY_MIN_VERSION: "3.9"
   UV_VERSION: "0.4.x"
 
 jobs:
@@ -30,9 +28,6 @@ jobs:
         with:
           enable-cache: true
           version: ${{ env.UV_VERSION }}
-
-      - name: Install Python
-        run: uv python install ${{ env.PY_MIN_VERSION }}
 
       - id: set-matrix
         run: |
@@ -54,9 +49,6 @@ jobs:
           enable-cache: true
           version: ${{ env.UV_VERSION }}
 
-      - name: Install Python
-        run: uv python install ${{ matrix.python-version }}
-
       - name: Run tests
         run: |
           uv run nox --session "tests(python='${{ matrix.python-version }}', django='${{ matrix.django-version }}')"
@@ -77,16 +69,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
           version: ${{ env.UV_VERSION }}
 
-      - name: Install Python
-        run: uv python install ${{ env.PY_MAX_VERSION }}
-
-      - name: Run mypy
+      - name: Run type checks
         run: |
           uv run nox --session "types"
 
@@ -101,9 +91,6 @@ jobs:
           enable-cache: true
           version: ${{ env.UV_VERSION }}
 
-      - name: Install Python
-        run: uv python install ${{ env.PY_MIN_VERSION }}
-
-      - name: Run mypy
+      - name: Generate code coverage
         run: |
           uv run nox --session "coverage"
