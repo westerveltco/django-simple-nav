@@ -18,9 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
-### Removed
+### Changed
 
-- Dropped support for Python 3.8.
+- Bumped `django-twc-package` template to v2024.29.
+- Switched project and dependency management over to use `uv` across the board (`pyproject.toml`, `Justfile` recipes, GHA workflows).
 
 ## [0.11.0]
 
