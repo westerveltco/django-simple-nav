@@ -23,7 +23,8 @@ def django_simple_nav(
         try:
             nav = import_string(nav)()
         except ImportError as err:
-            raise TemplateRuntimeError(f"Variable does not exist: {err}")
+            msg = f"Variable does not exist: {err}"
+            raise TemplateRuntimeError(msg) from err
 
     if template_name is None:
         template_name = cast(Nav, nav).template_name
