@@ -36,6 +36,9 @@ readme = "README.md"
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
+jinja2 = [
+  "jinja2",
+]
 docs = [
   "cogapp>=3.4.1",
   "furo>=2024.8.6",
