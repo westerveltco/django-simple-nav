@@ -240,12 +240,10 @@ class NavGroup(NavItem):
 
     @override
     def get_active(self, request: HttpRequest) -> bool:
-        is_active = super().get_active(request)
-
+        if super().get_active(request):
+            return True
         items = self.get_items(request)
-        item_is_active = any([item.get_active(request) for item in items])
-
-        return is_active or item_is_active
+        return any(item.get_active(request) for item in items)
 
     @override
     def check_permissions(self, request: HttpRequest) -> bool:
