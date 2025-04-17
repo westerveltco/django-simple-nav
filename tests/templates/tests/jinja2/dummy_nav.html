@@ -1,9 +1,11 @@
 <ul>
-  {% for item in items %}
+  {% for item in items recursive %}
     <li>
       <a href="{{ item.url }}">{{ item.title }}</a>
       {% if item.items %}
-        {% include "tests/dummy_nav.html" %}
+        <ul>
+          {{ loop(item.items) }}
+        </ul>
       {% endif %}
     </li>
   {% endfor %}
