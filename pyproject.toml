@@ -46,6 +46,9 @@ docs = [
   "sphinx-copybutton>=0.5.2",
   "sphinx-inline-tabs>=2023.4.21"
 ]
+jinja2 = [
+  "jinja2"
+]
 tests = [
   "faker>=30.3.0",
   "model-bakery>=1.20.0",
