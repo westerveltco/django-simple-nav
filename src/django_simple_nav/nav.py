@@ -140,9 +140,8 @@ class NavItem:
         parsed_url = urlparse(url)
         parsed_request = urlparse(request.build_absolute_uri())
 
-        if (
-            parsed_url.scheme != parsed_request.scheme
-            or parsed_url.netloc != parsed_request.netloc
+        if (parsed_url.scheme and (parsed_url.scheme != parsed_request.scheme)) or (
+            parsed_url.netloc and (parsed_url.netloc != parsed_request.netloc)
         ):
             return False
 

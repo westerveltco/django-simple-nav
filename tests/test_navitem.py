@@ -156,6 +156,14 @@ def test_active_different_domain(rf):
     assert item.get_active(req) is False
 
 
+def test_active_no_scheme_no_netloc(rf):
+    item = NavItem(title=..., url="/test/")
+
+    req = rf.get("/test")
+
+    assert item.get_active(req) is True
+
+
 @pytest.mark.parametrize("append_slash", [True, False])
 def test_active_append_slash_setting(append_slash, rf):
     item = NavItem(title=..., url="http://testserver/test")
