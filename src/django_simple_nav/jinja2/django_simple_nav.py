@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import cast
 
 from django.utils.module_loading import import_string
-from jinja2 import Template
 from jinja2 import TemplateRuntimeError
 from jinja2 import pass_context
 from jinja2.runtime import Context
@@ -30,7 +29,7 @@ def django_simple_nav(
             template_name = cast(Nav, nav).template_name
         if template_name is None:
             raise TemplateRuntimeError("Navigation object has no template")
-        items = cast(Nav, nav).get_items(context['request'])
+        items = cast(Nav, nav).get_items(context["request"])
     except Exception as err:
         raise TemplateRuntimeError(str(err)) from err
 

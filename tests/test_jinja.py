@@ -1,24 +1,21 @@
 from __future__ import annotations
 
 import pytest
-from jinja2 import UndefinedError, TemplateRuntimeError
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
-
-from django_simple_nav.nav import NavItem
+from django.contrib.auth.models import AnonymousUser
+from jinja2 import TemplateRuntimeError
 from model_bakery import baker
 
-from tests.utils import count_anchors
-from tests.navs import DummyNav
+from django_simple_nav.nav import NavItem
 from tests.jinja2.environment import environment
+from tests.navs import DummyNav
+from tests.utils import count_anchors
 
 pytestmark = pytest.mark.django_db
 
 
 def test_django_simple_nav_templatetag(req):
-    template = environment.from_string(
-        '{{ django_simple_nav("tests.navs.DummyNav") }}'
-    )
+    template = environment.from_string('{{ django_simple_nav("tests.navs.DummyNav") }}')
     req.user = AnonymousUser()
     rendered_template = template.render(request=req)
     assert count_anchors(rendered_template) == 7
@@ -78,14 +75,14 @@ def test_templatetag_with_no_arguments(req):
     req.user = AnonymousUser()
     with pytest.raises(TypeError):
         template = environment.from_string("{{ django_simple_nav() }}")
-        template.render({'request': req})
+        template.render({"request": req})
 
 
 def test_templatetag_with_missing_variable(req):
     req.user = AnonymousUser()
     template = environment.from_string("{{ django_simple_nav(missing_nav) }}")
     with pytest.raises(TemplateRuntimeError):
-        template.render({'request': req})
+        template.render({"request": req})
 
 
 def test_nested_templatetag(req):
@@ -108,8 +105,7 @@ def test_invalid_dotted_string(req):
         template.render({"request": req})
 
 
-class InvalidNav:
-    ...
+class InvalidNav: ...
 
 
 def test_invalid_nav_instance(req):
