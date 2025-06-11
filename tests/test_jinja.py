@@ -134,12 +134,9 @@ def test_request_not_in_context():
 
 
 def test_invalid_request():
-    class InvalidRequest:
-        ...
+    class InvalidRequest: ...
 
-    template = environment.from_string(
-        "{{ django_simple_nav('tests.navs.DummyNav') }}"
-    )
+    template = environment.from_string("{{ django_simple_nav('tests.navs.DummyNav') }}")
 
     with pytest.raises(TemplateRuntimeError):
         template.render({"request": InvalidRequest()})

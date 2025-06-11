@@ -156,12 +156,12 @@ def test_get_items_improperly_configured(req):
 )
 def test_get_template_engines(engine, expected):
     class TemplateEngineNav(Nav):
-        template_name = (
-            "tests/dummy_nav.html"
-        )
+        template_name = "tests/dummy_nav.html"
         items = [...]
 
-    with override_settings(TEMPLATES=[dict(settings.TEMPLATES[0], BACKEND=engine, DIRS=[])]):
+    with override_settings(
+        TEMPLATES=[dict(settings.TEMPLATES[0], BACKEND=engine, DIRS=[])]
+    ):
         template = TemplateEngineNav().get_template()
 
     assert isinstance(template, expected)
