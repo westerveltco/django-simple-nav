@@ -2,9 +2,9 @@
   {% for item in items recursive %}
     <li>
       <a href="{{ item.url }}">{{ item.title }}</a>
-      {% if item.items %}
+      {% if item['items'] %}
         <ul>
-          {{ loop(item.items) }}
+          {{ loop(item['items']) }}
         </ul>
       {% endif %}
     </li>

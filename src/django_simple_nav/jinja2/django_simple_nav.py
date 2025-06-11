@@ -29,8 +29,12 @@ def django_simple_nav(
             template_name = cast(Nav, nav).template_name
         if template_name is None:
             raise TemplateRuntimeError("Navigation object has no template")
-        items = cast(Nav, nav).get_items(context["request"])
+        request = context['request']
+        new_context = {
+            'request': request,
+            **cast(Nav, nav).get_context_data(request)
+        }
     except Exception as err:
         raise TemplateRuntimeError(str(err)) from err
 
-    return loader.load(context.environment, template_name).render(items=items)
+    return loader.load(context.environment, template_name).render(new_context)
