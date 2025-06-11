@@ -23,13 +23,15 @@ def django_simple_nav(
         try:
             nav = import_string(nav)()
         except ImportError as err:
-            msg = f"Variable does not exist: {err}"
-            raise TemplateRuntimeError(msg) from err
+            raise TemplateRuntimeError(str(err)) from err
 
-    if template_name is None:
-        template_name = cast(Nav, nav).template_name
-    if template_name is None:
-        raise TemplateRuntimeError("Navigation object has no template")
+    try:
+        if template_name is None:
+            template_name = cast(Nav, nav).template_name
+        if template_name is None:
+            raise TemplateRuntimeError("Navigation object has no template")
+        items = cast(Nav, nav).get_items(context['request'])
+    except Exception as err:
+        raise TemplateRuntimeError(str(err)) from err
 
-    template: Template = loader.load(context.environment, template_name)
-    return template.render(items=cast(Nav, nav).items)
+    return loader.load(context.environment, template_name).render(items=items)
