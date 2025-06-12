@@ -5,7 +5,7 @@ from __future__ import annotations
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
-from django_simple_nav.jinja2.django_simple_nav import django_simple_nav
+from django_simple_nav.jinja2 import django_simple_nav
 
 # Ensure the same template paths are valid for both Jinja2 and Django templates
 loader = FileSystemLoader("tests/jinja2/")
