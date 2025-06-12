@@ -143,7 +143,7 @@
 
 2. **Create a template for the navigation.**
 
-    Create a template to render the navigation structure. This is just a standard Django template so you can use any Django template features you like.
+    Create a template to render the navigation structure. This is a standard Django or Jinja 2 template so you can use any template features you like.
 
     The template will be passed an `items` variable in the context representing the structure of the navigation, containing the `NavItem` and `NavGroup` objects defined in your navigation.
 
@@ -177,9 +177,37 @@
     </ul>
     ```
 
+    The same template in Jinja would be written as follows:
+
+    ```html
+    <!-- main_nav.html.j2 -->
+    <ul>
+      {% for item in items %}
+        <li>
+          <a href="{{ item.url }}"{% if item.active %} class="active"{% endif %}{% if item.baz %} data-baz="{{ item.baz }}"{% endif %}>
+            {{ item.title }}
+          </a>
+          {% if item['items'] %}
+            <ul>
+              {% for subitem in item['items'] %}
+                <li>
+                  <a href="{{ subitem.url }}"{% if subitem.active %} class="active"{% endif %}{% if item.foo %} data-foo="{{ item.foo }}"{% endif %}>
+                    {{ subitem.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    ```
+
+    Note that unlike in Django templates we need to index the `items` field as a string in Jinja.
+
 1. **Integrate navigation in templates.**:
 
-    Use the `django_simple_nav` template tag in your Django templates where you want to display the navigation.
+    Use the `django_simple_nav` template tag in your Django templates (the `django_simple_nav` function in Jinja) where you want to display the navigation.
 
     For example:
 
@@ -190,6 +218,17 @@
     {% block navigation %}
     <nav>
       {% django_simple_nav "path.to.MainNav" %}
+    </nav>
+    {% endblock navigation %}
+    ```
+
+    For Jinja:
+
+    ```html
+    <!-- base.html.j2 -->
+    {% block navigation %}
+    <nav>
+      {{ django_simple_nav("path.to.MainNav") }}
     </nav>
     {% endblock navigation %}
     ```
@@ -217,6 +256,17 @@
     {% endblock navigation %}
     ```
 
+    ```html
+    <!-- example_app/example_template.html.j2 -->
+    {% extends "base.html" %}
+
+    {% block navigation %}
+    <nav>
+        {{ django_simple_nav(nav) }}
+    </nav>
+    {% endblock navigation %}
+    ```
+
     Additionally, the template tag can take a second argument to specify the template to use for rendering the navigation. This is useful if you want to use the same navigation structure in multiple places but render it differently.
 
     ```htmldjango
@@ -225,6 +275,14 @@
 
     <footer>
       {% django_simple_nav "path.to.MainNav" "footer_nav.html" %}
+    </footer>
+    ```
+
+    ```html
+    <!-- base.html.j2 -->
+
+    <footer>
+      {{ django_simple_nav("path.to.MainNav", "footer_nav.html.j2") }}
     </footer>
     ```
 
