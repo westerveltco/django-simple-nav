@@ -50,6 +50,22 @@
     ```
 
     If you do not add `django.contrib.auth` to your `INSTALLED_APPS` and you define any permissions for your navigation items, `django-simple-nav` will simply ignore the permissions and render all items regardless of whether the permission check is `True` or `False.`
+
+1. **Add the template function to your Jinja environment**
+
+    If you want to use Jinja 2 templates you will need to add the `django_simple_nav` function to your Jinja environment.
+    Example:
+
+    ```python
+    from jinja2 import Environment
+    from jinja2 import FileSystemLoader
+
+    from django_simple_nav.jinja2 import django_simple_nav
+
+    environment = Environment()
+    environment.globals.update({"django_simple_nav": django_simple_nav})
+    ```
+
 <!-- getting-started-end -->
 
 ## Getting Started
