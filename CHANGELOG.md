@@ -21,6 +21,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Added
 
 - Support for the `django.templates.backends.jinja2.Jinja2` template engine backend.
+- Support for Django 5.2.
 
 ### New Contributors
 

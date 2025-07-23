@@ -37,7 +37,7 @@ class Nav:
         template = self.get_template(template_name)
         if isinstance(template, str):
             engine = get_template_engine()
-            template = engine.from_string(template)
+            template: EngineTemplate = engine.from_string(template)  # type: ignore[no-redef]
         return template.render(context, request)
 
     def get_context_data(self, request: HttpRequest) -> dict[str, object]:
@@ -53,8 +53,10 @@ class Nav:
         msg = f"{self.__class__!r} must define 'items' or override 'get_items()'"
         raise ImproperlyConfigured(msg)
 
-    def get_template(self, template_name: str | None = None) -> EngineTemplate | str:
-        return get_template(template_name=template_name or self.get_template_name())
+    def get_template(self, template_name: str | None = None) -> EngineTemplate:
+        template_name = template_name or self.get_template_name()
+        template = get_template(template_name=template_name)
+        return cast(EngineTemplate, template)
 
     def get_template_name(self) -> str:
         if self.template_name is not None:
