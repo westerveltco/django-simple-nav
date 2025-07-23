@@ -190,3 +190,5 @@ mediafiles/
 
 # auto-generated apidocs
 apidocs/
+
+uv.lock
