@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.13.0]
+
 ### Added
 
 - Support for the `django.templates.backends.jinja2.Jinja2` template engine backend.
@@ -212,3 +214,4 @@ Initial release! 🎉
 [0.10.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.10.0
 [0.11.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.11.0
 [0.12.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.12.0
+[0.13.0]: https://github.com/westerveltco/django-simple-nav/releases/tag/v0.13.0
