@@ -24,7 +24,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### New Contributors
 
-- HiPhish [@hiphish](https://github.com/hiphish) in [#170](https://github.com/westerveltco/django-simple-nav/pull/170).
+- HiPhish [@hiphish](https://github.com/hiphish) ([#170](https://github.com/westerveltco/django-simple-nav/pull/170))
 
 ## [0.12.0]
 
