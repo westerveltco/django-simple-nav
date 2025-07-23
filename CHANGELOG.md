@@ -18,6 +18,14 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Support for the `django.templates.backends.jinja2.Jinja2` template engine backend.
+
+### New Contributors
+
+- HiPhish [@hiphish](https://github.com/hiphish) in [#170](https://github.com/westerveltco/django-simple-nav/pull/170).
+
 ## [0.12.0]
 
 ### Changed
