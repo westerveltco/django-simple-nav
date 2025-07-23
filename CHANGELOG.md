@@ -23,6 +23,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - Support for the `django.templates.backends.jinja2.Jinja2` template engine backend.
 - Support for Django 5.2.
 
+### Removed
+
+- Dropped support for Django 5.0.
+
 ### New Contributors
 
 - HiPhish [@hiphish](https://github.com/hiphish) ([#170](https://github.com/westerveltco/django-simple-nav/pull/170))
