@@ -188,8 +188,5 @@ dist-ssr
 staticfiles/
 mediafiles/
 
-# pyright config for nvim-lspconfig
-pyrightconfig.json
-
 # auto-generated apidocs
 apidocs/
