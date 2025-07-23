@@ -24,7 +24,7 @@
     python -m pip install django-simple-nav
     ```
 
-1. **Add `django_simple_nav` to `INSTALLED_APPS`.**
+2. **Add `django_simple_nav` to `INSTALLED_APPS`.**
 
     After installation, add `django_simple_nav` to your `INSTALLED_APPS` in your Django settings:
 
@@ -36,7 +36,7 @@
     ]
     ```
 
-1. **Adjust your Django project's settings.**
+3. **Adjust your Django project's settings.**
 
     If you plan to use the permissions feature of `django-simple-nav` to filter your navigation items based on the `request.user`, `django.contrib.auth` and `django.contrib.contenttypes` must be added to your `INSTALLED_APPS` as well:
 
@@ -51,7 +51,7 @@
 
     If you do not add `django.contrib.auth` to your `INSTALLED_APPS` and you define any permissions for your navigation items, `django-simple-nav` will simply ignore the permissions and render all items regardless of whether the permission check is `True` or `False.`
 
-1. **Add the template function to your Jinja environment**
+4. **Add the template function to your Jinja environment**
 
     If you want to use Jinja 2 templates you will need to add the `django_simple_nav` function to your Jinja environment.
     Example:
@@ -221,7 +221,7 @@
 
     Note that unlike in Django templates we need to index the `items` field as a string in Jinja.
 
-1. **Integrate navigation in templates.**:
+3. **Integrate navigation in templates.**:
 
     Use the `django_simple_nav` template tag in your Django templates (the `django_simple_nav` function in Jinja) where you want to display the navigation.
 
@@ -318,7 +318,7 @@ You can run the example project by following these steps. These steps assume you
     cd django-simple-nav
     ```
 
-1. **Create a new virtual environment, activate it, and install `django-simple-nav`.**
+2. **Create a new virtual environment, activate it, and install `django-simple-nav`.**
 
     ```bash
     python -m venv venv
@@ -326,13 +326,13 @@ You can run the example project by following these steps. These steps assume you
     python -m pip install .
     ```
 
-1. **Run the example project.**
+3. **Run the example project.**
 
     ```bash
     python example/demo.py
     ```
 
-1. **Open your browser to `http://localhost:8000` to see the examples in action.**
+4. **Open your browser to `http://localhost:8000` to see the examples in action.**
 
 ## Documentation
 
