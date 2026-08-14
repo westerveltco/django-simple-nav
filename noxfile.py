@@ -18,12 +18,12 @@ PY_VERSIONS = [PY310, PY311, PY312, PY313, PY314]
 PY_DEFAULT = PY_VERSIONS[0]
 PY_LATEST = PY_VERSIONS[-1]
 
-DJ42 = "4.2"
 DJ52 = "5.2"
 DJ60 = "6.0"
+DJ61 = "6.1"
 DJMAIN = "main"
 DJMAIN_MIN_PY = PY312
-DJ_VERSIONS = [DJ42, DJ52, DJ60, DJMAIN]
+DJ_VERSIONS = [DJ52, DJ60, DJ61, DJMAIN]
 DJ_LTS = [
     version for version in DJ_VERSIONS if version.endswith(".2") and version != DJMAIN
 ]
@@ -43,12 +43,8 @@ def should_skip(python: str, django: str) -> bool:
         # Django main requires Python 3.12+
         return True
 
-    if django == DJ60 and version(python) < version(PY312):
-        # Django 6.0 requires Python 3.12+
-        return True
-
-    # Django 5.2 requires Python 3.10+
-    return django == DJ52 and version(python) < version(PY310)
+    # Django 6.0+ requires Python 3.12+
+    return django in (DJ60, DJ61) and version(python) < version(PY312)
 
 
 @nox.session
